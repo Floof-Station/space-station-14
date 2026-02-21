@@ -1,0 +1,14 @@
+- type: Tag
+  id: CombatRemote # Tag: used on the RemoteSignallerCombat
+
+- type: Tag
+  id: Grenade120mm # Ammo: Magazine120mmGrenadeBlast, ShuttleGunNTSFCyerxa120mm
+
+- type: Tag
+  id: MagazineGrenade120mm # Magazine: Magazine120mmGrenadeBlast
+
+- type: Tag
+  id: Cartridge60mmRocket
+
+- type: Tag
+  id: Magazine60mmRocket
