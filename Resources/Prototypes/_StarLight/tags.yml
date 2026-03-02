@@ -12,3 +12,6 @@
 
 - type: Tag
   id: Magazine60mmRocket
+
+- type: Tag
+  id: Cartridge280mmSlug # Ammo: CartridgeCharon280mmSlug, CartridgeCharon280mmSubnuclear

@@ -23,6 +23,11 @@
     radius: 3
     energy: 2
     color: "#ff4400"
+  - type: RadarBlip
+    color: "#FFDD00"
+    scale: 1.0
+    shape: Square
+    requireInSpace: true
 
 - type: entity
   id: Bullet60mmRocket

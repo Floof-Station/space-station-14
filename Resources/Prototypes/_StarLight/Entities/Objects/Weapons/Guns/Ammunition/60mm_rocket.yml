@@ -1,5 +1,17 @@
 # Starlight 60mm Rocket Ammunition
 
+# Starlight override of the base 60mm rocket projectile with radar blip.
+- type: entity
+  parent: Bullet60mmRocket
+  id: Bullet60mmRocketStarlight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RadarBlip
+    color: "#44FFAA"
+    scale: 1.1
+    shape: Circle
+    requireInSpace: true
+
 # 60mm Rocket Cartridge
 - type: entity
   parent: [BaseItem, BaseMajorContraband]
@@ -13,7 +25,7 @@
   - type: Item
     size: Small
   - type: CartridgeAmmo
-    proto: Bullet60mmRocket
+    proto: Bullet60mmRocketStarlight
     deleteOnSpawn: true
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
