@@ -204,12 +204,12 @@
   - type: StaticPrice
     price: 6000
 
-# M321-CHARON 'Thanatos' 280mm Railgun - Single-shot, manually loaded, extreme damage
+# M321-CHARYBDIS 'Thanatos' 280mm Railgun - Single-shot, manually loaded, extreme damage
 - type: entity
   id: ShuttleGunCharon
   parent: ShuttleGunBase
-  name: M321-CHARON 'Thanatos' 280mm Railgun
-  description: A single-shot electromagnetic railgun of unparalleled destructive capability. Accelerates a 280mm slug to devastating velocities. Requires manual loading of each round into the open chamber before firing. Named for the ferryman of the dead - because that is what you become upon encountering one.
+  name: M321-CHARYBDIS 'Thanatos' 280mm Railgun
+  description: A single-shot electromagnetic railgun of unparalleled destructive capability. Accelerates a 280mm slug to devastating velocities. Requires manual loading of each round into the open chamber before firing. Named for the devouring whirlpool of legend - because that is what awaits those who face one.
   components:
   - type: Sprite
     sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/Charon.rsi
