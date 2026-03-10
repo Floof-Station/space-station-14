@@ -105,10 +105,10 @@
       task: PDTurretCompound
     blackboard:
       RotateSpeed: !type:Single
-        10
+        15
       RangedRange: !type:Single
-        25
+        30
       VisionRadius: !type:Single
-        25
+        30
       AggroVisionRadius: !type:Single
-        25
+        30
