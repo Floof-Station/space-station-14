@@ -1,14 +1,14 @@
 # Starlight Shuttle Cannons
 
-# NTSF-CYERXA Dual 120mm Cannon - Based on Duster, fires 2 shots per trigger
+# CYERXA Dual 120mm Cannon - Based on Duster, fires 2 shots per trigger
 - type: entity
-  id: ShuttleGunNTSFCyerxa120mm
+  id: ShuttleGunCyerxa120mm
   parent: ShuttleGunBase
   name: CYERXA Dual 120mm Cannons
   description: A powerful dual 120mm cannon system designed for heavy shuttle combat. Fires devastating blast grenades with extreme destructive power. Each activation fires both barrels in rapid succession.
   components:
   - type: Sprite
-    sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/ntsf_cyerxa_120mm.rsi
+    sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/cyerxa_120mm.rsi
     state: space_artillery
   - type: ContainerContainer
     containers:

@@ -13,6 +13,7 @@
     requireInSpace: true
   - type: GuidedProjectile
     turnRate: 180
+  - type: PDTarget
 
 # 60mm Rocket Cartridge
 - type: entity
