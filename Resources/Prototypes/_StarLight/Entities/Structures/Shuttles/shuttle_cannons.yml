@@ -346,3 +346,145 @@
   - type: StaticPrice
     price: 5500
 
+# ADMP-27 VESPERA 50mm Rapid-Fire Missile Rack
+- type: entity
+  id: WeaponTurretVespera
+  parent: ShuttleGunBase
+  name: ADMP-27 VESPERA 50mm Rapid-Fire Missile Rack
+  description: A rapid-fire swarm missile rack. Saturates targets with guided warheads to overwhelm defenses.
+  components:
+  - type: Sprite
+    sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/Vespera.rsi
+    layers:
+    - state: space_artillery
+      map: ["enum.GunVisualLayers.Base"]
+    - state: space_artillery
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 500
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Anchorable
+    delay: 90
+  - type: Pullable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+        - !type:ChangeConstructionNodeBehavior
+          node: machineFrame
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+  - type: Gun
+    shotsPerBurst: 13
+    burstCooldown: 20
+    burstFireRate: 13
+    fireRate: 16
+    selectedMode: Burst
+    angleDecay: 20
+    minAngle: 4
+    maxAngle: 35
+    availableModes:
+    - Burst
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+      params:
+        variation: 0.08
+        volume: 6
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: MagazineAmmoProvider
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        priority: 2
+        whitelist:
+          tags:
+          - Magazine50mmRocket
+        insertSound:
+          path: /Audio/Weapons/Guns/MagIn/kinetic_reload.ogg
+          params:
+            pitch: 1.5
+        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
+  - type: Appearance
+  - type: GunneryTrackable
+  - type: StaticPrice
+    price: 6000
+
+- type: entity
+  id: ShuttleGunAutocannon
+  parent: ShuttleGunBase
+  name: L85 20mm autocannon
+  description: A light 20mm ballistic autocannon designed for rapid fire and suppressing smaller targets at close range. Cheap, light.
+  components:
+  - type: Sprite
+    sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/50cal.rsi
+    state: space_artillery
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 500
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Anchorable
+    delay: 90
+  - type: Pullable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+        - !type:ChangeConstructionNodeBehavior
+          node: machineFrame
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+  - type: Gun
+    fireRate: 12
+    projectileSpeed: 160
+    minAngle: 0
+    maxAngle: 5
+    soundGunshot:
+      path: /Audio/_Starlight/Weapons/Shuttleguns/slammer.ogg
+      params:
+        variation: 0.05
+        volume: 5
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: BatteryAmmoProvider
+    proto: 20mmBullet
+    fireCost: 1
+  - type: Battery
+    maxCharge: 50
+    startingCharge: 50
+    netsync: false
+  - type: ApcPowerReceiverBattery
+    idleLoad: 100
+    batteryRechargeRate: 1
+    batteryRechargeEfficiency: 0.0
+  - type: ApcPowerReceiver
+    powerLoad: 100
+  - type: ExtensionCableReceiver
+  - type: GunneryTrackable
