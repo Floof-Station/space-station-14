@@ -63,10 +63,6 @@
         25
       AggroVisionRadius: !type:Single
         25
-  - type: RadarBlip
-    color: "#00FF00"
-    scale: 0.8
-    requireInSpace: false
   - type: RadarLaserTracker
     laserColor: "#FFFF00"
     traceDuration: 0.75

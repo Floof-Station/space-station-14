@@ -17,6 +17,6 @@
     color: orange
   - type: RadarBlip
     scale: 0.85
-    shape: triangle
-    radarColor: "#FFDD00"
+    shape: Square
+    color: "#FFDD00"
     requireInSpace: true
