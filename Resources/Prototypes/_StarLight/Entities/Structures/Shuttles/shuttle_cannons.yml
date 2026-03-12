@@ -75,6 +75,11 @@
   - type: GunneryTrackable
   - type: StaticPrice
     price: 5000
+  - type: AutoLoader
+    container: gun_magazine
+    whitelist:
+      tags:
+      - MagazineGrenade120mm
 
 # Apollo Heavy Laser Cannon - Slow firing devastating energy weapon
 - type: entity
@@ -125,6 +130,11 @@
     traceDuration: 0.75
     maxRange: 35.0
   - type: GunneryTrackable
+  - type: AutoLoader
+    container: cell_slot
+    whitelist:
+      tags:
+      - PowerCage
 
 # Vanyk-MK2 60mm Rocket Launcher - Multi-rocket burst fire system
 - type: entity
@@ -207,6 +217,11 @@
   - type: GunneryTrackable
   - type: StaticPrice
     price: 6000
+  - type: AutoLoader
+    container: gun_magazine
+    whitelist:
+      tags:
+      - Magazine60mmRocket
 
 # M321-CHARYBDIS 'Thanatos' 280mm Railgun - Single-shot, manually loaded, extreme damage
 - type: entity
@@ -354,6 +369,11 @@
   - type: GunneryTrackable
   - type: StaticPrice
     price: 5500
+  - type: AutoLoader
+    container: ballistic-ammo
+    whitelist:
+      tags:
+      - Grenade
 
 # ADMP-27 VESPERA 50mm Rapid-Fire Missile Rack
 - type: entity
@@ -438,6 +458,11 @@
   - type: GunneryTrackable
   - type: StaticPrice
     price: 6000
+  - type: AutoLoader
+    container: gun_magazine
+    whitelist:
+      tags:
+      - Magazine50mmRocket
 
 - type: entity
   id: ShuttleGunAutocannon
