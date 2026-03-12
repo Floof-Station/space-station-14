@@ -135,7 +135,11 @@
   components:
   - type: Sprite
     sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/vanyk-MK2.rsi
+    granularLayersRendering: true
     layers:
+    - sprite: _Starlight/Objects/Weapons/Guns/Turrets/pointdefense.rsi
+      state: support
+      renderingStrategy: NoRotation
     - state: space_artillery
       map: ["enum.GunVisualLayers.Base"]
     - state: space_artillery
@@ -288,7 +292,12 @@
   components:
   - type: Sprite
     sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/tarnyx.rsi
-    state: space_artillery
+    granularLayersRendering: true
+    layers:
+    - sprite: _Starlight/Objects/Weapons/Guns/Turrets/pointdefense.rsi
+      state: support
+      renderingStrategy: NoRotation
+    - state: space_artillery
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
@@ -355,7 +364,11 @@
   components:
   - type: Sprite
     sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/Vespera.rsi
+    granularLayersRendering: true
     layers:
+    - sprite: _Starlight/Objects/Weapons/Guns/Turrets/pointdefense.rsi
+      state: support
+      renderingStrategy: NoRotation
     - state: space_artillery
       map: ["enum.GunVisualLayers.Base"]
     - state: space_artillery
@@ -434,7 +447,12 @@
   components:
   - type: Sprite
     sprite: _Starlight/Objects/Weapons/Guns/Shuttleguns/50cal.rsi
-    state: space_artillery
+    granularLayersRendering: true
+    layers:
+    - sprite: _Starlight/Objects/Weapons/Guns/Turrets/pointdefense.rsi
+      state: support
+      renderingStrategy: NoRotation
+    - state: space_artillery
   - type: Physics
     bodyType: Dynamic
   - type: Fixtures
