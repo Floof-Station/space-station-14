@@ -11,15 +11,17 @@
     mode: SnapgridCenter
   components:
     - type: Sprite
+      sprite: _Starlight/Structures/Machines/computers.rsi
       layers:
         - map: ["computerLayerBody"]
+          sprite: Structures/Machines/computers.rsi
           state: computer
         - map: ["computerLayerKeyboard"]
-          state: generic_keyboard
+          state: gunnery_keyboard
         - map: ["computerLayerScreen"]
-          state: solar_screen
+          state: gunnery_screen
         - map: ["computerLayerKeys"]
-          state: generic_keys
+          state: gunnery_keyboard
     - type: GunneryConsole
       maxRange: 512
     - type: ActivatableUI
