@@ -3,6 +3,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.UserInterface;
 using Content.Shared._Starlight.Weapons.Gunnery;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -27,6 +28,7 @@ public sealed class GunneryConsoleSystem : EntitySystem
     [Dependency] private readonly SharedGunSystem       _gun       = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming           _timing    = default!;
+    [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
 
     private const float UpdateInterval = 0.25f;
     private float _updateTimer;
@@ -153,6 +155,40 @@ public sealed class GunneryConsoleSystem : EntitySystem
             return;
 
         var xform             = Transform(uid);
+
+        // Check for Server.
+        var gridId  = xform.GridUid;
+        var consoleMapCoords = _transform.GetMapCoordinates(uid);
+        var serverfound = false;
+
+        if (gridId != null && HasComp<MapGridComponent>(gridId.Value))
+        {
+            var gunQuery = AllEntityQuery<GunneryServerComponent, TransformComponent>();
+            while (gunQuery.MoveNext(out var serverUid, out _, out var serverXform))
+            {
+                if (serverXform.GridUid != gridId)
+                    continue;
+
+                var gunMapCoords = _transform.GetMapCoordinates(serverUid, serverXform);
+                if (gunMapCoords.MapId != consoleMapCoords.MapId)
+                    continue;
+
+                if (_power.IsPowered(serverUid))
+                {
+                    serverfound = true;
+                    break;
+                }
+            }
+        }
+
+        if (!serverfound)
+        {
+            _ui.SetUiState(uid, GunneryConsoleUiKey.Key,
+                new GunneryConsoleBoundUserInterfaceState(_console.GetNavState(uid, _console.GetAllDocks()), new List<CannonBlipData>(), null, false));
+
+            return;
+        }
+
         EntityCoordinates? coordinates = null;
         Angle?             angle       = null;
 
@@ -173,7 +209,6 @@ public sealed class GunneryConsoleSystem : EntitySystem
         navState.MaxRange = comp.MaxRange;
 
         // Populate standard radar blips (rockets, shells, etc.)
-        var consoleMapCoords = _transform.GetMapCoordinates(uid);
         var maxRangeSq       = comp.MaxRange * comp.MaxRange;
 
         var blipQuery = AllEntityQuery<RadarBlipComponent, TransformComponent>();
@@ -215,7 +250,6 @@ public sealed class GunneryConsoleSystem : EntitySystem
 
         // Build cannon blip list: all GunneryTrackable guns on the same grid.
         var cannons = new List<CannonBlipData>();
-        var gridId  = xform.GridUid;
 
         if (gridId != null && HasComp<MapGridComponent>(gridId.Value))
         {
