@@ -23,6 +23,7 @@
         - map: ["computerLayerKeys"]
           state: gunnery_keyboard
     - type: GunneryConsole
+    - type: RadarConsole
       maxRange: 512
     - type: ActivatableUI
       key: enum.GunneryConsoleUiKey.Key
