@@ -11,8 +11,6 @@
     scale: 1
     shape: Circle
     requireInSpace: true
-  - type: GuidedProjectile
-    turnRate: 180
   - type: PDTarget
 
 # 50mm Rocket Cartridge
