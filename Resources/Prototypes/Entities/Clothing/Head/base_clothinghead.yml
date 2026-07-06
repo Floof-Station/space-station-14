@@ -22,6 +22,20 @@
     tags:
     - ClothMade
     - WhitelistChameleon
+  # Forky - start - clothing stains
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon
+  - type: SolutionManager
+    solutions:
+    - SolutionStain
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -143,6 +157,10 @@
     - HeadTop
     - HeadSide
     - FacialHair
+  # Forky - start - clothing stains
+  - type: StainBlocker
+    slots: [MASK]
+  # Forky - End
 
 - type: entity
   abstract: true
@@ -194,6 +212,22 @@
     - HeadTop
     - HeadSide
     - FacialHair
+  # Forky - start - clothing stains
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon
+  - type: SolutionManager
+    solutions:
+    - SolutionStain
+  - type: StainBlocker
+    slots: [MASK]
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -291,3 +325,17 @@
     - Hair
     - HeadTop
     - HeadSide
+  # Forky - start - clothing stains
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      head:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: helmetblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: helmetbloodicon
+  - type: SolutionManager
+    solutions:
+    - SolutionStain
+  # Forky - end

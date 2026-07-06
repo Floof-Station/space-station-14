@@ -8,6 +8,29 @@
     - outerClothing
   - type: Sprite
     state: icon
+  # Forky - start - clothing stains
+  - type: Appearance
+  - type: Stainable
+    clothingVisuals:
+      outerClothing:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: outerclothing
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: outerclothing
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Fiber
+        Quantity: 30
+  - type: SolutionManager
+    solutions:
+    - SolutionStain
+  - type: StainBlocker
+    slots: [INNERCLOTHING]
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -23,6 +46,18 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: HeldSpeedModifier
+  # Forky - start - clothing stains
+  - type: Stainable
+    clothingVisuals:
+      outerClothing:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: suitblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: suitbloodicon
+  - type: StainBlocker
+    slots: [INNERCLOTHING, FEET, GLOVES]
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -60,6 +95,16 @@
         type: StorageBoundUserInterface
   - type: StaticPrice
     price: 70
+  # Forky - start - clothing stains
+  - type: Stainable
+    clothingVisuals:
+      outerClothing:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: coatblood
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: coatbloodicon
+    # Forky - end
 
 - type: entity
   abstract: true
@@ -98,6 +143,16 @@
     - state: icon-open
       map: ["foldedLayer"]
       visible: false
+  # Forky - start - clothing stains
+  - type: Stainable
+    clothingVisuals:
+      outerClothing:
+      - sprite: _Funkystation/Effects/blood.rsi
+        state: outerclothing
+    iconVisuals:
+    - sprite: _Funkystation/Effects/blood.rsi
+      state: outerclothing
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -159,6 +214,10 @@
   - type: HideLayerClothing
     slots:
     - Tail
+  # Forky - start - clothing stains
+  - type: StainBlocker
+    slots: [INNERCLOTHING, FEET, GLOVES]
+  # Forky - end
 
 - type: entity
   abstract: true
@@ -196,6 +255,10 @@
     tags:
     - Hardsuit
     - WhitelistChameleon
+  # Forky - start - clothing stains
+  - type: StainBlocker
+    slots: [INNERCLOTHING, FEET, GLOVES]
+  # Forky - end
 
 - type: entity
   parent: ClothingOuterEVASuitBase
