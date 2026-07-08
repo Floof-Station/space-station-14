@@ -184,7 +184,6 @@
   - type: EdgeSpreader
     id: Puddle
   - type: StepTrigger
-    stepOn: true
   - type: Edible
     edible: Drink
     delay: 3
