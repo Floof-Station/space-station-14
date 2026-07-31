@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: [SolutionFood, SolutionToolNormal, Clothing, AllowSuitStorageClothing, BaseSlicingRefinable ] # FLOOF: 'AllowSuitStorageClothing'
+  parent: [SolutionFood, SolutionToolNormal, Clothing, AllowSuitStorageClothing, BaseSlicingRefinable, MoffStainableClothingBase] # FLOOF: 'AllowSuitStorageClothing' # Moffstation - mixed in MoffStainableClothingBase
   id: UnsensoredClothingUniformBase
   components:
   - type: Sprite
@@ -34,7 +34,6 @@
     - Recyclable
     - WhitelistChameleon
   # Forky - start - clothing stains
-  - type: Appearance
   - type: Stainable
     clothingVisuals:
       jumpsuit:
@@ -50,9 +49,6 @@
     iconVisuals:
     - sprite: _Funkystation/Effects/blood.rsi
       state: uniformbloodicon
-  - type: SolutionManager
-    solutions:
-    - SolutionStain
   # Forky - end
 
 - type: entity
