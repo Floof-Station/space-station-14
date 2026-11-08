@@ -1,36 +1,3 @@
-﻿- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitRed
-  name: red swimsuit
-  description: You'd be a candy cane if these stripes were horizontal.
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_red.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_red.rsi
-
-- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitOrange
-  name: orange swimsuit
-  description: Don't turn around.
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_orange.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_orange.rsi
-
-- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitYellow
-  name: yellow swimsuit
-  description: Did you know that bees can swim?
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_yellow.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_yellow.rsi
-
 - type: entity
   parent: [ClothingSwimsuitBase]
   id: ClothingSwimsuitGreen
@@ -53,28 +20,6 @@
   - type: Clothing
     sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_blue.rsi
   
-- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitPurple
-  name: purple swimsuit
-  description: Spin and twirl in it!
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_purple.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_purple.rsi
-
-- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitPink
-  name: pink swimsuit
-  description: Who doesn't love some frills?
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_pink.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_pink.rsi
-
 - type: entity
   parent: [ClothingSwimsuitBase]
   id: ClothingSwimsuitMagenta
@@ -116,17 +61,6 @@
   - type: ContainerContainer #greycloak has this and greycloak also has folding and hood functions #seeing if this fixes testfail
     containers:
       toggleable-clothing: !type:ContainerSlot {}
-
-- type: entity
-  parent: [ClothingSwimsuitBase]
-  id: ClothingSwimsuitTrans
-  name: shark swimsuit
-  description: Rawr, or uh.. something...
-  components:
-  - type: Sprite
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_trans.rsi
-  - type: Clothing
-    sprite: _Impstation/Clothing/Uniforms/Other/Swimsuits/swimsuit_trans.rsi
 
 - type: entity
   parent: [ClothingSwimsuitBase]

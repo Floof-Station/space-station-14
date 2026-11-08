@@ -1,30 +1,23 @@
 - type: vendingMachineInventory
   id: BeachDrobeInventory
   startingInventory:
-    ClothingSwimsuitRed: 3
-    ClothingSwimsuitOrange: 3
-    ClothingSwimsuitYellow: 3
+    ClothingUnderTopSwimsuitRed: 3 # Floof - beach gear
+    ClothingUnderTopSwimsuitOrange: 3 # Floof - beach gear
+    ClothingUnderBottomSwimsuitOrange: 3 # Floof - beach gear
+    ClothingUnderTopSwimsuitYellow: 3 # Floof - beach gear
     ClothingSwimsuitGreen: 3
     ClothingSwimsuitBlue: 3
-    ClothingSwimsuitPurple: 3
-    ClothingSwimsuitPink: 3
+    ClothingUnderTopSwimsuitPurple: 3 # Floof - beach gear
+    ClothingUnderBottomSwimsuitPurple: 3 # Floof - beach gear
+    ClothingUnderTopSwimsuitPink: 3 # Floof - beach gear
     ClothingSwimsuitMagenta: 3
     ClothingSwimsuitBlack: 3
-    ClothingSwimsuitTrans: 3
+    ClothingUnderTopSwimsuitTrans: 3 # Floof - beach gear
     ClothingSwimsuitGay: 3
     ClothingHeadHatStrawHat: 2
     ClothingEyesGlassesCheapSunglasses: 2
     ClothingShoesFlippers: 2
     BeachBall: 2
-    TowelColorRed: 2 #here we fucking go
-    TowelColorOrange: 2
-    TowelColorYellow: 2
-    TowelColorGreen: 2
-    TowelColorLightBlue: 2
-    TowelColorPurple: 2
-    TowelColorPink: 2 
-    TowelColorMaroon: 2 
-    TowelColorBlack: 2
     TowelColorWhite: 2
   contrabandInventory: 
     PlushieSharkBlue: 1
