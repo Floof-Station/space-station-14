@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 11/05/2026 07:36:45
-  entityCount: 43
+  entityCount: 45
 maps:
 - 1
 grids:
@@ -1232,4 +1232,16 @@ entities:
       pos: -1.5,32.5
       parent: 2
       rot: 3.141592653589793 rad
+- proto: ClothingBackpackDuffelSyndicateFilledShotgun
+  entities:
+  - uid: 62
+    components:
+    - type: Transform
+      pos: -6.399703168768723,11.475096880180757
+      parent: 2
+  - uid: 63
+    components:
+    - type: Transform
+      pos: 8.648111638525918,11.16160073836212
+      parent: 2
 ...
