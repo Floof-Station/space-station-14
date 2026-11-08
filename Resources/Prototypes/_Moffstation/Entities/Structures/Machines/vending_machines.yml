@@ -6,10 +6,8 @@
   components:
   - type: VendingMachine
     pack: SwimvendInventory
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
-    denyState: deny-unshaded
+  - type: VendingMachineVisuals # Floof - beach gear
+    denyState: deny-unshaded # Floof - beach gear
   - type: DatasetVocalizer
     dataset: ClothesMateAds
   - type: SpeakOnUIClosed

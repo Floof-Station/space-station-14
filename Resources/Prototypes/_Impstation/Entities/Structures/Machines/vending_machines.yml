@@ -6,9 +6,6 @@
   components:
   - type: VendingMachine
     pack: BeachDrobeInventory
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
   - type: Vocalizer
   - type: DatasetVocalizer
     dataset: BeachDrobeAds
