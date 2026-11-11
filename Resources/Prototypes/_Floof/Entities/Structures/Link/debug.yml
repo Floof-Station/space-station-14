@@ -77,3 +77,103 @@
     loadNode: output
     sprite: Structures/Power/power.rsi
     state: provider
+
+- type: entity
+  abstract: true
+  id: BaseDebugGasLinkPipe
+  name: gas link pipe
+  suffix: DEBUG
+  description: Shares its pipe's gas with the matching pipe on the linked end.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Visibility
+    layer: 1
+  - type: SubFloorHide
+  - type: Sprite
+    drawdepth: ThinPipe
+    visible: false
+  - type: Appearance
+  - type: PipeAppearance
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+  - type: AtmosPipeLayers
+    spriteRsiPaths: {}
+    pipeLayersLocked: true
+  - type: AtmosDevice
+  - type: GasLink
+
+- type: entity
+  parent: BaseDebugGasLinkPipe
+  id: DebugGasLinkPipe1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeUnaryConnectors
+      color: "#FF4040"
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: LinkKey
+    key: DebugGasLink1
+
+- type: entity
+  parent: BaseDebugGasLinkPipe
+  id: DebugGasLinkPipe2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe_alt1.rsi
+      state: pipeUnaryConnectors
+      color: "#40FF40"
+  - type: AtmosPipeLayers
+    pipeLayer: 1
+  - type: LinkKey
+    key: DebugGasLink2
+
+- type: entity
+  parent: BaseDebugGasLinkPipe
+  id: DebugGasLinkPipe3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe_alt2.rsi
+      state: pipeUnaryConnectors
+      color: "#4080FF"
+  - type: AtmosPipeLayers
+    pipeLayer: 2
+  - type: LinkKey
+    key: DebugGasLink3
+
+- type: entity
+  id: DebugGasLink
+  name: gas link
+  suffix: DEBUG
+  description: Spawns three gas link pipes, one per pipe layer.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: Structures/Piping/Atmospherics/gascanisterport.rsi
+    state: gasCanisterPort
+  - type: ChildEntities
+    childPrototypes:
+    - prototype: DebugGasLinkPipe1
+    - prototype: DebugGasLinkPipe2
+    - prototype: DebugGasLinkPipe3
