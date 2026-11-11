@@ -46,11 +46,15 @@ public sealed partial class PowerLinkSystem : EntitySystem
             
             supplier.MaxSupply = consumer.ReceivedPower;
 
-            var demand = supplier.Net is { } net
-                ? _powerNet.GetNetworkStatistics(net.NetworkNode).Consumption
-                : 0f;
-
-            consumer.DrawRate = demand + link.Headroom;
+            
+            var unmet = 0f;
+            if (supplier.Net is { } net)
+            {
+                var stats = _powerNet.GetNetworkStatistics(net.NetworkNode);
+                unmet = Math.Max(0f, stats.Consumption - stats.SupplyCurrent - stats.SupplyBatteries);
+            }
+            //only relying on the headroom here would lead to brownouts when power surges. This adjusts instantly to the demand.
+            consumer.DrawRate = supplier.CurrentSupply + unmet + link.Headroom;
         }
     }
 
