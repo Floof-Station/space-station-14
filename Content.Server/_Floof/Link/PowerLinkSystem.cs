@@ -9,6 +9,14 @@ public sealed partial class PowerLinkSystem : EntitySystem
     [Dependency] private LinkedEntitySystem _linked = default!;
     [Dependency] private PowerNetSystem _powerNet = default!;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        // Network load lists are only rebuilt in PowerNetSystem.Update; reading stats before that hits freed loads.
+        UpdatesAfter.Add(typeof(PowerNetSystem));
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
