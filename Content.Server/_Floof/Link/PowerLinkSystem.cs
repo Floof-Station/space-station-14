@@ -36,7 +36,8 @@ public sealed partial class PowerLinkSystem : EntitySystem
                 continue;
             }
 
-            if (!link.Enabled || !partnerLink.Enabled)
+
+            if (!link.Enabled || !partnerLink.Enabled || consumer.Net == supplier.Net) // prevent power cycle
             {
                 consumer.DrawRate = 0f;
                 supplier.MaxSupply = 0f;
