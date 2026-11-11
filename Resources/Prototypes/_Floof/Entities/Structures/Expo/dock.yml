@@ -1,0 +1,11 @@
+- type: entity
+  parent: AirlockGlassShuttle
+  id: AirlockExpoBerth
+  name: expo docking airlock
+  suffix: Expo Berth, spawns the Expo
+  components:
+  - type: Docking
+    radarColor: "#4fd8e0"
+    highlightedRadarColor: "#9ff0f5"
+  - type: GridFill
+    path: /Maps/_Floof/Misc/expo.yml
