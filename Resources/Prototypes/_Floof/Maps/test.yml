@@ -1,0 +1,17 @@
+- type: gameMap
+  id: TestPowerLink
+  mapName: TestPowerLink
+  mapPath: /Maps/_Floof/Test/powerlink.yml
+  isGrid: true
+  minPlayers: 0
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    TestPowerLink:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "TestPowerLink"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
