@@ -119,7 +119,7 @@
   - type: Sprite
     layers:
     - sprite: Structures/Piping/Atmospherics/pipe.rsi
-      state: pipeUnaryConnectors
+      state: pipeHalf
       color: "#FF4040"
   - type: AtmosPipeLayers
     pipeLayer: 0
@@ -134,8 +134,15 @@
   - type: Sprite
     layers:
     - sprite: Structures/Piping/Atmospherics/pipe_alt1.rsi
-      state: pipeUnaryConnectors
+      state: pipeHalf
       color: "#40FF40"
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        pipeLayer: 1
   - type: AtmosPipeLayers
     pipeLayer: 1
   - type: LinkKey
@@ -149,8 +156,15 @@
   - type: Sprite
     layers:
     - sprite: Structures/Piping/Atmospherics/pipe_alt2.rsi
-      state: pipeUnaryConnectors
+      state: pipeHalf
       color: "#4080FF"
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        pipeLayer: 2
   - type: AtmosPipeLayers
     pipeLayer: 2
   - type: LinkKey
@@ -172,7 +186,21 @@
     drawdepth: FloorObjects
     sprite: Structures/Piping/Atmospherics/gascanisterport.rsi
     state: gasCanisterPort
-  - type: ChildEntities
+  - type: Anchorable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        mask:
+        - ItemMask
+  - type: Pullable
+  - type: Rotatable
+  - type: AnchoredChildEntities
     childPrototypes:
     - prototype: DebugGasLinkPipe1
     - prototype: DebugGasLinkPipe2
