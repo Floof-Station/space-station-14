@@ -28,6 +28,13 @@ public sealed partial class PowerLinkSystem : EntitySystem
                 continue;
             }
 
+            if (!link.Enabled || !partnerLink.Enabled)
+            {
+                consumer.DrawRate = 0f;
+                supplier.MaxSupply = 0f;
+                continue;
+            }
+            
             supplier.MaxSupply = consumer.ReceivedPower;
 
             var demand = supplier.Net is { } net
@@ -36,6 +43,12 @@ public sealed partial class PowerLinkSystem : EntitySystem
 
             consumer.DrawRate = demand + link.Headroom;
         }
+    }
+
+    public void SetEnabled(Entity<PowerLinkComponent?> ent, bool enabled)
+    {
+        if (Resolve(ent, ref ent.Comp, false))
+            ent.Comp.Enabled = enabled;
     }
 
     [SubscribeLocalEvent]
