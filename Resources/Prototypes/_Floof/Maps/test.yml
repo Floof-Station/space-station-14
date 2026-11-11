@@ -15,3 +15,21 @@
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]
+
+- type: gameMap
+  id: TestGasLink
+  mapName: TestGasLink
+  mapPath: /Maps/_Floof/Test/gaslink.yml
+  isGrid: true
+  minPlayers: 0
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    TestGasLink:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "TestGasLink"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
