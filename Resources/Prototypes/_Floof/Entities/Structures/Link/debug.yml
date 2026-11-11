@@ -1,7 +1,6 @@
 - type: entity
   abstract: true
   id: BaseDebugPowerLink
-  name: power link
   placement:
     mode: SnapgridCenter
   components:
@@ -24,7 +23,8 @@
 - type: entity
   parent: BaseDebugPowerLink
   id: DebugPowerLinkInput
-  suffix: DEBUG, Input
+  name: power link input
+  suffix: DEBUG
   description: Draws power from its HV network for its linked output.
   components:
   - type: Sprite
@@ -42,11 +42,17 @@
     drawRate: 0
   - type: PowerLink
     direction: Input
+  - type: PowerMonitoringDevice
+    group: Consumer
+    loadNode: input
+    sprite: Structures/Power/power.rsi
+    state: wiredmachine
 
 - type: entity
   parent: BaseDebugPowerLink
   id: DebugPowerLinkOutput
-  suffix: DEBUG, Output
+  name: power link output
+  suffix: DEBUG
   description: Supplies its HV network with whatever its linked input receives.
   components:
   - type: Sprite
@@ -66,3 +72,8 @@
     supplyRampTolerance: 500
   - type: PowerLink
     direction: Output
+  - type: PowerMonitoringDevice
+    group: Generator
+    loadNode: output
+    sprite: Structures/Power/power.rsi
+    state: provider
