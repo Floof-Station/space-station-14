@@ -1,8 +1,8 @@
 - type: entity
   parent: AirlockGlassShuttle
-  id: AirlockExpoBerth
+  id: AirlockExpoDock
   name: expo docking airlock
-  suffix: Expo Berth, spawns the Expo
+  suffix: Expo Dock
   components:
   - type: Docking
     radarColor: "#4fd8e0"
