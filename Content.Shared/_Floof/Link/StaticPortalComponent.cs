@@ -8,7 +8,7 @@ namespace Content.Shared._Floof.Link;
 ///     Just like a normal portal but with benefits.
 ///     Relies on <see cref="LinkedEntityComponent"/> being set up.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class StaticPortalComponent : Component
 {
     /// <summary>
@@ -31,6 +31,10 @@ public sealed partial class StaticPortalComponent : Component
     /// Below this open share nothing fits through, ghosts still can.
     [DataField]
     public float Threshold = 0.5f;
+
+    /// Sprite and light scale at the smallest open share, growing to 1 when fully open.
+    [DataField]
+    public float MinScale = 0.3f;
 
     /// Played when the portal opens from closed. Same as upstream's station teleporter link sound.
     [DataField] public SoundSpecifier? OpenSound = new SoundPathSpecifier("/Audio/Effects/Lightning/lightningbolt.ogg");
