@@ -3,6 +3,8 @@ using Content.Server._Floof.ChildEntities;
 using Content.Server._Floof.Link;
 using Content.Shared._Floof.Link;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Power.Components;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.Teleportation.Components;
 using Content.Shared.Teleportation.Systems;
 using Content.Shared.Verbs;
@@ -16,6 +18,46 @@ public sealed partial class FathomGateSystem : EntitySystem
     [Dependency] private PowerLinkSystem _powerLink = default!;
     [Dependency] private GasLinkSystem _gasLink = default!;
     [Dependency] private StaticPortalSystem _portal = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<FathomGateComponent>();
+        while (query.MoveNext(out var uid, out var gate))
+        {
+            if (gate.State != FathomGateState.Open)
+                continue;
+
+            _battery.UseCharge(uid, gate.UpkeepRate * frameTime);
+
+            if (HasComp<BatteryComponent>(uid) && _battery.GetChargeLevel(uid) <= 0f)
+            {
+                SetState((uid, gate), FathomGateState.Collapsed);
+                continue;
+            }
+
+            SetPortalOpen((uid, gate), GetPortalOpen((uid, gate)));
+        }
+    }
+
+    private float GetPortalOpen(Entity<FathomGateComponent> ent)
+    {
+        if (!HasComp<BatteryComponent>(ent))
+            return 1f;
+
+        return Math.Clamp(_battery.GetChargeLevel(ent.Owner) / ent.Comp.LowCharge, 0f, 1f);
+    }
+
+    private void SetPortalOpen(Entity<FathomGateComponent> ent, float open)
+    {
+        if (!TryComp<AnchoredChildEntitiesComponent>(ent, out var children))
+            return;
+
+        foreach (var child in children.Children)
+            _portal.SetOpen(child, open);
+    }
 
     [SubscribeLocalEvent]
     private void OnLinkChanged(Entity<FathomGateComponent> ent, ref LinkedEntityChangedEvent args)
@@ -97,8 +139,9 @@ public sealed partial class FathomGateSystem : EntitySystem
         {
             _powerLink.SetEnabled(child, open);
             _gasLink.SetEnabled(child, open);
-            _portal.SetOpen(child, open ? 1f : 0f);
         }
+
+        SetPortalOpen(ent, open ? GetPortalOpen(ent) : 0f);
     }
 
     /// <summary>
