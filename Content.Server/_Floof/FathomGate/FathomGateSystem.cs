@@ -5,6 +5,8 @@ using Content.Server.Administration.Managers;
 using Content.Shared._Floof.Link;
 using Content.Shared.Administration;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Interaction;
+using Content.Shared.Popups;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Teleportation.Components;
@@ -22,6 +24,7 @@ public sealed partial class FathomGateSystem : EntitySystem
     [Dependency] private StaticPortalSystem _portal = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Update(float frameTime)
     {
@@ -73,6 +76,42 @@ public sealed partial class FathomGateSystem : EntitySystem
     {
         PairChildren(ent);
         ApplyToChildren(ent);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnInteractUsing(Entity<FathomGateComponent> ent, ref InteractUsingEvent args)
+    {
+        if (args.Handled || !HasComp<FathomCatalystComponent>(args.Used))
+            return;
+
+        args.Handled = true;
+
+        if (CatalystBlocked(ent) is { } reason)
+        {
+            _popup.PopupEntity(Loc.GetString(reason), ent, args.User);
+            return;
+        }
+
+        SetState(ent.AsNullable(), FathomGateState.Open);
+        QueueDel(args.Used);
+        _popup.PopupEntity(Loc.GetString("fathom-gate-catalyst-used"), ent, args.User);
+    }
+
+    private string? CatalystBlocked(Entity<FathomGateComponent> ent)
+    {
+        if (!_linked.GetLink(ent, out var partner) || !HasComp<FathomGateComponent>(partner))
+            return "fathom-gate-catalyst-unlinked";
+
+        if (ent.Comp.State == FathomGateState.Open)
+            return "fathom-gate-catalyst-already-open";
+
+        if (!_battery.IsFull(ent.Owner))
+            return "fathom-gate-catalyst-not-charged";
+
+        if (!_battery.IsFull(partner.Value))
+            return "fathom-gate-catalyst-partner-not-charged";
+
+        return null;
     }
 
     [SubscribeLocalEvent]
