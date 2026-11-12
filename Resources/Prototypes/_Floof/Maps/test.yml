@@ -33,3 +33,21 @@
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]
+
+- type: gameMap
+  id: TestStaticPortal
+  mapName: TestStaticPortal
+  mapPath: /Maps/_Floof/Test/portaltest.yml
+  isGrid: true
+  minPlayers: 0
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    TestStaticPortal:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "TestStaticPortal"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]
