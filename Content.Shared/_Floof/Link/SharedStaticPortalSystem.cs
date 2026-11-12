@@ -16,7 +16,6 @@ using Robust.Shared.Physics.Dynamics.Joints;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._Floof.Link;
@@ -29,7 +28,6 @@ namespace Content.Shared._Floof.Link;
 public abstract partial class SharedStaticPortalSystem : EntitySystem
 {
     [Dependency] private INetManager _netMan = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedJointSystem _joints = default!;
@@ -48,9 +46,9 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         if (!args.CanAccess || !_tag.HasTag(args.User, ShowTraverseVerbTag))
             return;
 
-        // Don't use the verb with unlinked or with multi-output portals
+        // Don't use the verb with unlinked portals
         // (this is only intended to be useful for ghosts to see where a linked portal leads)
-        var disabled = !TryComp<LinkedEntityComponent>(ent, out var link) || link.LinkedEntities.Count != 1;
+        var disabled = !TryComp<LinkedEntityComponent>(ent, out var link) || link.LinkedEntities.Count == 0;
 
         var subject = args.User;
         args.Verbs.Add(new AlternativeVerb
@@ -145,8 +143,8 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
             if (_netMan.IsClient && !CanPredictTeleport((ent, link)))
                 return;
 
-            // pick a target and teleport there
-            var target = _random.Pick(link.LinkedEntities);
+            // LinkKey pairs exactly one partner
+            var target = link.LinkedEntities.First();
 
             if (HasComp<StaticPortalComponent>(target))
             {
@@ -231,23 +229,14 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
 
     /// <summary>
     /// Checks if the client is able to predict the teleport.
-    /// Client can't predict outside 1-to-1 portal-to-portal interactions due to randomness involved.
     /// </summary>
     /// <returns>
-    /// False if the linked entity count isn't 1.
     /// False if the linked entity doesn't exist on the client / is outside PVS.
     /// </returns>
     private bool CanPredictTeleport(Entity<LinkedEntityComponent> portal)
     {
         var first = portal.Comp.LinkedEntities.First();
-        var exists = Exists(first);
-
-        if (!exists ||
-            portal.Comp.LinkedEntities.Count != 1 || // 0 and >1 use RNG
-            exists && Transform(first).MapID == MapId.Nullspace) // The linked entity is most likely outside PVS
-            return false;
-
-        return true;
+        return Exists(first) && Transform(first).MapID != MapId.Nullspace;
     }
 
     /// <summary>
