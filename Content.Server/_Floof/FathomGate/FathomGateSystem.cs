@@ -1,7 +1,9 @@
 using System.Linq;
 using Content.Server._Floof.ChildEntities;
 using Content.Server._Floof.Link;
+using Content.Server.Administration.Managers;
 using Content.Shared._Floof.Link;
+using Content.Shared.Administration;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
@@ -19,6 +21,7 @@ public sealed partial class FathomGateSystem : EntitySystem
     [Dependency] private GasLinkSystem _gasLink = default!;
     [Dependency] private StaticPortalSystem _portal = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private IAdminManager _admin = default!;
 
     public override void Update(float frameTime)
     {
@@ -73,15 +76,16 @@ public sealed partial class FathomGateSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private void OnGetVerbs(Entity<FathomGateComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    private void OnGetVerbs(Entity<FathomGateComponent> ent, ref GetVerbsEvent<Verb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        if (!_admin.HasAdminFlag(args.User, AdminFlags.Admin))
             return;
 
         var open = ent.Comp.State == FathomGateState.Open;
-        args.Verbs.Add(new AlternativeVerb
+        args.Verbs.Add(new Verb
         {
             Text = Loc.GetString(open ? "fathom-gate-verb-close" : "fathom-gate-verb-open"),
+            Category = VerbCategory.Debug,
             Act = () => SetState(ent.AsNullable(), open ? FathomGateState.Closed : FathomGateState.Open),
         });
     }
