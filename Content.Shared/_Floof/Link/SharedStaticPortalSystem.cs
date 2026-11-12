@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Tag;
@@ -9,7 +10,9 @@ using Content.Shared.Weapons.Misc;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Dynamics;
+using Robust.Shared.Physics.Dynamics.Joints;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
@@ -90,26 +93,51 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         if (Transform(subject).Anchored)
             return;
 
-        // break pulls before portal enter so we don't break shit
-        if (TryComp<PullableComponent>(subject, out var pullable) && pullable.BeingPulled)
-        {
-            _pulling.TryStopPull(subject, pullable);
-        }
-
-        if (TryComp<PullerComponent>(subject, out var pullerComp)
-            && TryComp<PullableComponent>(pullerComp.Pulling, out var subjectPulling))
-        {
-            _pulling.TryStopPull(pullerComp.Pulling.Value, subjectPulling);
-        }
-
-        // also break grapple joints
-        _joints.RemoveJoint(subject, SharedGrapplingGunSystem.GrapplingJoint);
-
         // if they came from another portal, just return and wait for them to exit the portal
+        // checked before breaking pulls, so pulled entities work.
         if (HasComp<StaticPortalTimeoutComponent>(subject))
         {
             return;
         }
+
+        // a pulled subject takes its puller along: the puller goes through in its place
+        if (TryComp<PullableComponent>(subject, out var pullable)
+            && pullable.Puller is { } puller
+            && CanTakePuller(puller))
+        {
+            subject = puller;
+        }
+
+        // break pulls before portal enter so we don't break shit
+        if (TryComp(subject, out pullable) && pullable.BeingPulled)
+        {
+            _pulling.TryStopPull(subject, pullable);
+        }
+
+        // whatever the subject pulls comes along, anything that one pulls stays behind
+        EntityUid? pulled = null;
+        DistanceJoint? oldJoint = null;
+        if (TryComp<PullerComponent>(subject, out var pullerComp)
+            && TryComp<PullableComponent>(pullerComp.Pulling, out var subjectPulling))
+        {
+            pulled = pullerComp.Pulling.Value;
+            oldJoint = GetPullJoint(pulled.Value, subjectPulling);
+            _pulling.TryStopPull(pulled.Value, subjectPulling);
+
+            if (TryComp<PullerComponent>(pulled, out var chainPuller)
+                && TryComp<PullableComponent>(chainPuller.Pulling, out var chainPulling))
+            {
+                _pulling.TryStopPull(chainPuller.Pulling.Value, chainPulling);
+            }
+
+            if (_tag.HasTag(pulled.Value, PreventCollisionTag))
+                pulled = null;
+            else
+                _joints.RemoveJoint(pulled.Value, SharedGrapplingGunSystem.GrapplingJoint);
+        }
+
+        // also break grapple joints
+        _joints.RemoveJoint(subject, SharedGrapplingGunSystem.GrapplingJoint);
 
         if (TryComp<LinkedEntityComponent>(ent, out var link) && link.LinkedEntities.Count != 0)
         {
@@ -123,13 +151,55 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
             if (HasComp<StaticPortalComponent>(target))
             {
                 // if target is a portal, signal that they shouldn't be immediately teleported back
-                var timeout = EnsureComp<StaticPortalTimeoutComponent>(subject);
-                timeout.EnteredPortal = ent;
-                Dirty(subject, timeout);
+                AddTimeout(subject, ent);
+                if (pulled != null)
+                    AddTimeout(pulled.Value, ent);
             }
 
-            TeleportEntity(ent, subject, Transform(target).Coordinates, target);
+            var coords = Transform(target).Coordinates;
+            TeleportEntity(ent, subject, coords, target);
+
+            if (pulled != null)
+            {
+                TeleportEntity(ent, pulled.Value, coords, target, false);
+
+                // both arrive on the same spot, so give the new pull the old rope length back
+                if (_pulling.TryStartPull(subject, pulled.Value)
+                    && oldJoint != null
+                    && GetPullJoint(pulled.Value) is { } joint)
+                {
+                    joint.Length = oldJoint.Length;
+                    joint.MaxLength = oldJoint.MaxLength;
+                    Dirty(pulled.Value, Comp<JointComponent>(pulled.Value));
+                }
+            }
         }
+    }
+
+    private bool CanTakePuller(EntityUid puller)
+    {
+        return !_tag.HasTag(puller, PreventCollisionTag)
+               && !Transform(puller).Anchored
+               && !HasComp<StaticPortalTimeoutComponent>(puller)
+               && !(TryComp<BuckleComponent>(puller, out var buckle) && buckle.Buckled);
+    }
+
+    private DistanceJoint? GetPullJoint(EntityUid pulled, PullableComponent? pullable = null)
+    {
+        if (!Resolve(pulled, ref pullable, false)
+            || pullable.PullJointId == null
+            || !TryComp<JointComponent>(pulled, out var joints)
+            || !joints.GetJoints.TryGetValue(pullable.PullJointId, out var joint))
+            return null;
+
+        return joint as DistanceJoint;
+    }
+
+    private void AddTimeout(EntityUid subject, EntityUid portal)
+    {
+        var timeout = EnsureComp<StaticPortalTimeoutComponent>(subject);
+        timeout.EnteredPortal = portal;
+        Dirty(subject, timeout);
     }
     
     [SubscribeLocalEvent]
