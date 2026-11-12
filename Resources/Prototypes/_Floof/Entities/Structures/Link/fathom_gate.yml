@@ -171,3 +171,16 @@
       offset: -1,0
     - prototype: FathomGatePower
       offset: 1,0
+
+- type: entity
+  parent: BaseItem
+  id: FathomCatalyst
+  name: fathom catalyst
+  description: Opens the link between two fully charged fathom gates. Consumed in the process.
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
+    state: core
+  - type: Item
+    size: Small
+  - type: FathomCatalyst
