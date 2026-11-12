@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Content.Shared.Teleportation.Components;
 using Content.Shared.Teleportation.Systems;
@@ -29,6 +30,7 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
 {
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedJointSystem _joints = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -95,6 +97,14 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         // checked before breaking pulls, so pulled entities work.
         if (HasComp<StaticPortalTimeoutComponent>(subject))
         {
+            return;
+        }
+
+        // a closed portal is hidden, so no popup
+        if (ent.Comp.Open < ent.Comp.Threshold)
+        {
+            if (ent.Comp.Open > 0f)
+                _popup.PopupEntity(Loc.GetString("static-portal-too-small"), ent, subject);
             return;
         }
 
@@ -263,6 +273,25 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         _audio.PlayPredicted(arrivalSound, subject, subject);
     }
     
+    public void SetOpen(Entity<StaticPortalComponent?> ent, float open)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        open = Math.Clamp(open, 0f, 1f);
+        var old = ent.Comp.Open;
+        if (MathHelper.CloseTo(old, open))
+            return;
+
+        ent.Comp.Open = open;
+        Dirty(ent);
+
+        if (old <= 0f && open > 0f)
+            _audio.PlayPredicted(ent.Comp.OpenSound, ent, null);
+        else if (old > 0f && open <= 0f)
+            _audio.PlayPredicted(ent.Comp.CloseSound, ent, null);
+    }
+
     protected virtual void LogTeleport(EntityUid portal, EntityUid subject, EntityCoordinates source, EntityCoordinates target)
     {
     }
