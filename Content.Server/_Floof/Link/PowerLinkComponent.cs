@@ -3,8 +3,9 @@ namespace Content.Server._Floof.Link;
 [RegisterComponent, Access(typeof(PowerLinkSystem))]
 public sealed partial class PowerLinkComponent : Component
 {
-    [DataField(required: true)]
-    public PowerLinkDirection Direction;
+    /// Power only flows from an input end to an output end.
+    [DataField]
+    public PowerLinkDirection Direction = PowerLinkDirection.Output;
 
     /// Power only flows while both ends are enabled.
     [DataField]

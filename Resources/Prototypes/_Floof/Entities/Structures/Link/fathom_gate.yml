@@ -1,6 +1,6 @@
 - type: entity
   parent: BaseStaticPortal
-  id: ExpoLinkPortal
+  id: FathomGatePortal
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -14,7 +14,7 @@
 
 - type: entity
   parent: BaseGasLinkPipe
-  id: ExpoLinkGasPipe1
+  id: FathomGateGasPipe1
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -26,7 +26,7 @@
 
 - type: entity
   parent: BaseGasLinkPipe
-  id: ExpoLinkGasPipe2
+  id: FathomGateGasPipe2
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -45,7 +45,7 @@
 
 - type: entity
   parent: BaseGasLinkPipe
-  id: ExpoLinkGasPipe3
+  id: FathomGateGasPipe3
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -63,64 +63,43 @@
     pipeLayer: 2
 
 - type: entity
-  abstract: true
-  id: BaseExpoLinkPower
+  id: FathomGatePower
   categories: [ HideSpawnMenu ]
   placement:
     mode: SnapgridCenter
   components:
   - type: Transform
     anchored: true
-
-- type: entity
-  parent: BaseExpoLinkPower
-  id: ExpoLinkPowerInput
-  components:
   - type: NodeContainer
     examinable: true
     nodes:
-      input:
+      link:
         !type:CableDeviceNode
         nodeGroupID: HVPower
   - type: PowerConsumer
     voltage: High
-    node: input
+    node: link
     drawRate: 0
-  - type: PowerLink
-    direction: Input
-  - type: PowerMonitoringDevice
-    group: Consumer
-    loadNode: input
-    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
-    state: base
-
-- type: entity
-  parent: BaseExpoLinkPower
-  id: ExpoLinkPowerOutput
-  components:
-  - type: NodeContainer
-    examinable: true
-    nodes:
-      output:
-        !type:CableDeviceNode
-        nodeGroupID: HVPower
   - type: PowerSupplier
     voltage: High
-    node: output
+    node: link
     supplyRate: 0
     supplyRampRate: 50000
     supplyRampTolerance: 500
+  # both ends start as input, switching one to output is part of setting up the link
   - type: PowerLink
-    direction: Output
+    direction: Input
   - type: PowerMonitoringDevice
     group: Generator
-    loadNode: output
+    sourceNode: link
+    loadNode: link
     sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
     state: base
 
 - type: entity
-  abstract: true
-  id: BaseExpoLink
+  id: FathomGate
+  name: fathom gate
+  description: An ancient looking device with a huge hole in the center and several access ports.
   placement:
     mode: SnapgridCenter
   components:
@@ -152,46 +131,18 @@
         layer:
         - WallLayer
   - type: LinkKey
-    key: ExpoLink
-  - type: ExpoLink
-
-- type: entity
-  parent: BaseExpoLink
-  id: ExpoLinkAnchor
-  name: expo link anchor
-  description: Holds the station's end of the link to the Expo.
-  components:
+    key: FathomGate
+  - type: FathomGate
   - type: AnchoredChildEntities
-    # Children pair by index with the other end's list: keep both lists in the same order.
+    # these need to be the same for all gate types or the link won't work.
     childPrototypes:
-    - prototype: ExpoLinkPortal
+    - prototype: FathomGatePortal
       offset: 0,-1
-    - prototype: ExpoLinkGasPipe1
+    - prototype: FathomGateGasPipe1
       offset: -1,0
-    - prototype: ExpoLinkGasPipe2
+    - prototype: FathomGateGasPipe2
       offset: -1,0
-    - prototype: ExpoLinkGasPipe3
+    - prototype: FathomGateGasPipe3
       offset: -1,0
-    - prototype: ExpoLinkPowerInput
-      offset: 1,0
-
-- type: entity
-  parent: BaseExpoLink
-  id: ExpoLinkCore
-  name: expo link core
-  description: Holds the Expo's end of the link to the station.
-  components:
-  - type: ExpoLinkCore
-  - type: AnchoredChildEntities
-    # Children pair by index with the other end's list: keep both lists in the same order.
-    childPrototypes:
-    - prototype: ExpoLinkPortal
-      offset: 0,-1
-    - prototype: ExpoLinkGasPipe1
-      offset: -1,0
-    - prototype: ExpoLinkGasPipe2
-      offset: -1,0
-    - prototype: ExpoLinkGasPipe3
-      offset: -1,0
-    - prototype: ExpoLinkPowerOutput
+    - prototype: FathomGatePower
       offset: 1,0

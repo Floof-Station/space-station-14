@@ -6,20 +6,20 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Teleportation.Components;
 using Content.Shared.Teleportation.Systems;
 
-namespace Content.Server._Floof.Expo;
+namespace Content.Server._Floof.FathomGate;
 
-public sealed partial class ExpoLinkSystem : EntitySystem
+public sealed partial class FathomGateSystem : EntitySystem
 {
     [Dependency] private LinkedEntitySystem _linked = default!;
 
     [SubscribeLocalEvent]
-    private void OnLinkChanged(Entity<ExpoLinkComponent> ent, ref LinkedEntityChangedEvent args)
+    private void OnLinkChanged(Entity<FathomGateComponent> ent, ref LinkedEntityChangedEvent args)
     {
         PairChildren(ent);
     }
 
     [SubscribeLocalEvent]
-    private void OnChildrenSpawned(Entity<ExpoLinkComponent> ent, ref AnchoredChildrenSpawnedEvent args)
+    private void OnChildrenSpawned(Entity<FathomGateComponent> ent, ref AnchoredChildrenSpawnedEvent args)
     {
         PairChildren(ent);
     }
@@ -33,12 +33,6 @@ public sealed partial class ExpoLinkSystem : EntitySystem
             || !TryComp<AnchoredChildEntitiesComponent>(uid, out var ours)
             || !TryComp<AnchoredChildEntitiesComponent>(partner, out var theirs))
             return;
-
-        if (HasComp<ExpoLinkCoreComponent>(uid) == HasComp<ExpoLinkCoreComponent>(partner))
-        {
-            Log.Error($"{ToPrettyString(uid)} is linked to {ToPrettyString(partner)}, but an Expo link needs one anchor and one core.");
-            return;
-        }
 
         // the side that hasn't spawned its children yet pairs once it does
         if (ours.Children.Count == 0 || theirs.Children.Count == 0)
@@ -60,7 +54,7 @@ public sealed partial class ExpoLinkSystem : EntitySystem
 
             if (!Matches(child, other))
             {
-                Log.Error($"Expo link child {i} doesn't match: {ToPrettyString(child)} and {ToPrettyString(other)}, not paired.");
+                Log.Error($"Fathom gate child {i} doesn't match: {ToPrettyString(child)} and {ToPrettyString(other)}, not paired.");
                 continue;
             }
 
@@ -88,11 +82,7 @@ public sealed partial class ExpoLinkSystem : EntitySystem
             return HasComp<StaticPortalComponent>(a) && HasComp<StaticPortalComponent>(b);
 
         if (HasComp<PowerLinkComponent>(a) || HasComp<PowerLinkComponent>(b))
-        {
-            return TryComp<PowerLinkComponent>(a, out var powerA)
-                   && TryComp<PowerLinkComponent>(b, out var powerB)
-                   && powerA.Direction != powerB.Direction;
-        }
+            return HasComp<PowerLinkComponent>(a) && HasComp<PowerLinkComponent>(b);
 
         if (HasComp<GasLinkComponent>(a) || HasComp<GasLinkComponent>(b))
         {
