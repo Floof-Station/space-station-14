@@ -205,3 +205,19 @@
     - prototype: DebugGasLinkPipe1
     - prototype: DebugGasLinkPipe2
     - prototype: DebugGasLinkPipe3
+
+- type: entity
+  parent: BaseStaticPortal
+  id: DebugStaticPortal
+  suffix: DEBUG
+  components:
+  - type: Sprite
+    layers:
+    - state: portal-blue
+  - type: PointLight
+    color: SkyBlue
+    radius: 3
+    energy: 1
+    netsync: false
+  - type: LinkKey
+    key: DebugStaticPortal
