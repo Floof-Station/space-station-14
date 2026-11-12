@@ -1,0 +1,197 @@
+- type: entity
+  parent: BaseStaticPortal
+  id: ExpoLinkPortal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: portal-blue
+  - type: PointLight
+    color: SkyBlue
+    radius: 3
+    energy: 1
+    netsync: false
+
+- type: entity
+  parent: BaseGasLinkPipe
+  id: ExpoLinkGasPipe1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeHalf
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+
+- type: entity
+  parent: BaseGasLinkPipe
+  id: ExpoLinkGasPipe2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe_alt1.rsi
+      state: pipeHalf
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        pipeLayer: 1
+  - type: AtmosPipeLayers
+    pipeLayer: 1
+
+- type: entity
+  parent: BaseGasLinkPipe
+  id: ExpoLinkGasPipe3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe_alt2.rsi
+      state: pipeHalf
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        pipeLayer: 2
+  - type: AtmosPipeLayers
+    pipeLayer: 2
+
+- type: entity
+  abstract: true
+  id: BaseExpoLinkPower
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  parent: BaseExpoLinkPower
+  id: ExpoLinkPowerInput
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerConsumer
+    voltage: High
+    node: input
+    drawRate: 0
+  - type: PowerLink
+    direction: Input
+  - type: PowerMonitoringDevice
+    group: Consumer
+    loadNode: input
+    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
+    state: base
+
+- type: entity
+  parent: BaseExpoLinkPower
+  id: ExpoLinkPowerOutput
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerSupplier
+    voltage: High
+    node: output
+    supplyRate: 0
+    supplyRampRate: 50000
+    supplyRampTolerance: 500
+  - type: PowerLink
+    direction: Output
+  - type: PowerMonitoringDevice
+    group: Generator
+    loadNode: output
+    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
+    state: base
+
+- type: entity
+  abstract: true
+  id: BaseExpoLink
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
+    offset: 0,1
+    drawdepth: Mobs
+    layers:
+    - state: base
+    - state: unshaded
+      shader: unshaded
+  - type: SpriteFade
+    alwaysFade: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-0.5,1.5,0.6"
+        density: 50
+        mask:
+        - LargeMobMask
+        layer:
+        - WallLayer
+  - type: LinkKey
+    key: ExpoLink
+  - type: ExpoLink
+
+- type: entity
+  parent: BaseExpoLink
+  id: ExpoLinkAnchor
+  name: expo link anchor
+  description: Holds the station's end of the link to the Expo.
+  components:
+  - type: AnchoredChildEntities
+    # Children pair by index with the other end's list: keep both lists in the same order.
+    childPrototypes:
+    - prototype: ExpoLinkPortal
+      offset: 0,-1
+    - prototype: ExpoLinkGasPipe1
+      offset: -1,0
+    - prototype: ExpoLinkGasPipe2
+      offset: -1,0
+    - prototype: ExpoLinkGasPipe3
+      offset: -1,0
+    - prototype: ExpoLinkPowerInput
+      offset: 1,0
+
+- type: entity
+  parent: BaseExpoLink
+  id: ExpoLinkCore
+  name: expo link core
+  description: Holds the Expo's end of the link to the station.
+  components:
+  - type: ExpoLinkCore
+  - type: AnchoredChildEntities
+    # Children pair by index with the other end's list: keep both lists in the same order.
+    childPrototypes:
+    - prototype: ExpoLinkPortal
+      offset: 0,-1
+    - prototype: ExpoLinkGasPipe1
+      offset: -1,0
+    - prototype: ExpoLinkGasPipe2
+      offset: -1,0
+    - prototype: ExpoLinkGasPipe3
+      offset: -1,0
+    - prototype: ExpoLinkPowerOutput
+      offset: 1,0

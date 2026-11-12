@@ -38,6 +38,9 @@ public sealed partial class AnchoredChildEntitiesSystem : EntitySystem
             var coords = xform.Coordinates.Offset(xform.LocalRotation.RotateVec(child.Offset));
             ent.Comp.Children.Add(SpawnAttachedTo(child.Prototype, coords, null, xform.LocalRotation));
         }
+
+        var ev = new AnchoredChildrenSpawnedEvent();
+        RaiseLocalEvent(ent, ref ev);
     }
 
     private void DeleteChildren(Entity<AnchoredChildEntitiesComponent> ent)
@@ -51,3 +54,9 @@ public sealed partial class AnchoredChildEntitiesSystem : EntitySystem
         ent.Comp.Children.Clear();
     }
 }
+
+/// <summary>
+/// Raised on the parent after it spawned its children.
+/// </summary>
+[ByRefEvent]
+public readonly record struct AnchoredChildrenSpawnedEvent;
