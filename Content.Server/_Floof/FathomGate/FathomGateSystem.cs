@@ -5,6 +5,7 @@ using Content.Server.Administration.Managers;
 using Content.Shared._Floof.Link;
 using Content.Shared.Administration;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Power.Components;
@@ -112,6 +113,19 @@ public sealed partial class FathomGateSystem : EntitySystem
             return "fathom-gate-catalyst-partner-not-charged";
 
         return null;
+    }
+
+    // the charge line comes from ExaminableBattery
+    [SubscribeLocalEvent]
+    private void OnExamined(Entity<FathomGateComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+
+        var state = _linked.GetLink(ent, out var partner) && HasComp<FathomGateComponent>(partner)
+            ? ent.Comp.State.ToString().ToLowerInvariant()
+            : "unlinked";
+        args.PushMarkup(Loc.GetString("fathom-gate-examine-state", ("state", state)));
     }
 
     [SubscribeLocalEvent]
