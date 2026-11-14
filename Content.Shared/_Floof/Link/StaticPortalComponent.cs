@@ -32,10 +32,6 @@ public sealed partial class StaticPortalComponent : Component
     [DataField]
     public float Threshold = 0.5f;
 
-    /// Sprite and light scale at the smallest open share, growing to 1 when fully open.
-    [DataField]
-    public float MinScale = 0.3f;
-
     /// Played when the portal opens from closed. Same as upstream's station teleporter link sound.
     [DataField] public SoundSpecifier? OpenSound = new SoundPathSpecifier("/Audio/Effects/Lightning/lightningbolt.ogg");
 

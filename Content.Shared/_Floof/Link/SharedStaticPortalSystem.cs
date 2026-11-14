@@ -1,7 +1,9 @@
 using System.Linq;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
 using Content.Shared.Teleportation.Components;
@@ -12,6 +14,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Dynamics.Joints;
 using Robust.Shared.Physics.Events;
@@ -33,10 +36,13 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedJointSystem _joints = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedMoverController _mover = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TagSystem _tag = default!;
 
     private const string PortalFixture = "portalFixture";
+    private const string TimeoutFixture = "portalTimeout";
     private const string ProjectileFixture = "projectile";
     private static readonly ProtoId<TagPrototype> ShowTraverseVerbTag = "AllowPortalTraversal";
     private static readonly ProtoId<TagPrototype> PreventCollisionTag = "PreventPortalCollision";
@@ -159,9 +165,9 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
             if (HasComp<StaticPortalComponent>(target))
             {
                 // if target is a portal, signal that they shouldn't be immediately teleported back
-                AddTimeout(subject, ent);
+                AddTimeout(subject, target);
                 if (pulled != null)
-                    AddTimeout(pulled.Value, ent);
+                    AddTimeout(pulled.Value, target);
             }
 
             var coords = Transform(target).Coordinates;
@@ -203,26 +209,22 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         return joint as DistanceJoint;
     }
 
-    private void AddTimeout(EntityUid subject, EntityUid portal)
+    private void AddTimeout(EntityUid subject, EntityUid exitPortal)
     {
         var timeout = EnsureComp<StaticPortalTimeoutComponent>(subject);
-        timeout.EnteredPortal = portal;
+        timeout.ExitPortal = exitPortal;
         Dirty(subject, timeout);
     }
-    
+
+    // server only, so the client never lets anyone through before the server does
     [SubscribeLocalEvent]
     private void OnEndCollide(Entity<StaticPortalComponent> ent, ref EndCollideEvent args)
     {
-        if (!ShouldCollide(args.OurFixtureId, args.OtherFixtureId, args.OurFixture, args.OtherFixture))
+        if (_netMan.IsClient || args.OurFixtureId != TimeoutFixture)
             return;
 
-        var subject = args.OtherEntity;
-
-        // if they came from a different portal, remove the timeout
-        if (TryComp<StaticPortalTimeoutComponent>(subject, out var timeout) && timeout.EnteredPortal != ent)
-        {
-            RemCompDeferred<StaticPortalTimeoutComponent>(subject);
-        }
+        if (TryComp<StaticPortalTimeoutComponent>(args.OtherEntity, out var timeout) && timeout.ExitPortal == ent.Owner)
+            RemCompDeferred<StaticPortalTimeoutComponent>(args.OtherEntity);
     }
 
     /// <summary>
@@ -263,7 +265,31 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
 
         LogTeleport(ent, subject, Transform(subject).Coordinates, target);
 
+        // in one side and out the other: turned by the portals' angle plus a half turn,
+        // with the velocity taken relative to the entry portal and handed over to the exit
+        var rotation = _transform.GetWorldRotation(subject);
+        var velocity = _physics.GetMapLinearVelocity(subject) - _physics.GetMapLinearVelocity(ent);
+        var mover = CompOrNull<InputMoverComponent>(subject);
+        var camera = mover != null ? _mover.GetParentGridAngle(mover) : Angle.Zero;
+
         _transform.SetCoordinates(subject, target);
+
+        if (targetEntity is { } exit && HasComp<StaticPortalComponent>(exit))
+        {
+            var turn = _transform.GetWorldRotation(exit) - _transform.GetWorldRotation(ent) + Math.PI;
+            _transform.SetWorldRotation(subject, rotation + turn);
+
+            if (mover != null && !_mover.CameraRotationLocked)
+                TurnCamera((subject, mover), camera + turn);
+
+            if (TryComp<PhysicsComponent>(subject, out var body))
+            {
+                var wanted = turn.RotateVec(velocity) + _physics.GetMapLinearVelocity(exit);
+                var current = _physics.GetMapLinearVelocity(subject, body);
+                _physics.SetLinearVelocity(subject, body.LinearVelocity + wanted - current, body: body);
+            }
+        }
+
         RaiseLocalEvent(subject, new TeleportedEvent { Subject = subject }, true); // Floofstation. Note that this is raised broadcast.
 
         if (!playSound)
@@ -272,7 +298,20 @@ public abstract partial class SharedStaticPortalSystem : EntitySystem
         _audio.PlayPredicted(departureSound, ent, subject);
         _audio.PlayPredicted(arrivalSound, subject, subject);
     }
-    
+
+    private void TurnCamera(Entity<InputMoverComponent> ent, Angle worldAngle)
+    {
+        var xform = Transform(ent);
+        var relative = xform.GridUid ?? xform.MapUid;
+        var relativeAngle = relative is { } r ? _transform.GetWorldRotation(r) : Angle.Zero;
+
+        ent.Comp.RelativeEntity = relative;
+        ent.Comp.RelativeRotation = (worldAngle - relativeAngle).Reduced();
+        ent.Comp.TargetRelativeRotation = ent.Comp.RelativeRotation;
+        ent.Comp.LerpTarget = TimeSpan.Zero;
+        Dirty(ent);
+    }
+
     public void SetOpen(Entity<StaticPortalComponent?> ent, float open)
     {
         if (!Resolve(ent, ref ent.Comp, false))

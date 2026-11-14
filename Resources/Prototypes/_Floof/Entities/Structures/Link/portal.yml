@@ -19,7 +19,16 @@
       portalFixture:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.25,-0.48,0.25,0.48"
+          bounds: -0.375,0.28125,0.375,0.5425
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+      portalTimeout:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.625,0.09375,0.625,0.625"
         mask:
         - FullTileMask
         layer:

@@ -3,9 +3,23 @@
   id: FathomGatePortal
   categories: [ HideSpawnMenu ]
   components:
+  # anchoring would snap it to a tile center, off its fractional child offset
+  - type: Transform
+    anchored: false
   - type: Sprite
+    sprite: _Floof/Structures/Link/fathom_gate.rsi
+    offset: 0,0.9375 # same as the gate: the child offset is baked into the frames
+    noRot: true
+    drawdepth: Mobs
     layers:
-    - state: portal-blue
+    - state: ring
+    - state: glyphs
+      shader: unshaded
+    - state: portal
+      shader: unshaded
+      map: [ "portal" ]
+  - type: SpriteFade
+    alwaysFade: true
   - type: PointLight
     color: SkyBlue
     radius: 3
@@ -93,8 +107,8 @@
     group: Generator
     sourceNode: link
     loadNode: link
-    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
-    state: base
+    sprite: _Floof/Structures/Link/fathom_gate.rsi
+    state: plinth
 
 - type: entity
   id: FathomGate
@@ -108,15 +122,12 @@
   - type: Clickable
   - type: InteractionOutline
   - type: Sprite
-    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
-    offset: 0,1
-    drawdepth: Mobs
+    sprite: _Floof/Structures/Link/fathom_gate.rsi
+    offset: 0,0.9375
+    noRot: true
+    drawdepth: WallTops # under objects, items, mobs and the portal's frame
     layers:
-    - state: base
-    - state: unshaded
-      shader: unshaded
-  - type: SpriteFade
-    alwaysFade: true
+    - state: plinth
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -124,12 +135,48 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-1.5,-0.5,1.5,0.6"
+          bounds: -1.3125,-0.25,-0.5625,0.46875
         density: 50
         mask:
         - LargeMobMask
         layer:
         - WallLayer
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: 0.5625,-0.25,1.3125,0.46875
+        mask:
+        - LargeMobMask
+        layer:
+        - WallLayer
+        density: 50
+      fix3:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "1.1875,0.46875,1.3125,1.28125"
+        mask:
+        - LargeMobMask
+        layer:
+        - WallLayer
+        density: 50
+      fix4:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.3125,0.46875,-1.15625,1.28125"
+        layer:
+        - WallLayer
+        mask:
+        - LargeMobMask
+        density: 50
+      fix5:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -1.3125,1.28125,1.3125,1.46875
+        layer:
+        - WallLayer
+        mask:
+        - LargeMobMask
+        density: 50
   - type: LinkKey
     key: FathomGate
   - type: FathomGate
@@ -156,13 +203,13 @@
     group: SMES
     sourceNode: input
     loadNode: input
-    sprite: Structures/Machines/Anomaly/anomaly_generator.rsi
-    state: base
+    sprite: _Floof/Structures/Link/fathom_gate.rsi
+    state: plinth
   - type: AnchoredChildEntities
     # these need to be the same for all gate types or the link won't work.
     childPrototypes:
     - prototype: FathomGatePortal
-      offset: 0,-1
+      offset: 0,0.75
     - prototype: FathomGateGasPipe1
       offset: -1,0
     - prototype: FathomGateGasPipe2

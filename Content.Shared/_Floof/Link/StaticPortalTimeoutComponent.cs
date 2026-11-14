@@ -3,15 +3,12 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._Floof.Link;
 
 /// <summary>
-///     Attached to an entity after portal transit to mark that they should not immediately be portaled back
-///     at the end destination.
+///     Attached to an entity after portal transit so it isn't immediately portaled back.
+///     Removed once it leaves the exit portal's timeout fixture.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class StaticPortalTimeoutComponent : Component 
+public sealed partial class StaticPortalTimeoutComponent : Component
 {
-    /// <summary>
-    ///     The portal that was entered. Null if coming from a hand teleporter, etc.
-    /// </summary>
     [ViewVariables, DataField, AutoNetworkedField]
-    public EntityUid? EnteredPortal;
+    public EntityUid? ExitPortal;
 }

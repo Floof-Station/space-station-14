@@ -53,18 +53,18 @@
             Passenger: [ -1, -1 ]
 
 - type: gameMap
-  id: TestExpo
-  mapName: TestExpo
-  mapPath: /Maps/_Floof/Test/expo.yml
+  id: TestFathom
+  mapName: TestFathom
+  mapPath: /Maps/_Floof/Test/fathom.yml
   minPlayers: 0
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    TestExpo:
+    TestFathom:
       stationProto: StandardNanotrasenStation
       components:
         - type: StationNameSetup
-          mapNameTemplate: "TestExpo"
+          mapNameTemplate: "TestFathom"
         - type: StationJobs
           availableJobs:
             Passenger: [ -1, -1 ]
