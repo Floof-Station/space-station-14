@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._Floof.Flooding;
+using Content.Client._Floof.MapLayer;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map.Components;
@@ -26,6 +27,7 @@ public sealed partial class FloodFogOverlay : Overlay
     private readonly FloodSubmergedSystem _submerged;
     private readonly SharedMapSystem _map;
     private readonly SharedTransformSystem _xform;
+    private readonly MapLayerSystem _layers;
     private readonly ShaderInstance _shader;
 
     private readonly Dictionary<Vector2i, Color> _barriers = new();
@@ -39,6 +41,7 @@ public sealed partial class FloodFogOverlay : Overlay
         _submerged = _entManager.System<FloodSubmergedSystem>();
         _map = _entManager.System<SharedMapSystem>();
         _xform = _entManager.System<SharedTransformSystem>();
+        _layers = _entManager.System<MapLayerSystem>();
         _shader = _proto.Index(Shader).InstanceUnique();
 
         // After the caustics, before the screen tint.
@@ -47,7 +50,7 @@ public sealed partial class FloodFogOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        return _submerged.SubmergedView > 0f;
+        return _submerged.SubmergedView > 0f && !_layers.IsDrawingOtherLayer(args.Viewport);
     }
 
     protected override void Draw(in OverlayDrawArgs args)

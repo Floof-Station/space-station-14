@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Client._Floof.AnimatedTiles;
 using Content.Client._Floof.Graphics;
-using Content.Client._Floof.MapUnderlay;
 using Content.Shared._Floof.Ocean;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
@@ -28,7 +27,6 @@ public sealed partial class OceanDeepOverlay : Overlay
 
     private static readonly ProtoId<ShaderPrototype> MaskShader = "AnimatedTile";
     private static readonly ProtoId<ShaderPrototype> DeepShader = "OceanDeep";
-    private static readonly ProtoId<ShaderPrototype> UnderlayLightShader = "OceanUnderlayLight";
     private static readonly ResPath FloorTexture = new("/Textures/Tiles/Asteroid/asteroid.png");
     private static readonly ResPath SurfaceTexture = new("/Textures/_Floof/Tiles/ocean_surface.rsi/water.png");
 
@@ -40,12 +38,10 @@ public sealed partial class OceanDeepOverlay : Overlay
     private readonly SharedTransformSystem _xform;
     private readonly TurfSystem _turf;
     private readonly AnimatedTileSystem _animated;
-    private readonly MapUnderlaySystem _underlay;
     private readonly StencilRefSystem _stencil;
     private readonly ShaderInstance _mask;
     private readonly ShaderInstance _redraw;
     private readonly ShaderInstance _deep;
-    private readonly ShaderInstance _underlayLight;
     private List<Entity<MapGridComponent>> _grids = new();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceEntities;
@@ -57,12 +53,10 @@ public sealed partial class OceanDeepOverlay : Overlay
         _xform = _entManager.System<SharedTransformSystem>();
         _turf = _entManager.System<TurfSystem>();
         _animated = _entManager.System<AnimatedTileSystem>();
-        _underlay = _entManager.System<MapUnderlaySystem>();
         _stencil = _entManager.System<StencilRefSystem>();
         _mask = _proto.Index(MaskShader).InstanceUnique();
         _redraw = _proto.Index(MaskShader).InstanceUnique();
         _deep = _proto.Index(DeepShader).InstanceUnique();
-        _underlayLight = _proto.Index(UnderlayLightShader).InstanceUnique();
 
         ZIndex = (int) DrawDepth.Puddles + 1;
     }
@@ -94,8 +88,6 @@ public sealed partial class OceanDeepOverlay : Overlay
         _deep.SetParameter("floor_distance", depth.FloorDepth - meters);
         _deep.SetParameter("floor_seen_from", depth.FloorSeenFrom);
         _deep.SetParameter("floor_far_zoom", depth.FloorFarZoom);
-        var underlay = _underlay.GetDrawnShare(args.Viewport);
-        _deep.SetParameter("underlay", underlay);
         _deep.SetParameter("brightness", depth.GetBrightness(now));
         _deep.SetParameter("eye_position", args.Viewport.Eye.Position.Position);
         _deep.SetParameter("view_center", (Vector2) args.Viewport.Size / 2f);
@@ -116,7 +108,6 @@ public sealed partial class OceanDeepOverlay : Overlay
         };
         _mask.Stencil = stencil;
         _deep.Stencil = stencil;
-        _underlayLight.Stencil = stencil with { Op = StencilOp.Keep };
         _redraw.Stencil = new StencilParameters
         {
             Enabled = true,
@@ -143,14 +134,6 @@ public sealed partial class OceanDeepOverlay : Overlay
         }
 
         handle.SetTransform(Matrix3x2.Identity);
-        if (underlay > 0f && _underlay.GetDrawnUnlit(args.Viewport) is { } unlit)
-        {
-            _underlayLight.SetParameter("below_unlit", unlit);
-            _underlayLight.SetParameter("viewport_size", (Vector2) args.Viewport.Size);
-            handle.UseShader(_underlayLight);
-            handle.DrawRect(args.WorldBounds, Color.White);
-        }
-
         handle.UseShader(_deep);
         handle.DrawRect(args.WorldBounds, Color.White);
 

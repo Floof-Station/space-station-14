@@ -38,8 +38,3 @@
   id: OceanDeep
   kind: source
   path: "/Textures/_Floof/Shaders/ocean_deep.swsl"
-
-- type: shader
-  id: OceanUnderlayLight
-  kind: source
-  path: "/Textures/_Floof/Shaders/ocean_underlay_light.swsl"

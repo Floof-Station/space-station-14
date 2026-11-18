@@ -1,4 +1,5 @@
 using Content.Shared.Buckle.Components;
+using Content.Shared.Gravity;
 using Content.Shared.Maps;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
@@ -14,10 +15,10 @@ public sealed partial class OceanSeaSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
 
-    [Dependency] private EntityQuery<BuckleComponent> _buckleQuery = default!;
-    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
-    [Dependency] private EntityQuery<OceanDepthComponent> _depthQuery = default!;
-    [Dependency] private EntityQuery<OceanSeaComponent> _seaQuery = default!;
+    [Dependency] private EntityQuery<BuckleComponent> _buckleQuery;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery;
+    [Dependency] private EntityQuery<OceanDepthComponent> _depthQuery;
+    [Dependency] private EntityQuery<OceanSeaComponent> _seaQuery;
 
     public bool IsUnderSea(EntityUid? map)
     {
@@ -32,6 +33,31 @@ public sealed partial class OceanSeaSystem : EntitySystem
 
         sea = (uid, comp);
         return true;
+    }
+
+    public void CopyOcean(EntityUid map, EntityUid? like = null)
+    {
+        if (like is { } source && TryComp<OceanDepthComponent>(source, out var depth))
+        {
+            var copy = CopyComp(source, map, depth);
+            copy.Seabed = false;
+            Dirty(map, copy);
+        }
+        else
+        {
+            EnsureComp<OceanDepthComponent>(map);
+        }
+
+        if (like is { } seaSource && _seaQuery.TryComp(seaSource, out var sea))
+            CopyComp(seaSource, map, sea);
+        else
+            EnsureComp<OceanSeaComponent>(map);
+
+        EnsureComp<MapLightComponent>(map);
+        var gravity = EnsureComp<GravityComponent>(map);
+        gravity.Enabled = true;
+        gravity.Inherent = true;
+        Dirty(map, gravity);
     }
 
     /// <summary>

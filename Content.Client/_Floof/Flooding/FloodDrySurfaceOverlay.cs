@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._Floof.MapLayer;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map.Components;
@@ -21,6 +22,7 @@ public sealed partial class FloodDrySurfaceOverlay : Overlay
     private readonly FloodWaterlineSystem _system;
     private readonly FloodSubmergedSystem _submerged;
     private readonly SharedTransformSystem _xform;
+    private readonly MapLayerSystem _layers;
     private readonly ShaderInstance _shader;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceEntities;
@@ -31,6 +33,7 @@ public sealed partial class FloodDrySurfaceOverlay : Overlay
         _system = _entManager.System<FloodWaterlineSystem>();
         _submerged = _entManager.System<FloodSubmergedSystem>();
         _xform = _entManager.System<SharedTransformSystem>();
+        _layers = _entManager.System<MapLayerSystem>();
         _shader = _proto.Index(Shader).InstanceUnique();
 
         ZIndex = (int) DrawDepth.Puddles + 1;
@@ -39,6 +42,9 @@ public sealed partial class FloodDrySurfaceOverlay : Overlay
     protected override void Draw(in OverlayDrawArgs args)
     {
         if (_submerged.SubmergedView <= 0f)
+            return;
+
+        if (_layers.IsDrawingOtherLayer(args.Viewport))
             return;
 
         var handle = args.WorldHandle;

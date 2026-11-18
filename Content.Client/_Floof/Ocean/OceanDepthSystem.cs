@@ -17,8 +17,6 @@ public sealed partial class OceanDepthSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _overlay.AddOverlay(new OceanDeepOverlay());
     }
 
     public override void Shutdown()

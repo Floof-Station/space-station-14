@@ -23,18 +23,12 @@ public sealed partial class ArrivalsDiveComponent : Component
     /// </summary>
     [DataField]
     public float SpeedUpShare = 0.05f;
-
-    /// <summary>
-    /// Share of the trip spent slowing down to a stop.
-    /// </summary>
+    
     [DataField]
     public float SlowDownShare = 0.1f;
-
-    /// <summary>
-    /// The map the shuttle travels through, made on the first trip.
-    /// </summary>
+    
     [ViewVariables]
-    public EntityUid? TravelMap;
+    public EntityUid? TransitionLayer;
 
     [ViewVariables]
     public EntityUid? Target;

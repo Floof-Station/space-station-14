@@ -7,8 +7,6 @@ uniform highp float depth;
 uniform highp float floor_distance;
 uniform highp float floor_seen_from;
 uniform highp float floor_far_zoom;
-// How much the real map below shows through, drawn under us already. While it does, there's no floor to draw here.
-uniform highp float underlay;
 uniform highp float brightness;
 uniform highp vec2 eye_position;
 uniform highp vec2 view_center;
@@ -219,7 +217,7 @@ void fragment() {
     // We sink towards the floor under us, so it spreads out from the middle of the view as it gets closer.
     highp vec3 surfaceColor = surfaceBase;
     highp float landing = clamp(1.0 - floor_distance / floor_seen_from, 0.0, 1.0);
-    if (landing > 0.0 && underlay <= 0.0) {
+    if (landing > 0.0) {
         highp vec2 fromCenter = toWorld(FRAGCOORD.xy - view_center);
         highp vec2 floorPos = world + fromCenter * (mix(floor_far_zoom, 1.0, landing) - 1.0);
         // The same tile art the seabed map is made of, a strip of variants with one picked per tile.
@@ -256,6 +254,6 @@ void fragment() {
         water = mix(ripples * light, water, smoothstep(0.6, 1.0, submerged));
     }
 
-    COLOR = vec4(water, 1.0 - underlay * (1.0 - floorAlpha));
+    COLOR = vec4(water, 1.0);
     MODULATE = vec4(1.0);
 }
