@@ -1,5 +1,7 @@
+using System.Numerics;
 using Content.Client._Floof.MapLayer;
 using Robust.Client.Graphics;
+using Robust.Shared.Graphics;
 
 namespace Content.Client.Viewport;
 
@@ -19,7 +21,7 @@ public sealed partial class ScalingViewport
         _layers ??= _entityManager.SystemOrNull<MapLayerSystem>();
         if (_eye is not { } eye ||
             _layers == null ||
-            !_layers.TryGetViews(eye, _layersBelow, out var above))
+            !_layers.TryGetViews(eye, GetViewBounds(viewport, eye), _layersBelow, out var above, out var belowRange))
         {
             FreeLayerAbove();
             return false;
@@ -36,7 +38,7 @@ public sealed partial class ScalingViewport
                 else
                     FreeLayerAbove();
 
-                RenderLayersBelow(viewport);
+                RenderLayersBelow(viewport, belowRange);
             }
             finally
             {
@@ -49,7 +51,7 @@ public sealed partial class ScalingViewport
             if (over)
             {
                 viewport.ClearColor = null;
-                _layers.SetDrawingOver(viewport);
+                _layers.SetDrawingOver(viewport, MapLayerSystem.GetCover(0f, _layersBelow[^1].Gap, belowRange));
             }
 
             if (above is { } view && _layerAbove != null)
@@ -74,16 +76,28 @@ public sealed partial class ScalingViewport
         return true;
     }
 
-    private void RenderLayersBelow(IClydeViewport viewport)
+    private static Box2 GetViewBounds(IClydeViewport viewport, IEye eye)
+    {
+        viewport.Eye = eye;
+        var size = (Vector2) viewport.Size;
+        var a = viewport.LocalToWorld(Vector2.Zero).Position;
+        var b = viewport.LocalToWorld(new Vector2(size.X, 0f)).Position;
+        var c = viewport.LocalToWorld(new Vector2(0f, size.Y)).Position;
+        var d = viewport.LocalToWorld(size).Position;
+        return new Box2(Vector2.Min(Vector2.Min(a, b), Vector2.Min(c, d)), Vector2.Max(Vector2.Max(a, b), Vector2.Max(c, d)));
+    }
+
+    private void RenderLayersBelow(IClydeViewport viewport, float belowRange)
     {
         var clear = viewport.ClearColor;
-        var first = true;
-        foreach (var layer in _layersBelow)
+        for (var i = 0; i < _layersBelow.Count; i++)
         {
+            var layer = _layersBelow[i];
+            var first = i == 0;
             viewport.Eye = layer.Eye;
             viewport.ClearColor = first ? clear : null;
             if (!first)
-                _layers!.SetDrawingOver(viewport);
+                _layers!.SetDrawingOver(viewport, MapLayerSystem.GetCover(layer.Gap, _layersBelow[i - 1].Gap, belowRange));
 
             _layers!.SetDrawingOtherLayer(viewport, layer.Gap);
             try
@@ -95,8 +109,6 @@ public sealed partial class ScalingViewport
                 _layers.SetDrawingOver(null);
                 _layers.SetDrawingOtherLayer(null);
             }
-
-            first = false;
         }
     }
 

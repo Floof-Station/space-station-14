@@ -158,11 +158,6 @@ entities:
           version: 7
     - type: SpreaderGrid
     - type: GridPathfinding
-    - type: Gravity
-      inherent: True
-      gravityShakeSound: !type:SoundPathSpecifier
-        path: /Audio/Effects/alert.ogg
-      enabled: True
     - type: Biome
       template: Seabed
       seed: 1
@@ -429,13 +424,8 @@ entities:
         noise:
           seed: 0
       forcedMarkerLayers: []
-    - type: MapLight
     - type: Roof
       data: {}
-    - type: OceanDepth
-      startDepth: 600
-      seabed: True
-    - type: OceanSea
   - uid: 2
     components:
     - type: MetaData

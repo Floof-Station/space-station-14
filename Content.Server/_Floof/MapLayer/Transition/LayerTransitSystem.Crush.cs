@@ -11,9 +11,6 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 
 namespace Content.Server._Floof.MapLayer.Transition;
-/// <summary>
-/// This class is mostly copied from upstream, Smimsh is private there and I mayhaps wanna add my own stuff here later.
-/// </summary>
 public sealed partial class LayerTransitSystem
 {
     [Dependency] private BiomeSystem _biomes = default!;

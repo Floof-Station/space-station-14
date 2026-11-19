@@ -2,7 +2,7 @@ using System.Numerics;
 using Content.Server.Shuttles;
 using Content.Server.Shuttles.Components;
 using Content.Shared._Floof.CCVars;
-using Content.Shared._Floof.Ocean;
+using Content.Shared._Floof.MapLayer;
 using Content.Shared._Floof.MapLayer.Transition;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.Map;
@@ -37,7 +37,7 @@ public sealed partial class LayerTransitSystem
         var xform = Transform(uid);
         if (xform.GridUid is not { } sub ||
             xform.MapUid is not { } map ||
-            !TryGetSeabedBelow(map, out var stack, out var z, out var seabed))
+            !TryGetSeabedBelow(map, out var z, out var seabed))
             return;
 
         switch (FindDock(sub, seabed, out var config))
@@ -57,7 +57,8 @@ public sealed partial class LayerTransitSystem
         var velocity = body.LinearVelocity;
         var angularVelocity = body.AngularVelocity;
 
-        StartTransition(sub, seabed, stack, z, 0f);
+        if (StartTransition(sub, map, seabed) is null)
+            return;
 
         _shuttle.Disable(sub);
 
@@ -130,7 +131,7 @@ public sealed partial class LayerTransitSystem
                 continue;
 
             if (xform.MapUid is not { } map ||
-                !TryGetSeabedBelow(map, out _, out _, out var seabed) ||
+                !TryGetSeabedBelow(map, out _, out var seabed) ||
                 FindDock(uid, seabed, out var config) != SubDockSearch.Found)
             {
                 RemComp<SubDockPreviewComponent>(uid);
@@ -148,21 +149,33 @@ public sealed partial class LayerTransitSystem
         }
     }
 
-    private bool TryGetSeabedBelow(EntityUid map, out int stack, out float z, out Entity<OceanDepthComponent> seabed)
+    private bool TryGetSeabedBelow(EntityUid map, out float z, out EntityUid seabed)
     {
-        seabed = default;
+        seabed = EntityUid.Invalid;
         z = 0f;
-        if (!_layers.TryGetStack(map, out stack) ||
-            !_layers.TryGetZ(map, out z) ||
-            HasComp<MapLayerPoolComponent>(map))
+        if (!HasComp<MapLayerCruiseComponent>(map) ||
+            HasComp<MapLayerPoolComponent>(map) ||
+            !_layers.TryGetStack(map, out var stack) ||
+            !_layers.TryGetZ(map, out z))
             return false;
 
-        var seabedUid = _map.GetMapOrInvalid(new MapId(stack));
-        if (seabedUid == map || !TryComp<OceanDepthComponent>(seabedUid, out var depth))
-            return false;
+        var found = false;
+        var seabedZ = 0f;
+        _layers.GetLayers(stack, _stackLayers);
+        foreach (var (layer, layerZ) in _stackLayers)
+        {
+            if (layerZ >= z || !HasComp<MapLayerSeabedComponent>(layer))
+                continue;
 
-        seabed = (seabedUid, depth);
-        return true;
+            if (found && layerZ <= seabedZ)
+                continue;
+
+            seabed = layer;
+            seabedZ = layerZ;
+            found = true;
+        }
+
+        return found;
     }
 
     private (Vector2 Position, Angle Rotation) GetDockPose(DockingConfig config)

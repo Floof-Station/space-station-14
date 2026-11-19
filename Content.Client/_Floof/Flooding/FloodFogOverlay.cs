@@ -8,10 +8,6 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Floof.Flooding;
 
-/// <summary>
-///     With the local player under, thick liquid hides what's further away. Only inside the liquid: its walls fade with it,
-///     anything past those keeps the plain tint. Water at <see cref="ClearOpacity"/> stays clear.
-/// </summary>
 public sealed partial class FloodFogOverlay : Overlay
 {
     [Dependency] private IEntityManager _entManager = default!;
@@ -44,7 +40,6 @@ public sealed partial class FloodFogOverlay : Overlay
         _layers = _entManager.System<MapLayerSystem>();
         _shader = _proto.Index(Shader).InstanceUnique();
 
-        // After the caustics, before the screen tint.
         ZIndex = -1;
     }
 

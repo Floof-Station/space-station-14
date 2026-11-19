@@ -19,16 +19,16 @@ public sealed partial class LayerTransitSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MapLayerSystem _layers = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private OceanSeaSystem _ocean = default!;
+    [Dependency] private MapFluidSystem _fluid = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
 
     private List<Entity<MapGridComponent>> _blocking = new();
+    private readonly List<(EntityUid Map, float Z)> _stackLayers = new();
 
-    public const float CruiseHeight = 10f;
+    private const float LiftHeight = 10f;
 
     public static readonly TimeSpan LiftTime = TimeSpan.FromSeconds(10);
 
@@ -39,12 +39,10 @@ public sealed partial class LayerTransitSystem : EntitySystem
         if (xform.GridUid is not { } sub || xform.MapUid is not { } seabed)
             return;
 
-        if (!TryComp<OceanDepthComponent>(seabed, out var depth) || !depth.Seabed)
+        if (!HasComp<MapLayerSeabedComponent>(seabed) || !TryGetCruiseAbove(seabed, out var cruise))
             return;
 
-        EnsureCruiseLayer(seabed);
-        var stack = (int) Transform(seabed).MapID;
-        StartTransition(sub, (seabed, depth), stack, 0f, CruiseHeight);
+        StartTransition(sub, seabed, cruise);
     }
 
     [SubscribeLocalEvent]
@@ -53,7 +51,7 @@ public sealed partial class LayerTransitSystem : EntitySystem
         var xform = Transform(uid);
         if (xform.GridUid is not { } sub ||
             xform.MapUid is not { } map ||
-            !TryGetSeabedBelow(map, out var stack, out var z, out var seabed))
+            !TryGetSeabedBelow(map, out _, out var seabed))
             return;
 
         if (IsBlocked(seabed, GetBounds(sub, 0f)))
@@ -62,7 +60,9 @@ public sealed partial class LayerTransitSystem : EntitySystem
             return;
         }
 
-        var layer = StartTransition(sub, seabed, stack, z, 0f);
+        if (StartTransition(sub, map, seabed) is not { } layer)
+            return;
+
         _layers.AddPhantoms(layer, seabed, GetBounds(sub,  _cfg.GetCVar(CCVars.SubPhantomReach)));
     }
 
@@ -83,7 +83,7 @@ public sealed partial class LayerTransitSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnArrived(Entity<ShuttleComponent> ent, ref MapLayerArrivedEvent args)
     {
-        if (!TryComp<OceanDepthComponent>(args.Layer, out var depth) || !depth.Seabed)
+        if (!HasComp<MapLayerSeabedComponent>(args.Layer))
         {
             _shuttle.Enable(ent);
             return;
@@ -99,64 +99,52 @@ public sealed partial class LayerTransitSystem : EntitySystem
             ConnectDocks((ent, approach));
     }
     
-    private EntityUid StartTransition(EntityUid sub, Entity<OceanDepthComponent> seabed, int stack, float fromZ, float toZ)
+    private EntityUid? StartTransition(EntityUid sub, EntityUid from, EntityUid to)
     {
+        if (!_layers.TryGetZ(from, out var fromZ) || !_layers.TryGetZ(to, out var toZ))
+            return null;
+
         var layer = _layers.TakeTransitionLayer(sub);
-        _ocean.CopyOcean(layer, seabed);
+        _fluid.CopyFluid(layer, _fluid.HasFluid(from) ? from : to);
 
         var duration = GetDuration(fromZ, toZ);
-        
-        if (TryComp<OceanDepthComponent>(layer, out var depth))
-        {
-            depth.StartDepth = seabed.Comp.FloorDepth - fromZ;
-            depth.StartTime = _timing.CurTime;
-            depth.Rate = (fromZ - toZ) / (float) duration.TotalSeconds;
-            Dirty(layer, depth);
-        }
-
-        _layers.StartTransition(layer, stack, fromZ, toZ, duration);
-        Log.Info($"Moving {ToPrettyString(sub)} from Z {fromZ:0.0} to {toZ:0.0} through {ToPrettyString(layer)}");
-        
-        _shuttle.Enable(sub);
-        _dock.UndockDocks(sub);
         var subXform = Transform(sub);
         var (position, rotation) = _xform.GetWorldPositionRotation(subXform);
+        if (!_layers.StartTransition(layer, from, to, position, duration))
+        {
+            _layers.FreeTransitionLayer(layer);
+            return null;
+        }
+
+        Log.Info($"Moving {ToPrettyString(sub)} from Z {fromZ:0.0} to {toZ:0.0} through {ToPrettyString(layer)}");
+
+        _shuttle.Enable(sub);
+        _dock.UndockDocks(sub);
         _xform.SetCoordinates(sub, subXform, new EntityCoordinates(layer, position), rotation);
         return layer;
     }
-    
+
     private static TimeSpan GetDuration(float fromZ, float toZ)
     {
-        return LiftTime * (MathF.Max(MathF.Abs(toZ - fromZ), 0.1f) / CruiseHeight);
+        return LiftTime * (MathF.Max(MathF.Abs(toZ - fromZ), 0.1f) / LiftHeight);
     }
 
-    [SubscribeLocalEvent]
-    private void OnShutdown(Entity<SubCruiseLayerComponent> ent, ref ComponentShutdown args)
+    private bool TryGetCruiseAbove(EntityUid seabed, out EntityUid cruise)
     {
-        QueueDel(ent.Comp.CruiseLayer);
-    }
-    
-    public EntityUid EnsureCruiseLayer(EntityUid seabed)
-    {
-        var comp = EnsureComp<SubCruiseLayerComponent>(seabed);
-        if (comp.CruiseLayer is { } existing && Exists(existing))
-            return existing;
+        cruise = EntityUid.Invalid;
+        if (!_layers.TryGetStack(seabed, out var stack) || !_layers.TryGetZ(seabed, out var z))
+            return false;
 
-        var map = _map.CreateMap();
-        _ocean.CopyOcean(map, seabed);
-        if (TryComp<OceanDepthComponent>(map, out var depth))
+        _layers.GetLayers(stack, _stackLayers);
+        foreach (var (map, layerZ) in _stackLayers)
         {
-            depth.StartDepth = depth.FloorDepth - CruiseHeight;
-            Dirty(map, depth);
+            if (layerZ <= z || !HasComp<MapLayerCruiseComponent>(map))
+                continue;
+
+            cruise = map;
+            return true;
         }
-        
-        var stack = (int) Transform(seabed).MapID;
-        _layers.SetLayer(seabed, stack, 0f);
-        _layers.SetLayer(map, stack, CruiseHeight);
 
-        _metaData.SetEntityName(map, Loc.GetString("sub-lift-cruise-layer", ("seabed", Name(seabed))));
-
-        comp.CruiseLayer = map;
-        return map;
+        return false;
     }
 }

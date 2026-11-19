@@ -14,15 +14,18 @@ public readonly record struct MapLayerView(IEye Eye, float Gap, float Alpha);
 public sealed partial class MapLayerSystem : SharedMapLayerSystem
 {
     [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
 
     public const float ViewHeight = 20f;
 
     private const float MinZoom = 0.05f;
+    private const float CoverFalloff = 2f;
 
     private readonly List<(EntityUid Map, float Gap)> _gaps = new();
     private IClydeViewport? _drawing;
+    private float _drawingCover = 1f;
     private IClydeViewport? _drawingOther;
     private float _drawingOtherGap;
     private IClydeViewport? _aboveViewport;
@@ -43,14 +46,15 @@ public sealed partial class MapLayerSystem : SharedMapLayerSystem
         _overlay.RemoveOverlay<MapLayerAboveOverlay>();
     }
 
-    public bool TryGetViews(IEye eye, List<MapLayerView> below, out MapLayerView? above)
+    public bool TryGetViews(IEye eye, Box2 view, List<MapLayerView> below, out MapLayerView? above, out float belowRange)
     {
         below.Clear();
         above = null;
+        belowRange = 0f;
 
         if (_map.GetMapOrInvalid(eye.Position.MapId) is not { Valid: true } own ||
             !TryGetGaps(own, _gaps) ||
-            !TryGetVisibility(own, out var belowRange, out var aboveFade, IsUnderRoof(eye.Position)))
+            !TryGetVisibility(own, out belowRange, out var aboveFade, IsUnderRoof(eye.Position)))
             return false;
 
         foreach (var (map, gap) in _gaps)
@@ -60,7 +64,7 @@ public sealed partial class MapLayerSystem : SharedMapLayerSystem
 
             if (gap > 0f)
             {
-                if (gap <= belowRange)
+                if (gap <= belowRange && HasContent(map, Scale(view, GetZoom(gap))))
                     below.Add(new MapLayerView(MakeEye(eye, map, GetZoom(gap)), gap, 1f));
 
                 continue;
@@ -78,19 +82,63 @@ public sealed partial class MapLayerSystem : SharedMapLayerSystem
         return below.Count > 0 || above != null;
     }
 
+    private bool HasContent(EntityUid map, Box2 bounds)
+    {
+        var found = false;
+        _map.FindGridsIntersecting(map,
+            bounds,
+            ref found,
+            static (EntityUid _, MapGridComponent _, ref bool found) =>
+            {
+                found = true;
+                return false;
+            },
+            approx: true);
+
+        return found || _lookup.AnyLocalEntitiesIntersecting(map, bounds, LookupFlags.Uncontained);
+    }
+
+    private static Box2 Scale(Box2 box, float scale)
+    {
+        var center = box.Center;
+        return new Box2(center + (box.BottomLeft - center) * scale, center + (box.TopRight - center) * scale);
+    }
+
     public static float GetZoom(float gap)
     {
         return MathF.Max((ViewHeight + gap) / ViewHeight, MinZoom);
     }
 
-    public void SetDrawingOver(IClydeViewport? viewport)
+    public static float GetCover(float top, float bottom, float range)
+    {
+        if (range <= 0f)
+            return 1f;
+
+        var shown = GetShown(bottom, range) / MathF.Max(GetShown(top, range), 0.0001f);
+        return Math.Clamp(1f - shown, 0f, 1f);
+    }
+
+    private static float GetShown(float gap, float range)
+    {
+        var edge = MathF.Exp(-CoverFalloff);
+        var shown = (MathF.Exp(-CoverFalloff * gap / range) - edge) / (1f - edge);
+        return Math.Clamp(shown, 0f, 1f);
+    }
+
+    public void SetDrawingOver(IClydeViewport? viewport, float cover = 1f)
     {
         _drawing = viewport;
+        _drawingCover = cover;
     }
 
     public bool IsDrawingOver(IClydeViewport viewport)
     {
         return viewport == _drawing;
+    }
+
+    public float GetCover(IClydeViewport viewport)
+    {
+        return viewport == _drawing ? _drawingCover : 1f;
     }
 
     public void SetDrawingOtherLayer(IClydeViewport? viewport, float gap = 0f)

@@ -1,4 +1,4 @@
-using Content.Shared._Floof.Ocean;
+using Content.Shared._Floof.MapLayer;
 using Content.Shared.Shuttles.Components;
 
 namespace Content.Server._Floof.MapLayer.Transition;
@@ -19,9 +19,7 @@ public sealed partial class LayerTransitSystem
 
     private void AnchorOnSeabed(EntityUid grid)
     {
-        if (Transform(grid).MapUid is { } map &&
-            TryComp<OceanDepthComponent>(map, out var depth) &&
-            depth.Seabed)
+        if (Transform(grid).MapUid is { } map && HasComp<MapLayerSeabedComponent>(map))
             _shuttle.Disable(grid);
     }
 }

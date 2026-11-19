@@ -8,10 +8,6 @@ using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client._Floof.Flooding;
 
-/// <summary>
-///     With the local player under, shows the flood's shape on the floor: the deeper a tile's water the clearer it is,
-///     and everything dry, space included, is darkest. Wet tiles mark the stencil, so one rectangle can cover the rest.
-/// </summary>
 public sealed partial class FloodDrySurfaceOverlay : Overlay
 {
     [Dependency] private IEntityManager _entManager = default!;

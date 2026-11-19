@@ -8,10 +8,6 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Floof.Flooding;
 
-/// <summary>
-///     With the local player under, wet tiles ripple and carry the moving web of light seen on the floor of a sunlit pool.
-///     Deeper water shows more of it. Drawn before the screen tint, so that tints it too.
-/// </summary>
 public sealed partial class FloodCausticsOverlay : Overlay
 {
     [Dependency] private IEntityManager _entManager = default!;

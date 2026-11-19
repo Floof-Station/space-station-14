@@ -46,7 +46,7 @@ public sealed partial class ParallaxOverlay : Overlay
         if (_layers.IsDrawingOver(args.Viewport))
             return false;
 
-        if (_entManager.HasComponent<OceanSeaComponent>(_mapSystem.GetMapOrInvalid(args.MapId)))
+        if (_entManager.HasComponent<MapFluidComponent>(_mapSystem.GetMapOrInvalid(args.MapId)))
             return false;
         // Floof Section End
 

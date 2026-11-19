@@ -1,4 +1,3 @@
-// The layer above, drawn off screen lined up with this viewport, faded over the one below.
 uniform sampler2D above;
 uniform highp vec2 viewport_size;
 uniform highp float alpha;

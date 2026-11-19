@@ -1,5 +1,3 @@
-// The roof over a layer seen from far above. It doesn't take the light from below it, only the map's ambient light
-// and the downlights landing on it from above.
 light_mode unshaded;
 
 uniform highp vec4 ambient;
@@ -8,7 +6,6 @@ uniform highp vec2[8] light_position;
 uniform highp float[8] light_radius;
 uniform highp vec4[8] light_color;
 uniform highp float[8] light_energy;
-// the 8s above, the loop below and MaxLights in MapLayerRoofOverlay go together
 
 varying highp vec2 world_position;
 

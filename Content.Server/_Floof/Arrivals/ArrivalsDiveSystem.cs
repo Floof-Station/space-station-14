@@ -4,11 +4,9 @@ using Content.Server.Shuttles.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.Station.Systems;
-using Content.Shared._Floof.DayNightCycle;
 using Content.Shared._Floof.MapLayer;
 using Content.Shared._Floof.Ocean;
 using Content.Shared.Camera;
-using Content.Shared.Light.Components;
 using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -19,19 +17,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._Floof.Arrivals;
 
-/// <summary>
-/// Takes a diving arrivals shuttle down to the station and back up to the terminal. It sails through a map of its own,
-/// really moving, then docks at the other end.
-/// </summary>
 public sealed partial class ArrivalsDiveSystem : EntitySystem
 {
-    [Dependency] private DayNightCycleSystem _dayNight = default!;
     [Dependency] private DockingSystem _dock = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MapFluidSystem _fluid = default!;
     [Dependency] private MapLayerSystem _layers = default!;
-    [Dependency] private OceanSeaSystem _ocean = default!;
     [Dependency] private ServerArrivalsSystem _arrivals = default!;
     [Dependency] private SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -41,6 +34,7 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
 
     private const int LandingShakes = 10;
     private const float LandingShakeStrength = 0.6f;
+    private const float CatchUpTime = 1f;
     private static readonly TimeSpan LandingShakeInterval = TimeSpan.FromSeconds(0.15);
 
     public override void Initialize()
@@ -68,18 +62,10 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         args.TravelTime = ent.Comp.DiveTime;
 
         var layer = TakeTransitionLayer(ent);
-        var depth = EnsureComp<OceanDepthComponent>(layer);
         var now = _timing.CurTime;
-        // As deep as the station's sea floor, if it has one.
         var stationMap = GetStationMap(args.Station);
-        var floor = CompOrNull<OceanDepthComponent>(stationMap);
-        if (floor != null)
-            depth.FloorDepth = floor.FloorDepth;
-        depth.StartDepth = args.ToStation ? 0f : depth.FloorDepth;
-        depth.Rate = (args.ToStation ? 1f : -1f) * depth.FloorDepth / (float) ent.Comp.DiveTime.TotalSeconds;
-        depth.StartTime = now;
-        depth.SurfaceLight = GetSurfaceLight(args.Terminal);
-        Dirty(layer, depth);
+        if (stationMap is { } fluidSource)
+            _fluid.CopyFluid(layer, fluidSource);
 
         ent.Comp.Target = args.Target;
         ent.Comp.ToStation = args.ToStation;
@@ -91,11 +77,12 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         var xform = Transform(ent);
         var (position, rotation) = _xform.GetWorldPositionRotation(xform);
 
-        _layers.RemoveLayer(layer);
-        if (floor is { Seabed: true })
-            DiveOverStation(ent, layer, stationMap!.Value, floor, args, ref position, ref rotation);
+        if (!DiveOverStation(ent, layer, stationMap, Transform(args.Terminal).MapUid, args, ref position, ref rotation))
+            _layers.RemoveLayer(layer);
 
         _xform.SetCoordinates(ent, xform, new EntityCoordinates(layer, position), rotation);
+        ent.Comp.Start = position;
+        ent.Comp.Forward = rotation.RotateVec(Vector2.UnitY);
         _shuttles.Enable(ent);
     }
 
@@ -127,17 +114,33 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         }
     }
 
-    /// <summary>
-    /// Holds the speed the trip calls for right now, which also keeps tile friction from slowing it.
-    /// </summary>
     private void Sail(Entity<ArrivalsDiveComponent, PhysicsComponent> ent, TimeSpan now)
     {
         var dive = ent.Comp1;
-        var progress = 1f - (float) ((dive.ArriveTime - now).TotalSeconds / dive.DiveTime.TotalSeconds);
+        var progress = Math.Clamp(1f - (float) ((dive.ArriveTime - now).TotalSeconds / dive.DiveTime.TotalSeconds), 0f, 1f);
         var share = MathF.Min(1f, MathF.Min(progress / dive.SpeedUpShare, (1f - progress) / dive.SlowDownShare));
-        var forward = _xform.GetWorldRotation(ent).RotateVec(Vector2.UnitY);
-        _physics.SetLinearVelocity(ent, forward * dive.Speed * Math.Clamp(share, 0f, 1f), body: ent.Comp2);
+        var traveled = Vector2.Dot(_xform.GetWorldPosition(ent) - dive.Start, dive.Forward);
+        var behind = GetPlannedDistance(dive, progress) - traveled;
+        var speed = dive.Speed * Math.Clamp(share, 0f, 1f) + behind / CatchUpTime;
+        _physics.SetLinearVelocity(ent, dive.Forward * speed, body: ent.Comp2);
         _physics.SetAngularVelocity(ent, 0f, body: ent.Comp2);
+    }
+
+    private static float GetPlannedDistance(ArrivalsDiveComponent dive, float progress)
+    {
+        var up = dive.SpeedUpShare;
+        var down = dive.SlowDownShare;
+        var shares = progress <= up
+            ? progress * progress / (2f * up)
+            : up / 2f + MathF.Min(progress, 1f - down) - up;
+
+        if (progress > 1f - down)
+        {
+            var left = 1f - progress;
+            shares += down / 2f - left * left / (2f * down);
+        }
+
+        return dive.Speed * (float) dive.DiveTime.TotalSeconds * shares;
     }
 
     private void Arrive(Entity<ArrivalsDiveComponent> ent, ShuttleComponent shuttle, EntityUid target)
@@ -167,9 +170,6 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         _arrivals.TripArrived(ent.Owner);
     }
 
-    /// <summary>
-    /// One hard jolt that dies down, for everyone aboard.
-    /// </summary>
     private void Shake(Entity<ArrivalsDiveComponent> ent)
     {
         var strength = LandingShakeStrength * ent.Comp.ShakesLeft / LandingShakes;
@@ -189,57 +189,43 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
             return held;
 
         var map = _layers.TakeTransitionLayer(ent);
-        _ocean.CopyOcean(map);
 
         ent.Comp.TransitionLayer = map;
         return map;
     }
 
-    /// <summary>
-    /// </summary>
-    private void DiveOverStation(Entity<ArrivalsDiveComponent> ent,
+    private bool DiveOverStation(Entity<ArrivalsDiveComponent> ent,
         EntityUid layer,
-        EntityUid stationMap,
-        OceanDepthComponent floor,
+        EntityUid? stationMap,
+        EntityUid? terminalMap,
         ArrivalsTripEvent args,
         ref Vector2 position,
         ref Angle rotation)
     {
-        var stack = (int) Transform(stationMap).MapID;
-        _layers.SetLayer(stationMap, stack, 0f);
+        if (stationMap is not { } station ||
+            terminalMap is not { } terminal ||
+            !_layers.TryGetStack(station, out var stack) ||
+            !_layers.TryGetStack(terminal, out var terminalStack) ||
+            stack != terminalStack)
+            return false;
+
         if (!args.ToStation)
+            return _layers.StartTransition(layer, station, terminal, position, ent.Comp.DiveTime);
+
+        if (_dock.GetDockingConfig(ent, args.Target, "DockArrivals") is { } config)
         {
-            _layers.StartTransition(layer, stack, 0f, floor.FloorDepth, ent.Comp.DiveTime);
-            return;
+            var dive = ent.Comp;
+            var distance = GetPlannedDistance(dive, 1f);
+
+            rotation = config.Angle + _xform.GetWorldRotation(config.Coordinates.EntityId);
+            position = _xform.ToMapCoordinates(config.Coordinates).Position - rotation.RotateVec(Vector2.UnitY) * distance;
         }
 
-        _layers.StartTransition(layer, stack, floor.FloorDepth, 0f, ent.Comp.DiveTime);
-        if (_dock.GetDockingConfig(ent, args.Target, "DockArrivals") is not { } config)
-            return;
-
-        var dive = ent.Comp;
-        var distance = dive.Speed * (float) dive.DiveTime.TotalSeconds * (1f - (dive.SpeedUpShare + dive.SlowDownShare) / 2f);
-
-        rotation = config.Angle + _xform.GetWorldRotation(config.Coordinates.EntityId);
-        position = _xform.ToMapCoordinates(config.Coordinates).Position - rotation.RotateVec(Vector2.UnitY) * distance;
+        return _layers.StartTransition(layer, terminal, station, position, ent.Comp.DiveTime);
     }
 
     private EntityUid? GetStationMap(EntityUid station)
     {
         return _station.GetLargestGrid(station) is { } grid ? Transform(grid).MapUid : null;
-    }
-
-    /// <summary>
-    /// The daylight at the terminal, so the water at the top looks like the water the shuttle just left.
-    /// </summary>
-    private Color GetSurfaceLight(EntityUid terminal)
-    {
-        if (Transform(terminal).MapUid is not { } map)
-            return Color.Black;
-
-        if (TryComp<DayNightCycleComponent>(map, out var cycle))
-            return _dayNight.GetColor((map, cycle));
-
-        return CompOrNull<MapLightComponent>(map)?.AmbientLightColor ?? Color.Black;
     }
 }

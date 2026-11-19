@@ -6,10 +6,6 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._Floof.Flooding;
 
-/// <summary>
-///     Drawn with the world's lighting still bound and before the field of view is cut out,
-///     so the tint is lit like a sprite and walls still hide what's behind them.
-/// </summary>
 public sealed partial class FloodSubmergedOverlay : Overlay
 {
     [Dependency] private IEntityManager _entManager = default!;

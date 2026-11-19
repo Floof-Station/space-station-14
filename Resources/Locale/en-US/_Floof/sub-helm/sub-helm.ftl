@@ -1,6 +1,5 @@
 sub-helm-window-title = Submarine Console
 sub-helm-sonar-toggle = Sonar
-sub-lift-cruise-layer = {$seabed} (above)
 sub-helm-lift = Lift
 sub-helm-land = Land
 sub-helm-land-blocked = Something is in the way below.

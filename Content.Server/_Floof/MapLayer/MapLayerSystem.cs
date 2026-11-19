@@ -26,7 +26,19 @@ public sealed partial class MapLayerSystem : SharedMapLayerSystem
     private readonly HashSet<(ICommonSession Session, EntityUid Map)> _seen = new();
     private readonly List<(ICommonSession Session, EntityUid Map)> _unseen = new();
     private readonly List<(EntityUid Map, float Z)> _layers = new();
+    private readonly List<(EntityUid Map, float Z)> _stackLayers = new();
     private TimeSpan _nextUpdate;
+
+    [SubscribeLocalEvent]
+    private void OnStackShutdown(Entity<MapLayerStackComponent> ent, ref ComponentShutdown args)
+    {
+        GetLayers(ent, _stackLayers, true);
+        foreach (var (map, _) in _stackLayers)
+        {
+            if (!TerminatingOrDeleted(map))
+                RemoveLayer(map);
+        }
+    }
 
     public override void Update(float frameTime)
     {

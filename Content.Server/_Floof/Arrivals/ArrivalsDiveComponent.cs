@@ -1,26 +1,16 @@
+using System.Numerics;
+
 namespace Content.Server._Floof.Arrivals;
 
-/// <summary>
-/// An arrivals shuttle that dives under the ocean to the station and rises back to the terminal, instead of FTL.
-/// </summary>
 [RegisterComponent, Access(typeof(ArrivalsDiveSystem))]
 public sealed partial class ArrivalsDiveComponent : Component
 {
-    /// <summary>
-    /// How long one way takes. The ocean shader is timed for this, so faster dives look wrong.
-    /// </summary>
     [DataField]
     public TimeSpan DiveTime = TimeSpan.FromSeconds(150);
 
-    /// <summary>
-    /// Tiles per second at full speed, heading where the shuttle's nose points.
-    /// </summary>
     [DataField]
     public float Speed = 3f;
 
-    /// <summary>
-    /// Share of the trip spent getting up to full speed.
-    /// </summary>
     [DataField]
     public float SpeedUpShare = 0.05f;
     
@@ -38,6 +28,12 @@ public sealed partial class ArrivalsDiveComponent : Component
 
     [ViewVariables]
     public TimeSpan ArriveTime;
+
+    [ViewVariables]
+    public Vector2 Start;
+
+    [ViewVariables]
+    public Vector2 Forward;
 
     [ViewVariables]
     public int ShakesLeft;
