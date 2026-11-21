@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._Floof.Ocean.Depth;
+using Content.Shared.Atmos;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Gravity;
 using Content.Shared.Maps;
@@ -16,6 +17,9 @@ public sealed partial class MapFluidSystem : EntitySystem
     [Dependency] private EntityQuery<BuckleComponent> _buckleQuery;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery;
     [Dependency] private EntityQuery<MapFluidComponent> _fluidQuery;
+
+    private const float SeawaterDensity = 1025f;
+    private const float StandardGravity = 9.80665f;
 
     public bool HasFluid(EntityUid? map)
     {
@@ -71,11 +75,8 @@ public sealed partial class MapFluidSystem : EntitySystem
 
     public float GetPressure(Entity<MapFluidComponent> fluid, Vector2 position)
     {
-        if (_depth.GetDepth(fluid, position) is not { } depth)
-            return fluid.Comp.DeepPressure;
-
-        var share = MathF.Min(MathF.Max(depth, 0f) / MathF.Max(fluid.Comp.FullPressureDepth, 0.001f), 1f);
-        return fluid.Comp.SurfacePressure + (fluid.Comp.DeepPressure - fluid.Comp.SurfacePressure) * share;
+        var depth = MathF.Max(_depth.GetDepth(fluid, position) ?? 0f, 0f);
+        return Atmospherics.OneAtmosphere + SeawaterDensity * StandardGravity * depth / 1000f;
     }
     
     private bool IsLoose(TransformComponent xform, EntityUid gridUid)
