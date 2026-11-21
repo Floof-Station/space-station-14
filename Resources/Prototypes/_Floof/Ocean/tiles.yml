@@ -1,17 +1,3 @@
-- type: biomeTemplate
-  id: OpenOcean
-  layers:
-  - !type:BiomeTileLayer
-    threshold: -1.0
-    tile: FloorOceanSurface
-
-- type: biomeTemplate
-  id: Seabed
-  layers:
-  - !type:BiomeTileLayer
-    threshold: -1.0
-    tile: FloorAsteroidSand
-
 - type: tile
   id: FloorOceanSurface
   name: tiles-floor-ocean-surface
@@ -33,13 +19,3 @@
   id: FloorOceanSurface
   sprite: /Textures/_Floof/Tiles/ocean_surface.rsi
   state: water
-
-- type: shader
-  id: OceanBackdrop
-  kind: source
-  path: "/Textures/_Floof/Shaders/ocean_backdrop.swsl"
-
-- type: shader
-  id: OceanDeep
-  kind: source
-  path: "/Textures/_Floof/Shaders/ocean_deep.swsl"
