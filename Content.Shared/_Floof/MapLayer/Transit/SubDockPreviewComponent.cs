@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Floof.MapLayer.Transition;
+namespace Content.Shared._Floof.MapLayer.Transit;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class SubDockPreviewComponent : Component

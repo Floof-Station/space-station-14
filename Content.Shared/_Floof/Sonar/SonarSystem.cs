@@ -1,4 +1,4 @@
-namespace Content.Shared._Floof.MapLayer.Transition;
+namespace Content.Shared._Floof.Sonar;
 
 public sealed partial class SonarSystem : EntitySystem
 {

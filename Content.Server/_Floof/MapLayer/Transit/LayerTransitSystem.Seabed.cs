@@ -1,7 +1,8 @@
 using Content.Shared._Floof.MapLayer;
+using Content.Shared._Floof.MapLayer.Transit;
 using Content.Shared.Shuttles.Components;
 
-namespace Content.Server._Floof.MapLayer.Transition;
+namespace Content.Server._Floof.MapLayer.Transit;
 
 public sealed partial class LayerTransitSystem
 {

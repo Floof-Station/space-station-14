@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Floof.MapLayer.Transition;
+namespace Content.Shared._Floof.Sonar;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PassiveSonarComponent : Component

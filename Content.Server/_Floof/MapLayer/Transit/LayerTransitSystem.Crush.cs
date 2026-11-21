@@ -10,7 +10,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server._Floof.MapLayer.Transition;
+namespace Content.Server._Floof.MapLayer.Transit;
 public sealed partial class LayerTransitSystem
 {
     [Dependency] private BiomeSystem _biomes = default!;

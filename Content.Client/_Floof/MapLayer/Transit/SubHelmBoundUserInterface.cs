@@ -1,10 +1,12 @@
-using Content.Shared._Floof.MapLayer.Transition;
+using Content.Client._Floof.Sonar;
+using Content.Shared._Floof.MapLayer.Transit;
+using Content.Shared._Floof.Sonar;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._Floof.MapLayer.Transition;
+namespace Content.Client._Floof.MapLayer.Transit;
 
 [UsedImplicitly]
 public sealed class SubHelmBoundUserInterface : BoundUserInterface

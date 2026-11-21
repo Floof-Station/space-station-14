@@ -1,10 +1,11 @@
 using System.Numerics;
 using Content.Shared._Floof.MapLayer;
-using Content.Shared._Floof.MapLayer.Transition;
+using Content.Client._Floof.MapLayer;
+using Content.Shared._Floof.Sonar;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Client._Floof.MapLayer.Transition;
+namespace Content.Client._Floof.Sonar;
 
 public sealed partial class SonarBlipSystem : EntitySystem
 {

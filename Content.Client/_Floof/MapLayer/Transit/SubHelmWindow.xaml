@@ -1,6 +1,6 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:subHelm="clr-namespace:Content.Client._Floof.MapLayer.Transition"
+                      xmlns:subHelm="clr-namespace:Content.Client._Floof.MapLayer.Transit"
                       Title="{Loc 'sub-helm-window-title'}"
                       SetSize="960 762"
                       MinSize="960 762">

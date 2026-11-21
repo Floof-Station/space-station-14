@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Content.Server._Floof.MapLayer.Transition;
+namespace Content.Server._Floof.MapLayer.Transit;
 
 [RegisterComponent]
 public sealed partial class DockApproachComponent : Component

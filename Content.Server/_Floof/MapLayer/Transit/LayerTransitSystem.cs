@@ -2,7 +2,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._Floof.CCVars;
 using Content.Shared._Floof.MapLayer;
-using Content.Shared._Floof.MapLayer.Transition;
+using Content.Shared._Floof.MapLayer.Transit;
 using Content.Shared._Floof.Ocean;
 using Content.Shared.Popups;
 using Content.Shared.Shuttles.Components;
@@ -11,7 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Server._Floof.MapLayer.Transition;
+namespace Content.Server._Floof.MapLayer.Transit;
 
 public sealed partial class LayerTransitSystem : EntitySystem
 {

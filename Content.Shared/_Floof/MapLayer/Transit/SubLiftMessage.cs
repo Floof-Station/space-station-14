@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._Floof.MapLayer.Transition;
+namespace Content.Shared._Floof.MapLayer.Transit;
 
 [Serializable, NetSerializable]
 public sealed class SubLiftMessage : BoundUserInterfaceMessage;

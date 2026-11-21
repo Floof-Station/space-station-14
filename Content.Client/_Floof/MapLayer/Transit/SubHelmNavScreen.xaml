@@ -1,9 +1,9 @@
 <BoxContainer
     HorizontalExpand="True"
     xmlns="https://spacestation14.io"
-    xmlns:subHelm="clr-namespace:Content.Client._Floof.MapLayer.Transition"
+    xmlns:sonar="clr-namespace:Content.Client._Floof.Sonar"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
-    <subHelm:SonarControl
+    <sonar:SonarControl
         Name="NavRadar"
         MouseFilter="Stop"
         VerticalAlignment="Stretch"

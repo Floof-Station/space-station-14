@@ -1,5 +1,5 @@
 <BoxContainer xmlns="https://spacestation14.io"
-              xmlns:subHelm="clr-namespace:Content.Client._Floof.MapLayer.Transition"
+              xmlns:subHelm="clr-namespace:Content.Client._Floof.MapLayer.Transit"
               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
               xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
               HorizontalExpand="True">

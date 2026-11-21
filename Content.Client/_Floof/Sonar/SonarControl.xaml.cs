@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Client.Shuttles.UI;
-using Content.Shared._Floof.MapLayer.Transition;
+using Content.Shared._Floof.Sonar;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Systems;
 using JetBrains.Annotations;
@@ -13,7 +13,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 
-namespace Content.Client._Floof.MapLayer.Transition;
+namespace Content.Client._Floof.Sonar;
 
 [GenerateTypedNameReferences]
 public sealed partial class SonarControl : BaseShuttleControl

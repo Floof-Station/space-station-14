@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Content.Client._Floof.MapLayer.Transition;
+namespace Content.Client._Floof.Sonar;
 
 [RegisterComponent]
 public sealed partial class SonarViewComponent : Component
