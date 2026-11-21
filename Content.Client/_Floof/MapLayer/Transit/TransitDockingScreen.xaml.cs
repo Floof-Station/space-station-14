@@ -9,7 +9,7 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client._Floof.MapLayer.Transit;
 
 [GenerateTypedNameReferences]
-public sealed partial class SubDockingScreen : BoxContainer
+public sealed partial class TransitDockingScreen : BoxContainer
 {
     [Dependency] private IEntityManager _entManager = default!;
 
@@ -27,7 +27,7 @@ public sealed partial class SubDockingScreen : BoxContainer
 
     private bool _landed;
 
-    public SubDockingScreen()
+    public TransitDockingScreen()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
@@ -53,12 +53,12 @@ public sealed partial class SubDockingScreen : BoxContainer
         _landed = _entManager.HasComponent<MapLayerSeabedComponent>(map);
         var moving = _entManager.HasComponent<MapLayerTransitionComponent>(map);
 
-        var text = Loc.GetString(_landed ? "sub-helm-lift" : "sub-helm-land");
+        var text = Loc.GetString(_landed ? "transit-lift" : "transit-land");
         if (LiftButton.Text != text)
             LiftButton.Text = text;
 
         LiftButton.Disabled = moving;
-        DockButton.Disabled = _landed || moving || !_entManager.HasComponent<SubDockPreviewComponent>(_shuttle);
+        DockButton.Disabled = _landed || moving || !_entManager.HasComponent<TransitDockPreviewComponent>(_shuttle);
     }
 
     private void OnView(NetEntity obj)

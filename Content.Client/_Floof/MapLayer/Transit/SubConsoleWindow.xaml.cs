@@ -8,7 +8,7 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client._Floof.MapLayer.Transit;
 
 [GenerateTypedNameReferences]
-public sealed partial class SubHelmWindow : FancyWindow,
+public sealed partial class SubConsoleWindow : FancyWindow,
     IComputerWindow<ShuttleBoundUserInterfaceState>
 {
     [Dependency] private IEntityManager _entManager = default!;
@@ -20,7 +20,7 @@ public sealed partial class SubHelmWindow : FancyWindow,
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
 
-    public SubHelmWindow()
+    public SubConsoleWindow()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);

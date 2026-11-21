@@ -11,7 +11,7 @@ using Robust.Shared.Physics.Components;
 namespace Content.Client._Floof.MapLayer.Transit;
 
 [GenerateTypedNameReferences]
-public sealed partial class SubHelmNavScreen : BoxContainer
+public sealed partial class SubNavScreen : BoxContainer
 {
     [Dependency] private IEntityManager _entManager = default!;
     private SharedTransformSystem _xformSystem;
@@ -21,7 +21,7 @@ public sealed partial class SubHelmNavScreen : BoxContainer
 
     public event Action? OnSonarToggled;
 
-    public SubHelmNavScreen()
+    public SubNavScreen()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);

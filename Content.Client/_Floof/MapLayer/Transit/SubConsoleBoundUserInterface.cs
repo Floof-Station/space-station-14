@@ -9,12 +9,12 @@ using Robust.Client.UserInterface;
 namespace Content.Client._Floof.MapLayer.Transit;
 
 [UsedImplicitly]
-public sealed class SubHelmBoundUserInterface : BoundUserInterface
+public sealed class SubConsoleBoundUserInterface : BoundUserInterface
 {
     [ViewVariables]
-    private SubHelmWindow? _window;
+    private SubConsoleWindow? _window;
 
-    public SubHelmBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
+    public SubConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
     }
 
@@ -22,11 +22,11 @@ public sealed class SubHelmBoundUserInterface : BoundUserInterface
     {
         base.Open();
         EntMan.EnsureComponent<SonarViewComponent>(Owner);
-        _window = this.CreateWindow<SubHelmWindow>();
+        _window = this.CreateWindow<SubConsoleWindow>();
         _window.OnSonarToggled +=() => SendPredictedMessage(new SonarToggleMessage());
-        _window.OnLift += () => SendMessage(new SubLiftMessage());
-        _window.OnLand += () => SendMessage(new SubLandMessage());
-        _window.OnDock += () => SendMessage(new SubDockMessage());
+        _window.OnLift += () => SendMessage(new TransitLiftMessage());
+        _window.OnLand += () => SendMessage(new TransitLandMessage());
+        _window.OnDock += () => SendMessage(new TransitDockMessage());
         _window.DockRequest += (dock, target) => SendMessage(new DockRequestMessage
         {
             DockEntity = dock,

@@ -1,6 +1,6 @@
 - type: entity
   parent: ComputerShuttle
-  id: ComputerSubHelm
+  id: ComputerSub
   name: submarine console
   description: Steers the submarine and runs its sonar.
   components:
@@ -9,7 +9,7 @@
   - type: UserInterface
     interfaces:
       enum.ShuttleConsoleUiKey.Key:
-        type: SubHelmBoundUserInterface
+        type: SubConsoleBoundUserInterface
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ItemSlots

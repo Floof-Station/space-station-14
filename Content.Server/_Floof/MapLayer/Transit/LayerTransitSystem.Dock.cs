@@ -32,7 +32,7 @@ public sealed partial class LayerTransitSystem
     }
 
     [SubscribeLocalEvent]
-    private void OnDock(EntityUid uid, ShuttleConsoleComponent comp, SubDockMessage args)
+    private void OnDock(EntityUid uid, ShuttleConsoleComponent comp, TransitDockMessage args)
     {
         var xform = Transform(uid);
         if (xform.GridUid is not { } sub ||
@@ -42,11 +42,11 @@ public sealed partial class LayerTransitSystem
 
         switch (FindDock(sub, seabed, out var config))
         {
-            case SubDockSearch.NoneInRange:
-                _popup.PopupEntity(Loc.GetString("sub-helm-dock-none"), uid, args.Actor);
+            case TransitDockSearch.NoneInRange:
+                _popup.PopupEntity(Loc.GetString("transit-dock-none"), uid, args.Actor);
                 return;
-            case SubDockSearch.NoFit:
-                _popup.PopupEntity(Loc.GetString("sub-helm-dock-no-fit"), uid, args.Actor);
+            case TransitDockSearch.NoFit:
+                _popup.PopupEntity(Loc.GetString("transit-dock-no-fit"), uid, args.Actor);
                 return;
         }
 
@@ -119,7 +119,7 @@ public sealed partial class LayerTransitSystem
         }
 
         RemComp(sub, sub.Comp);
-        RemComp<SubDockPreviewComponent>(sub);
+        RemComp<TransitDockPreviewComponent>(sub);
     }
 
     private void UpdatePreviews()
@@ -132,14 +132,14 @@ public sealed partial class LayerTransitSystem
 
             if (xform.MapUid is not { } map ||
                 !TryGetSeabedBelow(map, out _, out var seabed) ||
-                FindDock(uid, seabed, out var config) != SubDockSearch.Found)
+                FindDock(uid, seabed, out var config) != TransitDockSearch.Found)
             {
-                RemComp<SubDockPreviewComponent>(uid);
+                RemComp<TransitDockPreviewComponent>(uid);
                 continue;
             }
 
             var (position, rotation) = GetDockPose(config);
-            var preview = EnsureComp<SubDockPreviewComponent>(uid);
+            var preview = EnsureComp<TransitDockPreviewComponent>(uid);
             if (preview.Position.EqualsApprox(position) && preview.Rotation.EqualsApprox(rotation))
                 continue;
 
@@ -191,10 +191,10 @@ public sealed partial class LayerTransitSystem
         _xform.SetWorldPositionRotation(sub, origin, rotation);
     }
 
-    private SubDockSearch FindDock(EntityUid sub, EntityUid seabed, out DockingConfig config)
+    private TransitDockSearch FindDock(EntityUid sub, EntityUid seabed, out DockingConfig config)
     {
         config = default!;
-        var range = _cfg.GetCVar(CCVars.SubDockRange);
+        var range = _cfg.GetCVar(CCVars.TransitDockRange);
         var subDocks = _dock.GetDocks(sub);
 
         _dockTargets.Clear();
@@ -243,14 +243,14 @@ public sealed partial class LayerTransitSystem
 
             best.TargetGrid = grid;
             config = best;
-            return SubDockSearch.Found;
+            return TransitDockSearch.Found;
         }
 
-        return _dockTargets.Count > 0 ? SubDockSearch.NoFit : SubDockSearch.NoneInRange;
+        return _dockTargets.Count > 0 ? TransitDockSearch.NoFit : TransitDockSearch.NoneInRange;
     }
 }
 
-public enum SubDockSearch : byte
+public enum TransitDockSearch : byte
 {
     NoneInRange,
 

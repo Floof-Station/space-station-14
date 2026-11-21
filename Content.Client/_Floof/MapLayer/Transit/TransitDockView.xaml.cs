@@ -10,7 +10,7 @@ using Robust.Shared.Map.Components;
 namespace Content.Client._Floof.MapLayer.Transit;
 
 [GenerateTypedNameReferences]
-public sealed partial class SubDockView : BaseShuttleControl
+public sealed partial class TransitDockView : BaseShuttleControl
 {
     private static readonly Color BelowColor = Color.FromHex("#5a7d9a");
     private static readonly Color GhostColor = Color.Cyan;
@@ -22,7 +22,7 @@ public sealed partial class SubDockView : BaseShuttleControl
 
     public EntityUid? Shuttle;
 
-    public SubDockView() : base(8f, 28f, 24f)
+    public TransitDockView() : base(8f, 28f, 24f)
     {
         RobustXamlLoader.Load(this);
         _layers = EntManager.System<MapLayerSystem>();
@@ -55,7 +55,7 @@ public sealed partial class SubDockView : BaseShuttleControl
             var belowToView = Matrix3x2.CreateScale(scale, center) * worldToView;
             DrawGridsOn(handle, below, belowToView, BelowColor);
 
-            if (EntManager.TryGetComponent(shuttle, out SubDockPreviewComponent? preview))
+            if (EntManager.TryGetComponent(shuttle, out TransitDockPreviewComponent? preview))
             {
                 var ghostToView = Matrix3Helpers.CreateTransform(preview.Position, preview.Rotation) * belowToView;
                 DrawGrid(handle, ghostToView, (shuttle, grid), GhostColor, 0.05f);

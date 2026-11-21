@@ -33,7 +33,7 @@ public sealed partial class LayerTransitSystem : EntitySystem
     public static readonly TimeSpan LiftTime = TimeSpan.FromSeconds(10);
 
     [SubscribeLocalEvent]
-    private void OnLift(EntityUid uid, ShuttleConsoleComponent comp, SubLiftMessage args)
+    private void OnLift(EntityUid uid, ShuttleConsoleComponent comp, TransitLiftMessage args)
     {
         var xform = Transform(uid);
         if (xform.GridUid is not { } sub || xform.MapUid is not { } seabed)
@@ -46,7 +46,7 @@ public sealed partial class LayerTransitSystem : EntitySystem
     }
 
     [SubscribeLocalEvent]
-    private void OnLand(EntityUid uid, ShuttleConsoleComponent comp, SubLandMessage args)
+    private void OnLand(EntityUid uid, ShuttleConsoleComponent comp, TransitLandMessage args)
     {
         var xform = Transform(uid);
         if (xform.GridUid is not { } sub ||
@@ -56,14 +56,14 @@ public sealed partial class LayerTransitSystem : EntitySystem
 
         if (IsBlocked(seabed, GetBounds(sub, 0f)))
         {
-            _popup.PopupEntity(Loc.GetString("sub-helm-land-blocked"), uid, args.Actor);
+            _popup.PopupEntity(Loc.GetString("transit-land-blocked"), uid, args.Actor);
             return;
         }
 
         if (StartTransition(sub, map, seabed) is not { } layer)
             return;
 
-        _layers.AddPhantoms(layer, seabed, GetBounds(sub,  _cfg.GetCVar(CCVars.SubPhantomReach)));
+        _layers.AddPhantoms(layer, seabed, GetBounds(sub,  _cfg.GetCVar(CCVars.TransitPhantomReach)));
     }
 
     private Box2Rotated GetBounds(EntityUid sub, float margin)

@@ -45,7 +45,7 @@
         <Button
             Name="SonarToggle"
             ToggleMode="True"
-            Text="{Loc 'sub-helm-sonar-toggle'}"
+            Text="{Loc 'sub-console-sonar-toggle'}"
             Margin="3"/>
     </BoxContainer>
 </BoxContainer>
