@@ -1,6 +1,6 @@
 namespace Content.Shared._Floof.Sonar;
 
-public sealed partial class SonarSystem : EntitySystem
+public abstract partial class SharedSonarSystem : EntitySystem
 {
     [SubscribeLocalEvent]
     private void OnToggle(EntityUid uid, SonarComponent comp, SonarToggleMessage args)

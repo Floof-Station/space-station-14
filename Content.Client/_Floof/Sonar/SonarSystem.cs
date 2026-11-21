@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._Floof.Sonar;
 
-public sealed partial class SonarBlipSystem : EntitySystem
+public sealed partial class SonarSystem : SharedSonarSystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MapLayerSystem _layers = default!;

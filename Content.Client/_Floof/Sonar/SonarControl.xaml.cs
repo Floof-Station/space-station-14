@@ -18,7 +18,7 @@ namespace Content.Client._Floof.Sonar;
 [GenerateTypedNameReferences]
 public sealed partial class SonarControl : BaseShuttleControl
 {
-    private readonly SonarBlipSystem _blips;
+    private readonly SonarSystem _sonar;
     private readonly SharedShuttleSystem _shuttles;
     private readonly SharedTransformSystem _transform;
 
@@ -35,7 +35,7 @@ public sealed partial class SonarControl : BaseShuttleControl
     public SonarControl() : base(64f, 256f, 256f)
     {
         RobustXamlLoader.Load(this);
-        _blips = EntManager.System<SonarBlipSystem>();
+        _sonar = EntManager.System<SonarSystem>();
         _shuttles = EntManager.System<SharedShuttleSystem>();
         _transform = EntManager.System<SharedTransformSystem>();
     }
@@ -174,7 +174,7 @@ public sealed partial class SonarControl : BaseShuttleControl
         if (!EntManager.TryGetComponent(_consoleEntity, out SonarViewComponent? view) ||
             !EntManager.TryGetComponent(_consoleEntity, out SonarComponent? sonar) ||
             view.Sub is not { } sub ||
-            !_blips.TryGetCenter(sub, out var center, out var ownMap))
+            !_sonar.TryGetCenter(sub, out var center, out var ownMap))
             return;
 
         var bounds = new Box2(Vector2.Zero, PixelSize);
@@ -188,7 +188,7 @@ public sealed partial class SonarControl : BaseShuttleControl
             if (alpha <= 0f)
                 continue;
 
-            var parallax = _blips.GetParallax(blip.Z, ownMap);
+            var parallax = _sonar.GetParallax(blip.Z, ownMap);
 
             var position = Vector2.Transform(center + (blip.Position - center) * parallax, worldToView);
             if (bounds.Contains(position))
@@ -208,9 +208,9 @@ public sealed partial class SonarControl : BaseShuttleControl
     {
         const int segments = 96;
 
-        var swept = _blips.GetPingRadius(ping, sonar, now);
+        var swept = _sonar.GetPingRadius(ping, sonar, now);
         var radius = (swept + ping.HullRadius) * MinimapScale;
-        var color = sonar.Color.WithAlpha(SonarBlipSystem.RingAlpha * (1f - swept / sonar.Range));
+        var color = sonar.Color.WithAlpha(SonarSystem.RingAlpha * (1f - swept / sonar.Range));
         var middle = Vector2.Transform(ping.Center, worldToView);
 
         var last = middle + new Vector2(radius, 0f);
