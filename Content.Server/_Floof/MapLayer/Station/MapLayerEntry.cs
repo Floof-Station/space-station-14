@@ -20,8 +20,6 @@ public abstract partial class MapLayerEntry
 
     public virtual bool NoOp => false;
 
-    public virtual bool Owned => false;
-
     public abstract EntityUid? GetMap(Entity<StationDataComponent> station, IEntityManager entMan);
 }
 
@@ -37,8 +35,6 @@ public sealed partial class StationMapLayer : MapLayerEntry
 
 public sealed partial class EmptyMapLayer : MapLayerEntry
 {
-    public override bool Owned => true;
-
     public override EntityUid? GetMap(Entity<StationDataComponent> station, IEntityManager entMan)
     {
         return entMan.System<SharedMapSystem>().CreateMap();
@@ -48,8 +44,6 @@ public sealed partial class EmptyMapLayer : MapLayerEntry
 public sealed partial class NoOpMapLayer : MapLayerEntry
 {
     public override bool NoOp => true;
-
-    public override bool Owned => true;
 
     public override EntityUid? GetMap(Entity<StationDataComponent> station, IEntityManager entMan)
     {

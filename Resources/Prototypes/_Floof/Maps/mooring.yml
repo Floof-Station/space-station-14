@@ -28,7 +28,7 @@
         - type: StationArrivals
           arrivalsMap: /Maps/_Floof/Misc/island.yml
           shuttlePath: /Maps/_Floof/Misc/arrivals_sub.yml
-        - type: StationMapLayers
+        - type: MapLayerSetup
           layers:
             - !type:ArrivalsMapLayer
               z: 600
