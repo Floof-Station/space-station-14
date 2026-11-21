@@ -61,7 +61,7 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         var now = _timing.CurTime;
         var stationMap = GetStationMap(args.Station);
         if (stationMap is { } fluidSource)
-            _fluid.CopyFluid(layer, fluidSource);
+            _fluid.CopyMapSettings(layer, fluidSource);
 
         var dive = EnsureComp<ArrivalsDivingComponent>(ent);
         dive.Target = args.Target;

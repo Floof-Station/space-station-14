@@ -32,7 +32,7 @@ public sealed partial class MapFluidSystem : EntitySystem
         return true;
     }
 
-    public void CopyFluid(EntityUid map, EntityUid from)
+    public void CopyMapSettings(EntityUid map, EntityUid from)
     {
         if (_fluidQuery.TryComp(from, out var fluid))
             CopyComp(from, map, fluid);

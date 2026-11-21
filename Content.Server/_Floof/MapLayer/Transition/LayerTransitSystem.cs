@@ -105,7 +105,7 @@ public sealed partial class LayerTransitSystem : EntitySystem
             return null;
 
         var layer = _layers.TakeTransitionLayer(sub);
-        _fluid.CopyFluid(layer, _fluid.HasFluid(from) ? from : to);
+        _fluid.CopyMapSettings(layer, _fluid.HasFluid(from) ? from : to);
 
         var duration = GetDuration(fromZ, toZ);
         var subXform = Transform(sub);
