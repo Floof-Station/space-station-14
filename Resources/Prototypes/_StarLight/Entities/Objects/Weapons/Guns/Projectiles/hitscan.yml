@@ -1,17 +1,21 @@
-- type: hitscan
+- type: entity
   id: PointDefenseBeam
   name: Point Defense beam
-  parent: LaserTrace
-  maxLength: 30
-  muzzleFlash:
-    sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: pd_muzzle
-  travelFlash:
-    sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: pd_trace
-  impactFlash:
-    sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: pd_impact
+  parent: BasicHitscan
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 30
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: pd_muzzle
+    travelFlash:
+      sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: pd_trace
+    impactFlash:
+      sprite: _Starlight/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: pd_impact
 
 # Apollo Plasma Bolt - Focused ship-to-ship bolt: high direct heat, small blast
 - type: entity

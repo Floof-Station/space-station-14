@@ -24,6 +24,7 @@ public sealed class NavInterfaceState
 
     public bool RotateWithEntity = true;
 
+    // Starlight - Start
     /// <summary>
     /// Radar blips for entities that should appear as shaped markers on radar
     /// (e.g. artillery shells, rockets, grenades).
@@ -36,6 +37,7 @@ public sealed class NavInterfaceState
     /// Each entry represents a fired beam; entries are expired server-side after a short duration.
     /// </summary>
     public List<RadarLaserData> Lasers = new(); // _Starlight
+    // Starlight - End
 
     public NavInterfaceState(
         float maxRange,
@@ -50,6 +52,7 @@ public sealed class NavInterfaceState
     }
 }
 
+// Starlight - Start
 /// <summary>
 /// A single radar blip entry representing a non-grid entity's position on radar.
 /// </summary>
@@ -105,6 +108,7 @@ public readonly struct RadarLaserData
         Color = color;
     }
 }
+// Starlight - End
 
 [Serializable, NetSerializable]
 public enum RadarConsoleUiKey : byte

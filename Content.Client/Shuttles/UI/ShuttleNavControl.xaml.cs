@@ -282,6 +282,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             DrawDocks(handle, gUid, curGridToView);
         }
 
+        // Starlight - Start
         // _Starlight - shaped radar blips and laser beam lines
         // Draw radar blips (shaped markers) for large projectiles etc.
         var blipWorldToView = worldToShuttle * shuttleToView;
@@ -325,6 +326,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             // Draw a slightly dimmer, wider glow line for visibility.
             handle.DrawLine(originScreen, endScreen, laser.Color.WithAlpha(0.35f));
         }
+        // Starlight - End
 
         // If we've set the controlling console, and it's on a different grid
         // to the shuttle itself, then draw an additional marker to help the
@@ -403,6 +405,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         }
     }
 
+    // Starlight - Start
     /// <summary>
     /// Draws a filled triangle blip on the radar screen, pointing upward.
     /// </summary>
@@ -449,6 +452,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         var outline = new[] { tl, tr, br, bl, tl };
         handle.DrawPrimitives(DrawPrimitiveTopology.LineStrip, outline, color);
     }
+    // Starlight - End
 
     private Vector2 InverseScalePosition(Vector2 value)
     {

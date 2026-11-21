@@ -38,6 +38,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedContentEyeSystem _eyeSystem = default!;
     [Dependency] private EntityQuery<PilotComponent> _pilotQuery = default!;
+    // Starlight - Start
     [Dependency] private RadarLaserSystem _laserSystem = default!; // _Starlight
     [Dependency] private IGameTiming _timing = default!; // _Starlight
 
@@ -45,6 +46,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     // How often (in seconds) to push fresh blip state to all open radar consoles.
     private const float BlipUpdateInterval = 0.25f;
     private float _blipUpdateTimer = 0f;
+    // Starlight - End
 
     private static readonly ProtoId<TagPrototype> CanPilotTag = "CanPilot";
 
@@ -281,6 +283,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
 
         if (_ui.HasUi(consoleUid, ShuttleConsoleUiKey.Key))
         {
+            // Starlight - Start
             // _Starlight - populate blips and laser traces
             // Populate radar blips for entities with RadarBlipComponent (e.g. artillery shells)
             var consoleMapCoords = _transform.GetMapCoordinates(consoleUid);
@@ -317,6 +320,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                         tracker.LaserColor));
                 }
             }
+            // Starlight - End
 
             _ui.SetUiState(consoleUid, ShuttleConsoleUiKey.Key, new ShuttleBoundUserInterfaceState(navState, mapState, dockState));
         }

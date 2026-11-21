@@ -16,6 +16,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
 {
     [Dependency] private ShuttleConsoleSystem _console = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
+    // Starlight - Start
     [Dependency] private SharedTransformSystem _transformSystem = default!; // _Starlight
     [Dependency] private RadarLaserSystem _laserSystem = default!; // _Starlight
     [Dependency] private IGameTiming _timing = default!; // _Starlight
@@ -24,6 +25,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
     // How often (in seconds) to push fresh blip state to all open radar consoles.
     private const float BlipUpdateInterval = 0.25f;
     private float _blipUpdateTimer = 0f;
+    // Starlight - End
 
     public override void Initialize()
     {
@@ -31,6 +33,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
         SubscribeLocalEvent<RadarConsoleComponent, ComponentStartup>(OnRadarStartup);
     }
 
+    // Starlight - Start
     public override void Update(float frameTime) // _Starlight
     {
         base.Update(frameTime);
@@ -48,6 +51,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
             UpdateState(uid, comp);
         }
     }
+    // Starlight - End
 
     private void OnRadarStartup(EntityUid uid, RadarConsoleComponent component, ComponentStartup args)
     {
@@ -83,6 +87,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
 
             state.RotateWithEntity = !component.FollowEntity;
 
+            // Starlight - Start
             // _Starlight - populate blips and laser traces
             // Populate radar blips for entities with RadarBlipComponent (e.g. artillery shells)
             var consoleMapCoords = _transformSystem.GetMapCoordinates(uid);
@@ -119,6 +124,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
                         tracker.LaserColor));
                 }
             }
+            // Starlight - End
 
             _uiSystem.SetUiState(uid, RadarConsoleUiKey.Key, new NavBoundUserInterfaceState(state));
         }

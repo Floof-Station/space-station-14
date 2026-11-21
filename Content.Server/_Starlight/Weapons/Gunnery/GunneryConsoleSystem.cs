@@ -26,17 +26,17 @@ namespace Content.Server._Starlight.Weapons.Gunnery;
 /// containing the standard radar data, cannon blip positions, and guided-projectile
 /// tracking info. Also handles fire and guidance BUI messages from the client.
 /// </summary>
-public sealed class GunneryConsoleSystem : EntitySystem
+public sealed partial class GunneryConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ShuttleConsoleSystem _console = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ShuttleConsoleSystem _console = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
     private const float UpdateInterval = 0.25f;
     private float _updateTimer;
@@ -169,7 +169,7 @@ public sealed class GunneryConsoleSystem : EntitySystem
         var cannonGridUid = Transform(cannon).GridUid;
         if (cannonGridUid != null
             && cannonMapPos.MapId == targetMapPos.MapId
-            && _mapManager.TryFindGridAt(targetMapPos, out var targetGridUid, out _)
+            && _mapSystem.TryFindGridAt(targetMapPos, out var targetGridUid, out _)
             && targetGridUid == cannonGridUid.Value)
             return;
 

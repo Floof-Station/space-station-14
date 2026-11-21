@@ -15,7 +15,7 @@
       - state: advanced-inhand-left
       right:
       - state: advanced-inhand-right
-  - type: WirelessNetworkConnection
+  - type: WirelessNetwork
     range: 100
   - type: StaticPrice
     price: 75

@@ -1,17 +1,18 @@
 using System.Linq;
-using Content.Server.Disposal.Unit;
+using Content.Shared.Disposal.Holder;
+using Content.Shared.Disposal.Unit;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._Starlight
 {
-    public sealed class AutoLoaderSystem : EntitySystem
+    public sealed partial class AutoLoaderSystem : EntitySystem
     {
-        [Dependency] private readonly DisposableSystem _disposableSystem = default!;
-        [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-        [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
-        [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+        [Dependency] private SharedDisposalHolderSystem _disposalHolder = default!;
+        [Dependency] private SharedContainerSystem _containerSystem = default!;
+        [Dependency] private SharedTransformSystem _xformSystem = default!;
+        [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
         public override void Initialize()
         {
@@ -22,17 +23,19 @@ namespace Content.Server._Starlight
         {
             var holder = Spawn(autoloader.Comp.HolderPrototypeId, _xformSystem.GetMapCoordinates(autoloader, xform: Transform(autoloader)));
             var holderComponent = Comp<DisposalHolderComponent>(holder);
+            if (holderComponent.Container is not { } holderContainer)
+                return;
 
             foreach (var item in autoloadercontainer.ContainedEntities.ToArray())
                 if (entity != item)
-                    _containerSystem.Insert(item, holderComponent.Container);
+                    _containerSystem.Insert(item, holderContainer);
 
             if (_whitelistSystem.IsWhitelistPass(autoloader.Comp.Whitelist, entity))
                 _containerSystem.Insert(entity, autoloadercontainer);
             else
-                _containerSystem.Insert(entity, holderComponent.Container);
+                _containerSystem.Insert(entity, holderContainer);
 
-            _disposableSystem.EnterTube(holder, CurrentTube, holderComponent);
+            _disposalHolder.TryEnterTube((holder, holderComponent), CurrentTube);
         }
     }
 

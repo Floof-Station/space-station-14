@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:gunnery="clr-namespace:Content.Client._Starlight.Weapons.Gunnery"
-    xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     x:Class="Content.Client._Starlight.Weapons.Gunnery.GunneryConsoleWindow"
     Title="Gunnery Console"
     SetSize="1100 740"
@@ -74,7 +73,7 @@
 
         </BoxContainer>
 
-        <cc:VSeparator />
+        <controls:Separator StyleClasses="LowDivider" Orientation="Vertical"/>
 
         <!-- Right sidebar: cannon list + status -->
         <BoxContainer
@@ -108,7 +107,7 @@
                 </ScrollContainer>
             </PanelContainer>
 
-            <cc:HSeparator />
+            <controls:Separator StyleClasses="LowDivider"/>
 
             <Label
                 Name="GuidanceLabel"
