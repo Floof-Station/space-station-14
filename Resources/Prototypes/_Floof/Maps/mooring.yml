@@ -26,8 +26,8 @@
               paths:
                 - /Maps/Shuttles/pathfinder.yml
         - type: StationArrivals
-          arrivalsMap: /Maps/_Floof/Misc/island.yml
-          shuttlePath: /Maps/_Floof/Misc/arrivals_sub.yml
+          arrivalsMap: /Maps/_Floof/Arrivals/island.yml
+          shuttlePath: /Maps/_Floof/Arrivals/arrivals_sub.yml
         - type: MapLayerSetup
           layers:
             - !type:ArrivalsMapLayer
