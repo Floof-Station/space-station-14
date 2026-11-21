@@ -1,7 +1,7 @@
 using Content.Server.Station.Events;
 using Content.Shared._Floof.MapLayer;
 
-namespace Content.Server._Floof.MapLayer.Station;
+namespace Content.Server._Floof.MapLayer.Setup;
 
 public sealed partial class MapLayerSetupSystem : EntitySystem
 {

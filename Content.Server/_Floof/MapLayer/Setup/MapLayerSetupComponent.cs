@@ -1,4 +1,4 @@
-namespace Content.Server._Floof.MapLayer.Station;
+namespace Content.Server._Floof.MapLayer.Setup;
 
 [RegisterComponent, Access(typeof(MapLayerSetupSystem))]
 public sealed partial class MapLayerSetupComponent : Component

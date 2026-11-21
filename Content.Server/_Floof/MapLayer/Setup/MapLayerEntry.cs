@@ -4,7 +4,7 @@ using Content.Shared.Station.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._Floof.MapLayer.Station;
+namespace Content.Server._Floof.MapLayer.Setup;
 
 [ImplicitDataDefinitionForInheritors, UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public abstract partial class MapLayerEntry
