@@ -13,10 +13,10 @@ public sealed partial class ArrivalsDiveComponent : Component
 
     [DataField]
     public float SpeedUpShare = 0.05f;
-    
+
     [DataField]
     public float SlowDownShare = 0.1f;
-    
+
     [ViewVariables]
     public EntityUid? TransitionLayer;
 
@@ -34,10 +34,4 @@ public sealed partial class ArrivalsDiveComponent : Component
 
     [ViewVariables]
     public Vector2 Forward;
-
-    [ViewVariables]
-    public int ShakesLeft;
-
-    [ViewVariables]
-    public TimeSpan NextShake;
 }

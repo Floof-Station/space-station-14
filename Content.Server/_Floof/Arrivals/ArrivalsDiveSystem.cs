@@ -4,15 +4,14 @@ using Content.Server.Shuttles.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared.Station.Systems;
+using Content.Shared._Floof.Arrivals;
 using Content.Shared._Floof.MapLayer;
 using Content.Shared._Floof.Ocean;
-using Content.Shared.Camera;
-using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Random;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Floof.Arrivals;
@@ -21,21 +20,15 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
 {
     [Dependency] private DockingSystem _dock = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MapFluidSystem _fluid = default!;
     [Dependency] private MapLayerSystem _layers = default!;
     [Dependency] private ServerArrivalsSystem _arrivals = default!;
-    [Dependency] private SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private ShuttleSystem _shuttles = default!;
     [Dependency] private StationSystem _station = default!;
 
-    private const int LandingShakes = 10;
-    private const float LandingShakeStrength = 0.6f;
     private const float CatchUpTime = 1f;
-    private static readonly TimeSpan LandingShakeInterval = TimeSpan.FromSeconds(0.15);
 
     public override void Initialize()
     {
@@ -94,9 +87,6 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         var query = EntityQueryEnumerator<ArrivalsDiveComponent, ShuttleComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out var dive, out var shuttle, out var body))
         {
-            if (dive.ShakesLeft > 0 && now >= dive.NextShake)
-                Shake((uid, dive));
-
             if (dive.Target is not { } target)
                 continue;
 
@@ -162,25 +152,9 @@ public sealed partial class ArrivalsDiveSystem : EntitySystem
         }
 
         if (ent.Comp.ToStation)
-        {
-            ent.Comp.ShakesLeft = LandingShakes;
-            ent.Comp.NextShake = _timing.CurTime;
-        }
+            RaiseNetworkEvent(new ArrivalsLandedEvent(), Filter.BroadcastGrid(ent));
 
         _arrivals.TripArrived(ent.Owner);
-    }
-
-    private void Shake(Entity<ArrivalsDiveComponent> ent)
-    {
-        var strength = LandingShakeStrength * ent.Comp.ShakesLeft / LandingShakes;
-        ent.Comp.ShakesLeft--;
-        ent.Comp.NextShake = _timing.CurTime + LandingShakeInterval;
-
-        foreach (var session in _player.Sessions)
-        {
-            if (session.AttachedEntity is { } player && Transform(player).GridUid == ent.Owner)
-                _recoil.KickCamera(player, _random.NextAngle().ToVec() * strength);
-        }
     }
 
     private EntityUid TakeTransitionLayer(Entity<ArrivalsDiveComponent> ent)
