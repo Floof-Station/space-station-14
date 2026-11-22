@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 11/15/2026 13:14:06
-  entityCount: 2095
+  entityCount: 2127
 maps:
 - 1
 grids:
@@ -10976,6 +10976,166 @@ entities:
     - type: Transform
       parent: 2
       pos: -11.5,-7.5
+  - uid: 20668
+    components:
+    - type: Transform
+      pos: -16.5,-9.5
+      parent: 2
+  - uid: 20669
+    components:
+    - type: Transform
+      pos: -17.5,-9.5
+      parent: 2
+  - uid: 20670
+    components:
+    - type: Transform
+      pos: -18.5,-9.5
+      parent: 2
+  - uid: 20671
+    components:
+    - type: Transform
+      pos: -19.5,-9.5
+      parent: 2
+  - uid: 20672
+    components:
+    - type: Transform
+      pos: -20.5,-9.5
+      parent: 2
+  - uid: 20673
+    components:
+    - type: Transform
+      pos: -21.5,-9.5
+      parent: 2
+  - uid: 20674
+    components:
+    - type: Transform
+      pos: -22.5,-9.5
+      parent: 2
+  - uid: 20675
+    components:
+    - type: Transform
+      pos: -23.5,-9.5
+      parent: 2
+  - uid: 20676
+    components:
+    - type: Transform
+      pos: -23.5,-8.5
+      parent: 2
+  - uid: 20677
+    components:
+    - type: Transform
+      pos: -23.5,-7.5
+      parent: 2
+  - uid: 20678
+    components:
+    - type: Transform
+      pos: -23.5,-6.5
+      parent: 2
+  - uid: 20679
+    components:
+    - type: Transform
+      pos: -23.5,-5.5
+      parent: 2
+  - uid: 20680
+    components:
+    - type: Transform
+      pos: -22.5,-5.5
+      parent: 2
+  - uid: 20681
+    components:
+    - type: Transform
+      pos: -21.5,-5.5
+      parent: 2
+  - uid: 20682
+    components:
+    - type: Transform
+      pos: -20.5,-5.5
+      parent: 2
+  - uid: 20683
+    components:
+    - type: Transform
+      pos: -19.5,-5.5
+      parent: 2
+  - uid: 20684
+    components:
+    - type: Transform
+      pos: -18.5,-5.5
+      parent: 2
+  - uid: 20685
+    components:
+    - type: Transform
+      pos: -17.5,-5.5
+      parent: 2
+  - uid: 20686
+    components:
+    - type: Transform
+      pos: -16.5,-5.5
+      parent: 2
+  - uid: 20687
+    components:
+    - type: Transform
+      pos: -15.5,-5.5
+      parent: 2
+  - uid: 20688
+    components:
+    - type: Transform
+      pos: -14.5,-5.5
+      parent: 2
+  - uid: 20689
+    components:
+    - type: Transform
+      pos: -13.5,-5.5
+      parent: 2
+  - uid: 20690
+    components:
+    - type: Transform
+      pos: -12.5,-5.5
+      parent: 2
+  - uid: 20691
+    components:
+    - type: Transform
+      pos: -11.5,-5.5
+      parent: 2
+  - uid: 20692
+    components:
+    - type: Transform
+      pos: -10.5,-5.5
+      parent: 2
+  - uid: 20693
+    components:
+    - type: Transform
+      pos: -9.5,-5.5
+      parent: 2
+  - uid: 20694
+    components:
+    - type: Transform
+      pos: -8.5,-5.5
+      parent: 2
+  - uid: 20695
+    components:
+    - type: Transform
+      pos: -7.5,-5.5
+      parent: 2
+  - uid: 20696
+    components:
+    - type: Transform
+      pos: -6.5,-5.5
+      parent: 2
+  - uid: 20697
+    components:
+    - type: Transform
+      pos: -5.5,-5.5
+      parent: 2
+  - uid: 20698
+    components:
+    - type: Transform
+      pos: -5.5,-4.5
+      parent: 2
+  - uid: 20699
+    components:
+    - type: Transform
+      pos: -5.5,-3.5
+      parent: 2
 - proto: ClosetEmergencyFilledRandom
   entities:
   - uid: 18258
