@@ -37,7 +37,7 @@ public sealed partial class MoffStainRepellentSourceComponent : Component
     /// Reagent that will be used as the stain-repellent coating.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public ProtoId<ReagentPrototype> Reagent = "MoffStainRepellent";
+    public ProtoId<ReagentPrototype> Reagent = "StainRepellent";
 
     /// <summary>
     /// Reagent consumption per use.

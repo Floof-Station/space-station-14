@@ -9,7 +9,7 @@
   - type: Solution
     solution:
       reagents:
-      - ReagentId: MoffStainRepellent
+      - ReagentId: StainRepellent
         Quantity: 60
   - type: MoffStainRepellentSource
     removalOnWashingChance: 0.5
