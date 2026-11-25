@@ -1,0 +1,36 @@
+- type: entity
+  name: Random Double Sheet Spawner
+  id: DoubleBedsheetSpawner
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _ADT/Objects/Misc/bedsheets_double.rsi
+      state: double_sheetwhite
+  - type: EntityTableSpawner
+    table: !type:GroupSelector
+      children:
+      - !type:GroupSelector
+        weight: 97
+        prob: 0.97
+        children:
+        - id: DoubleBedsheetBlue
+        - id: DoubleBedsheetYellow
+        - id: DoubleBedsheetOrange
+        - id: DoubleBedsheetGreen
+        - id: DoubleBedsheetNT
+        - id: DoubleBedsheetRed
+        - id: DoubleBedsheetUSA
+        - id: DoubleBedsheetBrown
+        - id: DoubleBedsheetBlack
+        - id: DoubleBedsheetPurple
+        - id: DoubleBedsheetGrey
+        - id: DoubleBedsheetWhite
+        - id: DoubleBedsheetRainbow
+      - !type:GroupSelector
+        weight: 3
+        children:
+        - id: DoubleBedsheetIan
+        - id: DoubleBedsheetCosmos
+    offset: 0
