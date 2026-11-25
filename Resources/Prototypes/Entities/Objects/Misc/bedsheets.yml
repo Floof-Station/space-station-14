@@ -23,6 +23,7 @@
   - type: Tag
     tags:
     - Bedsheet
+  - type: DirectionalBedsheet # Floof - Directional Beds
 
 - type: entity
   id: BedsheetBlack

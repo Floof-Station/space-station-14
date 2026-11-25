@@ -86,10 +86,6 @@
     surface: 0.34 # Floof - flooding
   - type: Sprite
     state: bed-MED
-  # Floof Section - Directional Beds
-  - type: Transform
-    noRot: true
-  # Floof Section End
   - type: HealOnBuckle
     damage:
       types:
@@ -148,10 +144,6 @@
   components:
   - type: Sprite
     state: mattress
-  # Floof Section - Directional Beds
-  - type: Transform
-    noRot: true
-  # Floof Section End
   - type: Damageable
     damageModifierSet: PlasticMod
 
@@ -166,6 +158,13 @@
   - type: Sprite
     sprite: Structures/Web/bed.rsi
     state: icon
+  # Floof Section - Directional Beds
+  - type: Transform
+    noRot: false
+  - type: Strap
+    modifyBuckleDrawDepth: false
+  - type: DirectionalBed
+  # Floof Section End
   - type: Destructible
     thresholds:
     - trigger: *DamageFurnitureNormal
@@ -193,6 +192,13 @@
     surface: 0.48 # Floof - flooding
   - type: Sprite
     state: psychbed
+  # Floof Section - Directional Beds
+  - type: Transform
+    noRot: false
+  - type: Strap
+    modifyBuckleDrawDepth: false
+  - type: DirectionalBed
+  # Floof Section End
   - type: HealOnBuckle
     damage:
       types:

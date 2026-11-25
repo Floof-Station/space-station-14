@@ -8,7 +8,8 @@
   "copyright": "Made by PixelTheKermit (github) for SS14",
   "states": [
     {
-      "name": "icon"
+      "name": "icon",
+      "directions": 4
     }
   ]
 }

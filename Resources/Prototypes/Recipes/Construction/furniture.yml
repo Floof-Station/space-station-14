@@ -258,6 +258,7 @@
   parent: BaseBed
   id: MedicalBed
   targetNode: medicalbed
+  canRotate: true # Floof - Directional Beds
 
 - type: construction
   parent: BaseBed

@@ -31,6 +31,7 @@
   parent: BaseWebStructure
   id: WebBed
   targetNode: bed
+  canRotate: true # Floof - Directional Beds
   conditions:
   - !type:TileNotBlocked
 

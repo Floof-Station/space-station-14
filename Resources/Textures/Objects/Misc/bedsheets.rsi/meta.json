@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at https://github.com/tgstation/tgstation/commit/0ec86b44b11f5e2f45137d9f6c851b8942a26aa3, sheetbrigmedic sprited by RudeyCoolLeet#3875, sheetce sheethop sheethos sheetrd are adaptations of the original sprites and were created by Alpaccalypse",
+  "copyright": "Taken from tgstation at https://github.com/tgstation/tgstation/commit/0ec86b44b11f5e2f45137d9f6c851b8942a26aa3, sheetbrigmedic sprited by RudeyCoolLeet#3875, sheetce sheethop sheethos sheetrd are adaptations of the original sprites and were created by Alpaccalypse, directions taken from tgstation at https://github.com/tgstation/tgstation/commit/644ebf93d05272ad9c36d9c0a663d7b676e6e89b, the other side of sheetbrigmedic sheetce sheethop sheethos sheetrd is mirrored",
   "size": {
     "x": 32,
     "y": 32
@@ -11,34 +11,44 @@
       "name": "random_bedsheet"
     },
     {
-      "name": "sheetNT"
+      "name": "sheetNT",
+      "directions": 4
     },
     {
-      "name": "sheetUSA"
+      "name": "sheetUSA",
+      "directions": 4
     },
     {
-      "name": "sheetblack"
+      "name": "sheetblack",
+      "directions": 4
     },
     {
-      "name": "sheetblue"
+      "name": "sheetblue",
+      "directions": 4
     },
     {
-      "name": "sheetbrown"
+      "name": "sheetbrown",
+      "directions": 4
     },
     {
-      "name": "sheetcaptain"
+      "name": "sheetcaptain",
+      "directions": 4
     },
     {
-      "name": "sheetce"
+      "name": "sheetce",
+      "directions": 4
     },
     {
-      "name": "sheetcentcom"
+      "name": "sheetcentcom",
+      "directions": 4
     },
     {
-      "name": "sheetclown"
+      "name": "sheetclown",
+      "directions": 4
     },
     {
-      "name": "sheetcmo"
+      "name": "sheetcmo",
+      "directions": 4
     },
     {
       "name": "sheetcosmos",
@@ -50,65 +60,109 @@
           0.2,
           0.2,
           0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
         ]
-      ]
+      ],
+      "directions": 4
     },
     {
-      "name": "sheetcult"
+      "name": "sheetcult",
+      "directions": 4
     },
     {
-      "name": "sheetgreen"
+      "name": "sheetgreen",
+      "directions": 4
     },
     {
-      "name": "sheetgrey"
+      "name": "sheetgrey",
+      "directions": 4
     },
     {
-      "name": "sheethop"
+      "name": "sheethop",
+      "directions": 4
     },
     {
-      "name": "sheethos"
+      "name": "sheethos",
+      "directions": 4
     },
     {
-      "name": "sheetian"
+      "name": "sheetian",
+      "directions": 4
     },
     {
-      "name": "sheetmedical"
+      "name": "sheetmedical",
+      "directions": 4
     },
     {
-      "name": "sheetmime"
+      "name": "sheetmime",
+      "directions": 4
     },
     {
-      "name": "sheetorange"
+      "name": "sheetorange",
+      "directions": 4
     },
     {
-      "name": "sheetpurple"
+      "name": "sheetpurple",
+      "directions": 4
     },
     {
-      "name": "sheetqm"
+      "name": "sheetqm",
+      "directions": 4
     },
     {
-      "name": "sheetrainbow"
+      "name": "sheetrainbow",
+      "directions": 4
     },
     {
-      "name": "sheetrd"
+      "name": "sheetrd",
+      "directions": 4
     },
     {
-      "name": "sheetbrigmedic"
+      "name": "sheetbrigmedic",
+      "directions": 4
     },
     {
-      "name": "sheetred"
+      "name": "sheetred",
+      "directions": 4
     },
     {
-      "name": "sheetsyndie"
+      "name": "sheetsyndie",
+      "directions": 4
     },
     {
-      "name": "sheetwhite"
+      "name": "sheetwhite",
+      "directions": 4
     },
     {
-      "name": "sheetwiz"
+      "name": "sheetwiz",
+      "directions": 4
     },
     {
-      "name": "sheetyellow"
+      "name": "sheetyellow",
+      "directions": 4
     }
   ]
 }

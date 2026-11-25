@@ -12,16 +12,19 @@
       "directions": 4
     },
     {
-      "name": "bed-MED"
+      "name": "bed-MED",
+      "directions": 4
     },
     {
       "name": "dogbed"
     },
     {
-      "name": "mattress"
+      "name": "mattress",
+      "directions": 4
     },
     {
-      "name": "psychbed"
+      "name": "psychbed",
+      "directions": 4
     },
     {
       "name": "rack"
