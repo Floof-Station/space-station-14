@@ -1119,3 +1119,16 @@ Entries:
   id: 134
   time: '2026-11-25T16:49:20.0000000+00:00'
   url: https://github.com/Floof-Station/space-station-14/pull/414
+- author: Pachat-Kas
+  changes:
+    - type: Add
+      message: >-
+        Ported double bedsheets for double beds, printable at the uniform
+        printer.
+    - type: Tweak
+      message: >-
+        Medical beds, mattresses, psych beds, web beds and bedsheets can now
+        face left or right.
+  id: 135
+  time: '2026-11-25T23:53:05.0000000+00:00'
+  url: https://github.com/Floof-Station/space-station-14/pull/416
