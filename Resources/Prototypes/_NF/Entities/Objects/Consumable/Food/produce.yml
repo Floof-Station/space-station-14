@@ -18,6 +18,8 @@
         Quantity: 5
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/pear.rsi
+  - type: Item # Floof
+    heldPrefix: produce
   - type: Produce
     plantId: pear
   - type: Tag
@@ -45,6 +47,8 @@
         Quantity: 1
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
+  - type: Item # Floof
+    heldPrefix: produce
   - type: Produce
     plantId: coffee
   - type: Tag
@@ -76,6 +80,8 @@
         Quantity: 6
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/avocado.rsi
+  - type: Item # Floof
+    heldPrefix: produce
   - type: Produce
     plantId: avocado
   - type: ToolRefinable
@@ -143,6 +149,8 @@
         Quantity: 4
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/cucumber.rsi
+  - type: Item # Floof
+    heldPrefix: produce
   - type: Produce
     plantId: cucumber
   - type: ToolRefinable
@@ -213,6 +221,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/cucumber.rsi
     state: pickle
+  - type: Item # Floof
+    heldPrefix: pickle
   - type: ToolRefinable
     refineResult:
     - id: FoodPickleSlice
@@ -282,6 +292,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/bees.rsi
     state: produce
+  - type: Item # Floof
+    heldPrefix: produce
   - type: Extractable
     grindableSolutionName: food
     juiceSolution:

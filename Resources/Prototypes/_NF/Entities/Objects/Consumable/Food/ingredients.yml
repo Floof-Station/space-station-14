@@ -37,6 +37,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: produce-beans
+  - type: Item # Floof
+    heldPrefix: produce-beans
   - type: Tag
     tags:
     - Fruit
@@ -45,6 +47,17 @@
     node: start
     defaultTarget: light roasted coffee
   - type: AtmosExposed
+  - type: Fixtures # Floof
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 1 # Floof
+        mask:
+        - ItemMask
+        restitution: 0.3  # fite me
+        friction: 0.2
   - type: Temperature
     thermalConductivity: 1
     heatCapacity: 250 # Floof - had to convert this due to upstream change, Arbitrarily chosen
@@ -72,6 +85,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: produce-beans-light
+  - type: Item # Floof
+    heldPrefix: produce-beans-light
   - type: Tag
     tags:
     - Fruit
@@ -79,6 +94,17 @@
     graph: Coffee
     node: light roasted coffee
     defaultTarget: medium roasted coffee
+  - type: Fixtures # Floof
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 1 # Floof
+        mask:
+        - ItemMask
+        restitution: 0.3  # fite me
+        friction: 0.2
   - type: Temperature
     thermalConductivity: 1
     heatCapacity: 250 # Floof - had to convert this due to upstream change, Arbitrarily chosen
@@ -97,6 +123,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: produce-beans-medium
+  - type: Item # Floof
+    heldPrefix: produce-beans-medium
   - type: Construction
     graph: Coffee
     node: medium roasted coffee
@@ -111,6 +139,8 @@
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: produce-beans-dark
+  - type: Item # Floof
+    heldPrefix: produce-beans-dark
   - type: Construction
     graph: Coffee
     node: dark roasted coffee

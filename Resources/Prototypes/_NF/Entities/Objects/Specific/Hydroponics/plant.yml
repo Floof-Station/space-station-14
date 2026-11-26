@@ -68,8 +68,8 @@
       sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     - type: PlantData
       name: seeds-coffee-name
-      packetPrototype: HumpShroomSeeds
-      productPrototypes: [ CoffeeSeeds ]
+      packetPrototype: CoffeeSeeds
+      productPrototypes: [ FoodCoffee ]
     - type: PlantHarvest
       harvestRepeat: Repeat
     - type: Plant

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-4.0",
-  "copyright": "Taken from https://ninjikin.itch.io/fruit edited by terezi4real github",
+  "copyright": "Taken from https://ninjikin.itch.io/fruit edited by terezi4real github, inhand sprites by whatston3 (GitHub)",
   "size": {
     "x": 32,
     "y": 32
@@ -36,6 +36,14 @@
     },
     {
       "name": "produce"
+    },
+    {
+      "name": "produce-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-inhand-right",
+      "directions": 4
     }
   ]
 }
