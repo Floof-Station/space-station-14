@@ -40,13 +40,6 @@
       - state: Stirrer-Left
       right:
       - state: Stirrer-Right
-  - type: Utensil
-    types:
-    - Spoon
-  - type: ReactionMixer
-    timeToMix: 1.0
-    reactionTypes:
-    - Stir
   - type: Sprite
     sprite: _TP/Objects/Tools/kitchen.rsi
     state: stirrer
@@ -67,9 +60,6 @@
       - state: Tamper-Left
       right:
       - state: Tamper-Right
-  - type: Utensil
-    types:
-    - Spoon
   - type: Sprite
     sprite: _TP/Objects/Tools/kitchen.rsi
     state: tamper
