@@ -1,0 +1,179 @@
+# Coffee Filters
+- type: entity
+  id: CoffeeFilter
+  parent: BaseItem
+  name: coffee filter
+  description: A single-use filter for a boiler.
+  components:
+  - type: CoffeeFilter
+    dirtyPrototype: CoffeeFilterDirty
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: filter
+  - type: Tag
+    tags:
+    - TagCoffeeFilter
+
+- type: entity
+  parent: CoffeeFilter
+  id: CoffeeFilterDirty
+  name: dirty coffee filter
+  description: Smells of old, burnt coffee.
+  components:
+  - type: CoffeeFilter
+    isDirty: true
+    dirtyPrototype: null
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: filter-dirty
+
+- type: entity
+  id: CoffeeFilterInfinite
+  parent: BaseItem
+  name: forever-use coffee filter
+  description: A filter for a boiler. This one seems spotless, despite its age! A token for the heartiest of coffee lovers.
+  components:
+  - type: CoffeeFilter
+    infiniteUses: true
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: filter-forever
+
+# Coffee
+- type: entity
+  parent: [ BaseItem, SolutionVeryTiny ]
+  id: CoffeeBeans
+  name: coffee beans
+  description: A bag of coffee beans.
+  components:
+  - type: Extractable
+    grindableSolutionName: food
+  - type: Item
+    size: Small
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: ReagentGroundCoffee
+        Quantity: 15
+  - type: Sprite # TODO TRIESTE - add custom sprite
+    sprite: Objects/Specific/Hydroponics/cocoa.rsi
+    state: seed
+  - type: Tag
+    tags:
+    - TagCoffeeBeans
+
+- type: entity
+  id: InstantInstantCoffee
+  parent: [ BaseItem, SolutionVeryTiny ]
+  name: instant coffee
+  description: A bag of instant coffee.
+  components:
+  - type: DrainableSolution
+    solution: reagents
+  - type: ExaminableSolution
+    solution: reagents
+    exactVolume: true
+  - type: Item
+    size: Small
+  - type: Solution
+    id: reagents # explicit id; the default "solution" id broke grinding on the coffee beans
+    solution:
+      reagents:
+      - ReagentId: ReagentInstantCoffee
+        Quantity: 15
+  - type: Sprite # TODO - add custom sprite
+    sprite: Objects/Specific/Hydroponics/cocoa.rsi
+    state: seed
+  - type: SolutionTransfer
+    maxTransferAmount: 5
+
+# Tools
+- type: entity
+  parent: BaseItem
+  id: CoffeeMixer
+  name: coffee stirrer
+  description: A tool for mixing coffee grounds.
+  components:
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,0
+    inhandVisuals:
+      left:
+      - state: Stirrer-Left
+      right:
+      - state: Stirrer-Right
+  - type: Utensil
+    types:
+    - Spoon
+  - type: ReactionMixer
+    mixMessage: "coffee-mixer-success"
+    timeToMix: 1.0
+    reactionTypes:
+    - Stir
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: stirrer
+
+- type: entity
+  parent: BaseItem
+  id: CoffeePress
+  name: coffee tamper
+  description: A tool for pressing coffee grounds.
+  components:
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: Tamper-Left
+      right:
+      - state: Tamper-Right
+  - type: Utensil
+    types:
+    - Spoon
+  - type: ReactionMixer
+    mixMessage: "coffee-press-success"
+    timeToMix: 1.0
+    reactionTypes:
+    - Pressing
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: tamper
+
+- type: entity
+  parent: [ BaseItem, SolutionToolSmall ]
+  id: CoffeeBasket
+  name: coffee basket
+  description: A basket for coffee grounds. Connects to the coffee machine.
+  components:
+  - type: Solution
+    id: food # The coffee maker reads the basket's "food" solution; the base's default id is "solution".
+  - type: ExaminableSolution
+    solution: food
+  - type: FitsAsBasket
+  - type: FitsInDispenser # Lets the basket sit in the grinder's beaker slot, so beans grind straight into it.
+    solution: food
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: Basket-Left
+      right:
+      - state: Basket-Right
+  - type: MixableSolution
+    solution: food
+  - type: RefillableSolution
+    solution: food
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: basket
+  - type: SolutionTransfer
+    maxTransferAmount: 30
+    transferAmount: 5
+  - type: Spillable
+    solution: food

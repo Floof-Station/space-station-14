@@ -1,0 +1,90 @@
+- type: entity
+  parent: [ BaseMachinePowered, SmallConstructibleMachine, BaseSmallConstructibleMachineDestructible ]
+  id: CoffeeMaker
+  suffix: Empty
+  name: coffee maker
+  description: A table-top espresso machine, for all your coffee needs.
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 5
+  - type: PowerState
+    idlePowerDraw: 5
+    workingPowerDraw: 100
+  - type: Appearance
+  - type: CoffeeMaker
+    brews: # grounds in the basket -> coffee in the pitcher
+      ReagentGroundCoffee: Coffee
+      ReagentInstantCoffee: Coffee
+      ReagentMixedCoffee: ReagentBadCoffee
+      ReagentTamperedCoffee: ReagentBadCoffee
+      ReagentMixedTamperedCoffee: ReagentQualityCoffee
+  - type: ContainerContainer
+    containers:
+      Beaker: !type:ContainerSlot
+      Basket: !type:ContainerSlot
+      Filter: !type:ContainerSlot
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.17,0,0.20,0.4"
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: ItemSlots
+    slots:
+      Beaker:
+        whitelist:
+          components:
+          - FitsAsPitcher
+      Basket:
+        whitelist:
+          components:
+          - FitsAsBasket
+      Filter:
+        whitelist:
+          components:
+          - CoffeeFilter
+  - type: Machine
+    board: CoffeeMakerCircuitboard
+  - type: Sprite
+    sprite: _TP/Structures/Machines/coffeemaker.rsi
+    offset: 0.0,0.4
+    layers:
+    - state: icon
+    - state: basket
+      map: [ "enum.CoffeeMakerVisuals.Basket" ]
+      visible: false
+    - state: beaker
+      map: [ "enum.CoffeeMakerVisuals.Beaker" ]
+      visible: false
+    - state: pitcher
+      map: [ "enum.CoffeeMakerVisuals.Pitcher" ]
+      visible: false
+    drawdepth: LargeObjects
+    snapCardinals: true
+
+- type: entity
+  parent: CoffeeMaker
+  id: CoffeeMakerFilled
+  suffix: Filled
+  components:
+  - type: ItemSlots
+    slots:
+      Beaker:
+        whitelist:
+          components:
+          - FitsAsPitcher
+        startingItem: Pitcher
+      Basket:
+        whitelist:
+          components:
+          - FitsAsBasket
+        startingItem: CoffeeBasket
+      Filter:
+        whitelist:
+          components:
+          - CoffeeFilter
+        startingItem: CoffeeFilter

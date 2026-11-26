@@ -3,3 +3,8 @@
   parent: [ BaseCircuitboardRecipe, BaseServiceMachineRecipeCategory ]
   id: TP14LatheRecipeOvenMachineCircuitboard
   result: TP14OvenMachineCircuitboard
+
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseServiceMachineRecipeCategory ]
+  id: CoffeeMakerCircuitboardRecipe
+  result: CoffeeMakerCircuitboard

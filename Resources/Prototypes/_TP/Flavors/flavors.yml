@@ -1,0 +1,32 @@
+- type: flavor
+  id: blue
+  flavorType: Base
+  description: flavor-base-blue
+
+- type: flavor
+  id: Custard
+  flavorType: Complex
+  description: flavor-complex-custard
+
+
+# Coffee
+- type: flavor
+  id: FlavorGroundCoffee
+  flavorType: Complex
+  description: flavor-complex-ground-coffee
+
+- type: flavor
+  id: FlavorInstantCoffee
+  flavorType: Complex
+  description: flavor-complex-instant-coffee
+
+- type: flavor
+  id: FlavorBadCoffee
+  flavorType: Complex
+  description: flavor-complex-bad-coffee
+
+- type: flavor
+  id: FlavorQualityCoffee
+  flavorType: Complex
+  description: flavor-complex-quality-coffee
+

@@ -1,0 +1,6 @@
+- type: mixingCategory
+  id: Pressing
+  verbText: mixing-verb-pressing
+  icon:
+    sprite: Structures/Machines/Medical/centrifuge.rsi
+    state: base

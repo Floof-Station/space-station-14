@@ -1,0 +1,52 @@
+# Coffee Grounds
+- type: reaction
+  id: GroundCoffeeToTamperedCoffee
+  requiredMixerCategories:
+  - Pressing
+  reactants:
+    ReagentGroundCoffee:
+      amount: 1
+  products:
+    ReagentTamperedCoffee: 1
+
+- type: reaction
+  id: GroundCoffeeToMixedCoffee
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    ReagentGroundCoffee:
+      amount: 1
+  products:
+    ReagentTamperedCoffee: 1
+
+- type: reaction
+  id: TamperedCoffeeToMixedCoffee # Wrong path, chucklenuts!
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    ReagentTamperedCoffee:
+      amount: 1
+  products:
+    ReagentMixedCoffee: 1
+
+- type: reaction
+  id: MixedCoffeeToMixedTamperedCoffee # You did it! :D
+  requiredMixerCategories:
+  - Pressing
+  reactants:
+    ReagentMixedCoffee:
+      amount: 1
+  products:
+    ReagentMixedTamperedCoffee: 1
+
+# Coffee (the drink)
+- type: reaction
+  id: InstantCoffeeToCoffee
+  minTemp: 350
+  reactants:
+    ReagentInstantCoffee:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    Coffee: 2
