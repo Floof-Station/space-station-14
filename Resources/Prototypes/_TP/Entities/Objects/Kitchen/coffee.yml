@@ -1,7 +1,7 @@
 # Coffee
 - type: entity
   id: InstantInstantCoffee
-  parent: [ BaseItem, SolutionVeryTiny ]
+  parent: [ BaseItem, SolutionSmall ]
   name: instant coffee
   description: A bag of instant coffee.
   components:
@@ -17,9 +17,9 @@
     solution:
       reagents:
       - ReagentId: ReagentInstantCoffee
-        Quantity: 15
+        Quantity: 60
   - type: Sprite # TODO - add custom sprite
-    sprite: Objects/Specific/Hydroponics/cocoa.rsi
+    sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: seed
   - type: SolutionTransfer
     maxTransferAmount: 5
