@@ -382,3 +382,53 @@
   id: roastedcrickets
   flavorType: Complex
   description: flavor-complex-roasted-crickets
+
+- type: flavor
+  id: groundcoffeelight
+  flavorType: Complex
+  description: flavor-complex-ground-coffee-light
+
+- type: flavor
+  id: groundcoffeemedium
+  flavorType: Complex
+  description: flavor-complex-ground-coffee-medium
+
+- type: flavor
+  id: groundcoffeedark
+  flavorType: Complex
+  description: flavor-complex-ground-coffee-dark
+
+- type: flavor
+  id: groundcoffeeburnt
+  flavorType: Complex
+  description: flavor-complex-ground-coffee-burnt
+
+- type: flavor
+  id: burntcoffee
+  flavorType: Complex
+  description: flavor-complex-burnt-coffee
+
+- type: flavor
+  id: coffeearomalight
+  flavorType: Complex
+  description: flavor-complex-coffee-aroma-light
+
+- type: flavor
+  id: coffeearomamedium
+  flavorType: Complex
+  description: flavor-complex-coffee-aroma-medium
+
+- type: flavor
+  id: coffeearomadark
+  flavorType: Complex
+  description: flavor-complex-coffee-aroma-dark
+
+- type: flavor
+  id: brewqualitylow
+  flavorType: Complex
+  description: flavor-complex-brew-quality-low
+
+- type: flavor
+  id: brewqualityhigh
+  flavorType: Complex
+  description: flavor-complex-brew-quality-high

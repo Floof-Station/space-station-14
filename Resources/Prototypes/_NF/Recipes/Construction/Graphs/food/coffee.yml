@@ -38,3 +38,14 @@
 
     - node: dark roasted coffee
       entity: FoodCoffeeBeansRoastedDark
+      edges: # Floof
+        - to: burnt coffee
+          completed:
+            - !type:PlaySound
+              sound: /Audio/Effects/sizzle.ogg
+          steps:
+            - minTemperature: 395
+
+    # Floof
+    - node: burnt coffee
+      entity: FoodCoffeeBeansBurnt

@@ -2,7 +2,7 @@
   id: BoxCoffeeBeans
   parent: BoxCardboard
   name: box of coffee beans
-  description: A box filled with bags of coffee beans.
+  description: A box filled with light roasted coffee beans.
   components:
   - type: Storage
     grid:
@@ -10,7 +10,7 @@
   - type: EntityTableContainerFill
     containers:
       storagebase:
-        id: CoffeeBeans
+        id: FoodCoffeeBeansRoastedLight
         amount: 6
 
 - type: entity

@@ -16,6 +16,12 @@
   id: CoffeeBasket
 
 - type: Tag
+  id: CoffeeStirrer
+
+- type: Tag
+  id: CoffeeTamper
+
+- type: Tag
   id: CombatBoots
 
 ## D ##

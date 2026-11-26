@@ -17,9 +17,6 @@
       "name": "produce"
     },
     {
-      "name": "produce-beans"
-    },
-    {
       "name": "produce-beans-light"
     },
     {
@@ -27,6 +24,9 @@
     },
     {
       "name": "produce-beans-dark"
+    },
+    {
+      "name": "produce-beans-burnt"
     },
     {
       "name": "seed"
@@ -47,19 +47,11 @@
       "name": "stage-5"
     },
     {
-      "name": "produce-beans-dark-inhand-left",
+      "name": "produce-beans-burnt-inhand-left",
       "directions": 4
     },
     {
-      "name": "produce-beans-dark-inhand-right",
-      "directions": 4
-    },
-    {
-      "name": "produce-beans-inhand-left",
-      "directions": 4
-    },
-    {
-      "name": "produce-beans-inhand-right",
+      "name": "produce-beans-burnt-inhand-right",
       "directions": 4
     },
     {
@@ -76,6 +68,14 @@
     },
     {
       "name": "produce-beans-medium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-dark-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-dark-inhand-right",
       "directions": 4
     },
     {

@@ -1,28 +1,5 @@
 # Coffee
 - type: entity
-  parent: [ BaseItem, SolutionVeryTiny ]
-  id: CoffeeBeans
-  name: coffee beans
-  description: A bag of coffee beans.
-  components:
-  - type: Extractable
-    grindableSolutionName: food
-  - type: Item
-    size: Small
-  - type: Solution
-    id: food
-    solution:
-      reagents:
-      - ReagentId: ReagentGroundCoffee
-        Quantity: 15
-  - type: Sprite # TODO TRIESTE - add custom sprite
-    sprite: Objects/Specific/Hydroponics/cocoa.rsi
-    state: seed
-  - type: Tag
-    tags:
-    - TagCoffeeBeans
-
-- type: entity
   id: InstantInstantCoffee
   parent: [ BaseItem, SolutionVeryTiny ]
   name: instant coffee
@@ -67,13 +44,15 @@
     types:
     - Spoon
   - type: ReactionMixer
-    mixMessage: "coffee-mixer-success"
     timeToMix: 1.0
     reactionTypes:
     - Stir
   - type: Sprite
     sprite: _TP/Objects/Tools/kitchen.rsi
     state: stirrer
+  - type: Tag
+    tags:
+    - CoffeeStirrer
 
 - type: entity
   parent: BaseItem
@@ -91,14 +70,12 @@
   - type: Utensil
     types:
     - Spoon
-  - type: ReactionMixer
-    mixMessage: "coffee-press-success"
-    timeToMix: 1.0
-    reactionTypes:
-    - Pressing
   - type: Sprite
     sprite: _TP/Objects/Tools/kitchen.rsi
     state: tamper
+  - type: Tag
+    tags:
+    - CoffeeTamper
 
 - type: entity
   parent: [ BaseItem, SolutionToolSmall ]
@@ -112,6 +89,7 @@
     solution: basket
   - type: DrainableSolution
     solution: basket
+  - type: CoffeeBasket
   - type: Tag
     tags:
     - CoffeeBasket

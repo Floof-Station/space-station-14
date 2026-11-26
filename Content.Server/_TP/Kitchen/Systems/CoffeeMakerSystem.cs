@@ -156,6 +156,19 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
         _itemSlots.SetLock(ent.Owner, "Basket", false);
     }
 
+    private CoffeeQuality GetQuality(EntityUid basketEnt)
+    {
+        if (!TryComp<CoffeeBasketComponent>(basketEnt, out var basket))
+            return CoffeeQuality.Low;
+
+        return basket.Prep switch
+        {
+            CoffeePrep.Stirred | CoffeePrep.Tamped => CoffeeQuality.High,
+            CoffeePrep.None => CoffeeQuality.Low,
+            _ => CoffeeQuality.Medium,
+        };
+    }
+
     /// <summary>
     ///     The main update loop for the coffee maker.
     /// </summary>
@@ -185,6 +198,8 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
                 if (!_solution.TryGetRefillableSolution(beakerEnt, out var beakerSolution, out _))
                     continue;
 
+                var quality = GetQuality(basketEnt);
+
                 foreach (var reagent in basketSolution.Value.Comp.Solution.Contents.ToArray())
                 {
                     // Ground removal and coffee adding processes
@@ -199,10 +214,24 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
                         continue;
                     }
 
-                    _solution.TryAddReagent(beakerSolution.Value, new ReagentId(recipe.Output, null), reagent.Quantity * comp.BrewMultiplier, out _);
+                    // ReSharper disable EnforceForeachStatementBraces, EnforceIfStatementBraces
+                    // I'm not gonna expand this code with braces, fuck you rider
+                    foreach (var (output, amount) in recipe.Outputs)
+                        _solution.TryAddReagent(beakerSolution.Value, new ReagentId(output, null), reagent.Quantity * amount, out _);
 
-                    if (recipe.Byproduct is { } byproduct)
-                        _solution.TryAddReagent(basketSolution.Value, new ReagentId(byproduct, null), reagent.Quantity, out _);
+                    if (recipe.Quality?.GetValueOrDefault(quality) is { } qualityOutputs)
+                        foreach (var (output, amount) in qualityOutputs)
+                            _solution.TryAddReagent(beakerSolution.Value, new ReagentId(output, null), reagent.Quantity * amount, out _);
+
+                    foreach (var (byproduct, amount) in recipe.Byproducts)
+                        _solution.TryAddReagent(basketSolution.Value, new ReagentId(byproduct, null), reagent.Quantity * amount, out _);
+                    // ReSharper restore EnforceForeachStatementBraces, EnforceIfStatementBraces
+                }
+
+                if (TryComp<CoffeeBasketComponent>(basketEnt, out var basket))
+                {
+                    basket.Prep = CoffeePrep.None;
+                    Dirty(basketEnt, basket);
                 }
 
                 // Finally, we reset the maker, play a sound, and display a popup message.

@@ -54,11 +54,28 @@
   - type: Tag
     tags:
     - Fruit
-  - type: SpawnItemsOnUse
-    items:
-    - id: FoodCoffeeBeansRaw
-    sound:
-      path: /Audio/Effects/packetrip.ogg
+  - type: Construction # Floof
+    graph: Coffee
+    node: start
+    defaultTarget: light roasted coffee
+  - type: AtmosExposed # Floof
+  - type: Fixtures # Floof
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 1
+        mask:
+        - ItemMask
+        restitution: 0.3  # fite me
+        friction: 0.2
+  - type: Temperature # Floof
+    thermalConductivity: 1
+    heatCapacity: 250
+  - type: TemperatureDamage # Floof
+    # required for cooking to work
+  - type: InternalTemperature # Floof
 
 - type: entity
   parent: [ FoodProduceBase, BaseSlicingRefinableFood ]

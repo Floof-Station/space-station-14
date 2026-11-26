@@ -16,56 +16,6 @@
             Quantity: 50
 
 - type: entity
-  name: raw coffee beans
-  parent: FoodProduceBase
-  id: FoodCoffeeBeansRaw
-  description: Green coffee beans, just waiting to be roasted.
-  components:
-  - type: FlavorProfile
-    flavors:
-    - bitter
-  - type: Edible
-  - type: Solution
-    id: food
-    solution:
-      maxVol: 6
-      reagents:
-      - ReagentId: Nutriment
-        Quantity: 1
-      - ReagentId: Theobromine # Caffeine
-        Quantity: 1
-  - type: Sprite
-    sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
-    state: produce-beans
-  - type: Item # Floof
-    heldPrefix: produce-beans
-  - type: Tag
-    tags:
-    - Fruit
-  - type: Construction
-    graph: Coffee
-    node: start
-    defaultTarget: light roasted coffee
-  - type: AtmosExposed
-  - type: Fixtures # Floof
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.25,-0.25,0.25,0.25"
-        density: 1 # Floof
-        mask:
-        - ItemMask
-        restitution: 0.3  # fite me
-        friction: 0.2
-  - type: Temperature
-    thermalConductivity: 1
-    heatCapacity: 250 # Floof - had to convert this due to upstream change, Arbitrarily chosen
-  - type: TemperatureDamage
-    # required for cooking to work
-  - type: InternalTemperature
-
-- type: entity
   name: light roasted coffee beans
   parent: FoodProduceBase
   id: FoodCoffeeBeansRoastedLight
@@ -78,10 +28,10 @@
   - type: Solution
     id: food
     solution:
-      maxVol: 6
+      maxVol: 15 # Floof
       reagents:
-      - ReagentId: CoffeeGrounds
-        Quantity: 5
+      - ReagentId: GroundCoffeeLight # Floof
+        Quantity: 15
   - type: Sprite
     sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
     state: produce-beans-light
@@ -129,6 +79,13 @@
     graph: Coffee
     node: medium roasted coffee
     defaultTarget: dark roasted coffee
+  - type: Solution # Floof
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: GroundCoffeeMedium
+        Quantity: 15
 
 - type: entity
   name: dark roasted coffee beans
@@ -144,4 +101,35 @@
   - type: Construction
     graph: Coffee
     node: dark roasted coffee
+    defaultTarget: burnt coffee # Floof
+  - type: Solution # Floof
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: GroundCoffeeDark
+        Quantity: 15
+
+# Floof
+- type: entity
+  name: burnt coffee beans
+  parent: FoodCoffeeBeansRoastedLight
+  id: FoodCoffeeBeansBurnt
+  description: Roasted well past French and into charcoal. Oily, charred and ashy; this will brew a miserable cup.
+  components:
+  - type: Sprite
+    sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
+    state: produce-beans-burnt
+  - type: Item
+    heldPrefix: produce-beans-burnt
+  - type: Construction
+    graph: Coffee
+    node: burnt coffee
     defaultTarget: null
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: GroundCoffeeBurnt
+        Quantity: 15

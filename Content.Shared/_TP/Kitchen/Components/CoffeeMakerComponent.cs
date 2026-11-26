@@ -1,4 +1,3 @@
-using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.Serialization;
 
@@ -7,12 +6,6 @@ namespace Content.Shared._TP.Kitchen.Components;
 [RegisterComponent]
 public sealed partial class CoffeeMakerComponent : Component
 {
-    /// <summary>
-    ///     How much coffee is made per unit of grounds.
-    /// </summary>
-    [DataField]
-    public FixedPoint2 BrewMultiplier = 2;
-
     [DataField]
     public SoundPathSpecifier? FinishSound = new("/Audio/_TP/Machines/Kitchen/coffee-pour.ogg");
 
