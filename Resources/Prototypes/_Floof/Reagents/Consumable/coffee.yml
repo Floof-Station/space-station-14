@@ -1,0 +1,29 @@
+- type: reagent
+  id: ReagentSpentCoffeeGrounds
+  name: reagent-name-spent-coffee-grounds
+  desc: reagent-desc-spent-coffee-grounds
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#2E1F17"
+  recognizable: true
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 1
+
+- type: reagent
+  id: ReagentWeakCoffee
+  name: reagent-name-weak-coffee
+  parent: BaseDrink
+  desc: reagent-desc-weak-coffee
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: water
+  color: "#8A6A45"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.05
+      effects:
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 2

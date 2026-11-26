@@ -6,9 +6,6 @@
   id: TagCoffeeBeans
 
 - type: Tag
-  id: TagCoffeeFilter
-
-- type: Tag
   id: TagCoffeeMakerBoard
 
 ## O ##

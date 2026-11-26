@@ -8,8 +8,6 @@
     containers:
       entity_storage: !type:AllSelector
         children:
-        - id: BoxCoffeeFilter
-          amount: 2
         - id: BoxCoffeeBeans
           amount: 1
         - id: BoxInstantCoffee

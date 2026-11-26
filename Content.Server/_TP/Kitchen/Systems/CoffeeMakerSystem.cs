@@ -1,13 +1,19 @@
+using System.Linq;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._TP.Kitchen.Components;
+using Content.Shared._TP.Kitchen.Prototypes;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Popups;
+using Content.Shared.Power;
+using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server._TP.Kitchen.Systems;
@@ -20,35 +26,24 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PowerReceiverSystem _power = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private TagSystem _tag = default!;
     [Dependency] private IGameTiming _timing = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
+    private static readonly ProtoId<TagPrototype> PitcherTag = "Pitcher";
 
-        SubscribeLocalEvent<CoffeeMakerComponent, GetVerbsEvent<ActivationVerb>>(OnActivationVerb);
-        SubscribeLocalEvent<CoffeeMakerComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
-        SubscribeLocalEvent<CoffeeMakerComponent, EntInsertedIntoContainerMessage>(OnEntInserted);
-        SubscribeLocalEvent<CoffeeMakerComponent, ContainerIsRemovingAttemptEvent>(OnAttemptRemove);
-    }
-
-    private void OnAttemptRemove(Entity<CoffeeMakerComponent> ent, ref ContainerIsRemovingAttemptEvent args)
-    {
-        if (ent.Comp.IsEnabled)
-        {
-            args.Cancel();
-        }
-    }
-
+    [SubscribeLocalEvent]
     private void OnEntInserted(Entity<CoffeeMakerComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         switch (args.Container.ID)
         {
             case "Beaker":
-                _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Pitcher, true);
+                var visual = _tag.HasTag(args.Entity, PitcherTag) ? CoffeeMakerVisuals.Pitcher : CoffeeMakerVisuals.Beaker;
+                _appearance.SetData(ent.Owner, visual, true);
                 break;
             case "Basket":
                 _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Basket, true);
@@ -56,26 +51,16 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
         }
     }
 
+    [SubscribeLocalEvent]
     private void OnEntRemoved(Entity<CoffeeMakerComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         switch (args.Container.ID)
         {
             case "Beaker":
-                if (ent.Comp.IsEnabled)
-                {
-                    _popup.PopupEntity(Loc.GetString("coffee-maker-message-brewing"), ent.Owner);
-                    return;
-                }
-
                 _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Pitcher, false);
+                _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Beaker, false);
                 break;
             case "Basket":
-                if (ent.Comp.IsEnabled)
-                {
-                    _popup.PopupEntity(Loc.GetString("coffee-maker-message-brewing"), ent.Owner);
-                    return;
-                }
-
                 _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Basket, false);
                 break;
         }
@@ -86,12 +71,13 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
     /// </summary>
     /// <param name="ent">CoffeeMaker entity</param>
     /// <param name="args">AlternativeVerb arguments</param>
+    [SubscribeLocalEvent]
     private void OnActivationVerb(Entity<CoffeeMakerComponent> ent, ref GetVerbsEvent<ActivationVerb> args)
     {
         if (!args.CanAccess || !args.CanInteract)
             return;
 
-        if (!ent.Comp.IsEnabled)
+        if (ent.Comp.BrewEnd == null)
         {
             var user = args.User;
             var verb = new ActivationVerb
@@ -111,72 +97,14 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
     /// <param name="user">User uid</param>
     private void AttemptEnable(Entity<CoffeeMakerComponent> ent, EntityUid user)
     {
-        // First, we check for each container if it has items in it.
-        // If any of them return null or empty, we return and display a popup message.
-        if (!_container.TryGetContainer(ent.Owner, "Beaker", out var beakerContainer) || beakerContainer.ContainedEntities.Count == 0)
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-beaker"), user, user);
+        if (!CanBrew(ent, user))
             return;
-        }
 
-        if (!_container.TryGetContainer(ent.Owner, "Basket", out var basketContainer) || basketContainer.ContainedEntities.Count == 0)
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-basket"), user, user);
-            return;
-        }
-
-        if (!_container.TryGetContainer(ent.Owner, "Filter", out var filterContainer) || filterContainer.ContainedEntities.Count == 0)
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-filter"), user, user);
-            return;
-        }
-
-        // Another special case for the coffee filters, for if they're dirty.
-        var filterEnt = filterContainer.ContainedEntities[0];
-        if (TryComp<CoffeeFilterComponent>(filterEnt, out var filter) && filter.IsDirty)
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-dirty-filter"), user, user);
-            return;
-        }
-
-        // Then we check if the basket has any grounds in it.
-        // If not, we return early.
-        var basketEnt = basketContainer.ContainedEntities[0];
-        if (!_solution.TryGetSolution(basketEnt, "food", out _, out var basketSolutionComp))
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-grounds"), user, user);
-            return;
-        }
-
-        // Now we check the grounds in the basket.
-        // If any grounds this maker can brew are present, we set a var to true.
-        // Otherwise, we return early.
-        var hasGrounds = false;
-        foreach (var ground in ent.Comp.Brews.Keys)
-        {
-            var groundAmount = basketSolutionComp.GetReagentQuantity(new ReagentId(ground, null));
-            if (groundAmount > 0)
-            {
-                hasGrounds = true;
-                break;
-            }
-        }
-
-        if (!hasGrounds)
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-grounds"), user, user);
-            return;
-        }
-
-        // And finally, before finishing up properly, we check if it's powered.
-        if (!_power.IsPowered(ent))
-        {
-            _popup.PopupEntity(Loc.GetString("coffee-maker-message-unpowered", ("entity", ent.Owner)), user, user);
-            return;
-        }
-
-        ent.Comp.IsEnabled = true;
-        ent.Comp.StartTime = _timing.CurTime;
+        ent.Comp.BrewEnd = _timing.CurTime + ent.Comp.BrewTime;
+        ent.Comp.PlayingStream = _audio.PlayPvs(ent.Comp.BrewSound, ent)?.Entity;
+        _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Brewing, true);
+        _itemSlots.SetLock(ent.Owner, "Beaker", true);
+        _itemSlots.SetLock(ent.Owner, "Basket", true);
         _popup.PopupEntity(Loc.GetString("coffee-maker-message-enabled", ("entity", ent.Owner)), ent.Owner, user);
         _popup.PopupEntity(Loc.GetString("coffee-maker-message-enabled-other",
                 ("user", user),
@@ -184,6 +112,48 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
             ent.Owner,
             Filter.PvsExcept(user),
             true);
+    }
+
+    private bool CanBrew(Entity<CoffeeMakerComponent> ent, EntityUid user)
+    {
+        // And finally, before finishing up properly, we check if it's powered.
+        if (!_power.IsPowered(ent))
+        {
+            _popup.PopupEntity(Loc.GetString("coffee-maker-message-unpowered", ("entity", ent.Owner)), user, user);
+            return false;
+        }
+
+        // First, we check for each container if it has items in it.
+        // If any of them return null or empty, we return and display a popup message.
+        if (!_container.TryGetContainer(ent.Owner, "Beaker", out var beakerContainer) || beakerContainer.ContainedEntities.Count == 0)
+        {
+            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-beaker"), user, user);
+            return false;
+        }
+
+        if (!_container.TryGetContainer(ent.Owner, "Basket", out var basketContainer) || basketContainer.ContainedEntities.Count == 0)
+        {
+            _popup.PopupEntity(Loc.GetString("coffee-maker-message-no-basket"), user, user);
+            return false;
+        }
+
+        return true;
+    }
+
+    [SubscribeLocalEvent]
+    private void OnPowerChanged(Entity<CoffeeMakerComponent> ent, ref PowerChangedEvent args)
+    {
+        if (!args.Powered && ent.Comp.BrewEnd != null)
+            StopBrewing(ent);
+    }
+
+    private void StopBrewing(Entity<CoffeeMakerComponent> ent)
+    {
+        ent.Comp.BrewEnd = null;
+        ent.Comp.PlayingStream = _audio.Stop(ent.Comp.PlayingStream);
+        _appearance.SetData(ent.Owner, CoffeeMakerVisuals.Brewing, false);
+        _itemSlots.SetLock(ent.Owner, "Beaker", false);
+        _itemSlots.SetLock(ent.Owner, "Basket", false);
     }
 
     /// <summary>
@@ -198,89 +168,46 @@ public sealed partial class CoffeeMakerSystem : EntitySystem
         while (query.MoveNext(out var uid, out var comp))
         {
             // If the coffee maker isn't enabled we don't do anything.
-            // Then we move onto container checking (again!), plus returning their first contained entity.
-            if (!comp.IsEnabled)
+            if (comp.BrewEnd is not { } brewEnd || _timing.CurTime < brewEnd)
                 continue;
 
-            if (!_container.TryGetContainer(uid, "Beaker", out var beakerContainer) || beakerContainer.ContainedEntities.Count == 0)
-            {
-                comp.IsEnabled = false;
-                continue;
-            }
+            StopBrewing((uid, comp));
 
-            if (!_container.TryGetContainer(uid, "Basket", out var basketContainer) || basketContainer.ContainedEntities.Count == 0)
-            {
-                comp.IsEnabled = false;
-                continue;
-            }
-
-            if (!_container.TryGetContainer(uid, "Filter", out var filterContainer) || filterContainer.ContainedEntities.Count == 0)
-            {
-                comp.IsEnabled = false;
-                continue;
-            }
-
-            var beakerEnt = beakerContainer.ContainedEntities[0];
-            var basketEnt = basketContainer.ContainedEntities[0];
-            var filterEnt = filterContainer.ContainedEntities[0];
-
-            // Now we increase the internal (fake) temperature of the coffee maker.
-            // If it reaches the brew temperature, we handle the brewing process.
-            comp.CurrentHeat += comp.HeatingAmount * frameTime;
-            if (comp.CurrentHeat >= comp.BrewTemperature)
+            if (_itemSlots.GetItemOrNull(uid, "Beaker") is { } beakerEnt
+                && _itemSlots.GetItemOrNull(uid, "Basket") is { } basketEnt)
             {
                 // First we get the solutions of the basket and beaker
                 // Afterward, we remove the grounds from the basket and add a coffee reagent to the beaker.
                 // These depend on the grounds used, see Brews in the CoffeeMaker prototype.
-                if (!_solution.TryGetSolution(basketEnt, "food", out var basketSolution))
-                {
-                    comp.IsEnabled = false;
+                if (!_solution.TryGetDrainableSolution(basketEnt, out var basketSolution, out _))
                     continue;
-                }
 
-                if (!_solution.TryGetSolution(beakerEnt, "drink", out var beakerSolution))
-                {
-                    comp.IsEnabled = false;
+                if (!_solution.TryGetRefillableSolution(beakerEnt, out var beakerSolution, out _))
                     continue;
-                }
 
-                foreach (var (ground, brew) in comp.Brews)
+                foreach (var reagent in basketSolution.Value.Comp.Solution.Contents.ToArray())
                 {
                     // Ground removal and coffee adding processes
-                    var groundId = new ReagentId(ground, null);
-                    var groundsAmount = basketSolution.Value.Comp.Solution.GetReagentQuantity(groundId);
-                    if (groundsAmount <= 0)
+                    _solution.RemoveReagent(basketSolution.Value, reagent);
+
+                    var recipe = _proto.EnumeratePrototypes<CoffeeMakerRecipePrototype>()
+                        .FirstOrDefault(recipe => recipe.Input == reagent.Reagent.Prototype);
+
+                    if (recipe == null)
+                    {
+                        _solution.TryAddReagent(beakerSolution.Value, reagent, out _);
                         continue;
+                    }
 
-                    _solution.RemoveReagent(basketSolution.Value, groundId, groundsAmount);
-                    _solution.TryAddReagent(beakerSolution.Value, new ReagentId(brew, null), groundsAmount * comp.BrewMultiplier, out _);
-                }
+                    _solution.TryAddReagent(beakerSolution.Value, new ReagentId(recipe.Output, null), reagent.Quantity * comp.BrewMultiplier, out _);
 
-                // Power-outage handling - We just turn it off and set the heat to 0.
-                if (!_power.IsPowered(uid))
-                {
-                    comp.IsEnabled = false;
-                    comp.CurrentHeat = 0f;
+                    if (recipe.Byproduct is { } byproduct)
+                        _solution.TryAddReagent(basketSolution.Value, new ReagentId(byproduct, null), reagent.Quantity, out _);
                 }
 
                 // Finally, we reset the maker, play a sound, and display a popup message.
-                comp.IsEnabled = false;
-                comp.CurrentHeat = 0f;
                 _audio.PlayPvs(comp.FinishSound, uid, AudioParams.Default.WithVolume(-3));
                 _popup.PopupEntity(Loc.GetString("coffee-maker-message-complete"), uid, PopupType.Medium);
-
-                // Filter handling
-                // I lied, FINALLY if the filter can get dirty, we swap it for its dirty version. Otherwise, we continue.
-                if (TryComp<CoffeeFilterComponent>(filterEnt, out var filterComp)
-                    && !filterComp.InfiniteUses
-                    && filterComp.DirtyPrototype is { } dirtyProto)
-                {
-                    _container.Remove(filterEnt, filterContainer);
-                    QueueDel(filterEnt);
-
-                    var dirtyEnt = Spawn(dirtyProto, Transform(uid).Coordinates);
-                    _container.Insert(dirtyEnt, filterContainer);
-                }
             }
         }
     }

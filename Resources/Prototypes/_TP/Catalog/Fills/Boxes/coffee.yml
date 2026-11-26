@@ -1,19 +1,4 @@
 - type: entity
-  id: BoxCoffeeFilter
-  parent: BoxCardboard
-  name: coffee filter box
-  description: A box filled with new coffee filters.
-  components:
-  - type: Storage
-    grid:
-    - 0,0,2,3
-  - type: EntityTableContainerFill
-    containers:
-      storagebase:
-        id: CoffeeFilter
-        amount: 6
-
-- type: entity
   id: BoxCoffeeBeans
   parent: BoxCardboard
   name: box of coffee beans

@@ -12,17 +12,10 @@
     workingPowerDraw: 100
   - type: Appearance
   - type: CoffeeMaker
-    brews: # grounds in the basket -> coffee in the pitcher
-      ReagentGroundCoffee: Coffee
-      ReagentInstantCoffee: Coffee
-      ReagentMixedCoffee: ReagentBadCoffee
-      ReagentTamperedCoffee: ReagentBadCoffee
-      ReagentMixedTamperedCoffee: ReagentQualityCoffee
   - type: ContainerContainer
     containers:
       Beaker: !type:ContainerSlot
       Basket: !type:ContainerSlot
-      Filter: !type:ContainerSlot
   - type: Fixtures
     fixtures:
       fix1:
@@ -36,17 +29,17 @@
   - type: ItemSlots
     slots:
       Beaker:
+        priority: 1
         whitelist:
-          components:
-          - FitsAsPitcher
+          tags:
+          - Pitcher
+          - GlassBeaker
+        lockedFailPopup: coffee-maker-message-brewing
       Basket:
         whitelist:
-          components:
-          - FitsAsBasket
-      Filter:
-        whitelist:
-          components:
-          - CoffeeFilter
+          tags:
+          - CoffeeBasket
+        lockedFailPopup: coffee-maker-message-brewing
   - type: Machine
     board: CoffeeMakerCircuitboard
   - type: Sprite
@@ -63,8 +56,29 @@
     - state: pitcher
       map: [ "enum.CoffeeMakerVisuals.Pitcher" ]
       visible: false
+    - state: steam
+      map: [ "enum.CoffeeMakerVisuals.Brewing" ]
+      visible: false
     drawdepth: LargeObjects
     snapCardinals: true
+  - type: GenericVisualizer
+    visuals:
+      enum.CoffeeMakerVisuals.Basket:
+        enum.CoffeeMakerVisuals.Basket:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Pitcher:
+        enum.CoffeeMakerVisuals.Pitcher:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Beaker:
+        enum.CoffeeMakerVisuals.Beaker:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Brewing:
+        enum.CoffeeMakerVisuals.Brewing:
+          True: { visible: true }
+          False: { visible: false }
 
 - type: entity
   parent: CoffeeMaker
@@ -74,17 +88,16 @@
   - type: ItemSlots
     slots:
       Beaker:
+        priority: 1
         whitelist:
-          components:
-          - FitsAsPitcher
+          tags:
+          - Pitcher
+          - GlassBeaker
+        lockedFailPopup: coffee-maker-message-brewing
         startingItem: Pitcher
       Basket:
         whitelist:
-          components:
-          - FitsAsBasket
+          tags:
+          - CoffeeBasket
+        lockedFailPopup: coffee-maker-message-brewing
         startingItem: CoffeeBasket
-      Filter:
-        whitelist:
-          components:
-          - CoffeeFilter
-        startingItem: CoffeeFilter

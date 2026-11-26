@@ -1,0 +1,29 @@
+- type: coffeeMakerRecipe
+  id: GroundCoffee
+  input: ReagentGroundCoffee
+  output: Coffee
+  byproduct: ReagentSpentCoffeeGrounds
+
+- type: coffeeMakerRecipe
+  id: MixedCoffee
+  input: ReagentMixedCoffee
+  output: ReagentBadCoffee
+  byproduct: ReagentSpentCoffeeGrounds
+
+- type: coffeeMakerRecipe
+  id: TamperedCoffee
+  input: ReagentTamperedCoffee
+  output: ReagentBadCoffee
+  byproduct: ReagentSpentCoffeeGrounds
+
+- type: coffeeMakerRecipe
+  id: MixedTamperedCoffee
+  input: ReagentMixedTamperedCoffee
+  output: ReagentQualityCoffee
+  byproduct: ReagentSpentCoffeeGrounds
+
+- type: coffeeMakerRecipe
+  id: SpentCoffeeGrounds
+  input: ReagentSpentCoffeeGrounds
+  output: ReagentWeakCoffee
+  byproduct: ReagentSpentCoffeeGrounds
