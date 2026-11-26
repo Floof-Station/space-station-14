@@ -1,14 +1,3 @@
-- type: flavor
-  id: blue
-  flavorType: Base
-  description: flavor-base-blue
-
-- type: flavor
-  id: Custard
-  flavorType: Complex
-  description: flavor-complex-custard
-
-
 # Coffee
 - type: flavor
   id: FlavorInstantCoffee
