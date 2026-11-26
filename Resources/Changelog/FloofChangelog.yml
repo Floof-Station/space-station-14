@@ -1132,3 +1132,12 @@ Entries:
   id: 135
   time: '2026-11-25T23:53:05.0000000+00:00'
   url: https://github.com/Floof-Station/space-station-14/pull/416
+- author: Pachat-Kas
+  changes:
+    - type: Add
+      message: >-
+        Ported the coffee maker from Trieste. Roast coffee berries, grind them,
+        then stir and tamp the grounds for a better cup.
+  id: 136
+  time: '2026-11-26T13:53:23.0000000+00:00'
+  url: https://github.com/Floof-Station/space-station-14/pull/418
