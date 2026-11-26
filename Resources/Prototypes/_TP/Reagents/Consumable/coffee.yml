@@ -1,0 +1,12 @@
+- type: reagent
+  id: ReagentInstantCoffee
+  name: reagent-name-instant-coffee
+  desc: reagent-desc-instant-coffee
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: FlavorInstantCoffee
+  color: "#4E3629"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.1

@@ -1,0 +1,106 @@
+# Coffee
+- type: entity
+  id: InstantInstantCoffee
+  parent: [ BaseItem, SolutionSmall ]
+  name: instant coffee
+  description: A bag of instant coffee.
+  components:
+  - type: DrainableSolution
+    solution: reagents
+  - type: ExaminableSolution
+    solution: reagents
+    exactVolume: true
+  - type: Item
+    size: Small
+  - type: Solution
+    id: reagents # explicit id; the default "solution" id broke grinding on the coffee beans
+    solution:
+      reagents:
+      - ReagentId: ReagentInstantCoffee
+        Quantity: 60
+  - type: Sprite # TODO - add custom sprite
+    sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
+    state: seed
+  - type: SolutionTransfer
+    maxTransferAmount: 5
+
+# Tools
+- type: entity
+  parent: BaseItem
+  id: CoffeeMixer
+  name: coffee stirrer
+  description: A tool for mixing coffee grounds.
+  components:
+  - type: Item
+    size: Small
+    shape:
+    - 0,0,1,0
+    inhandVisuals:
+      left:
+      - state: Stirrer-Left
+      right:
+      - state: Stirrer-Right
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: stirrer
+  - type: Tag
+    tags:
+    - CoffeeStirrer
+
+- type: entity
+  parent: BaseItem
+  id: CoffeePress
+  name: coffee tamper
+  description: A tool for pressing coffee grounds.
+  components:
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: Tamper-Left
+      right:
+      - state: Tamper-Right
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: tamper
+  - type: Tag
+    tags:
+    - CoffeeTamper
+
+- type: entity
+  parent: [ BaseItem, SolutionToolSmall ]
+  id: CoffeeBasket
+  name: coffee basket
+  description: A basket for coffee grounds. Connects to the coffee machine.
+  components:
+  - type: Solution
+    id: basket
+  - type: ExaminableSolution
+    solution: basket
+  - type: DrainableSolution
+    solution: basket
+  - type: CoffeeBasket
+  - type: Tag
+    tags:
+    - CoffeeBasket
+  - type: FitsInDispenser # Lets the basket sit in the grinder's beaker slot, so beans grind straight into it.
+    solution: basket
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: Basket-Left
+      right:
+      - state: Basket-Right
+  - type: MixableSolution
+    solution: basket
+  - type: RefillableSolution
+    solution: basket
+  - type: Sprite
+    sprite: _TP/Objects/Tools/kitchen.rsi
+    state: basket
+  - type: SolutionTransfer
+    maxTransferAmount: 30
+    transferAmount: 5
+  - type: Spillable
+    solution: basket

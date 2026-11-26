@@ -29,7 +29,7 @@
   - type: Seed
     plantId: coffee
   - type: Sprite
-    sprite: _NF/Objects/Specific/Hydroponics/coffee.rsi
+    sprite: _Floof/Objects/Specific/Hydroponics/coffee_seed.rsi # Floof
 
 - type: entity
   parent: SeedBase

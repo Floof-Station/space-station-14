@@ -14,3 +14,20 @@
   - type: Tag
     tags:
     - TP14TagOvenMachineBoard
+
+- type: entity
+  id: CoffeeMakerCircuitboard
+  parent: BaseMachineCircuitboard
+  name: coffee maker machine board
+  components:
+    - type: Sprite
+      state: service
+    - type: MachineBoard
+      prototype: CoffeeMaker
+      stackRequirements:
+        Manipulator: 3
+        Steel: 20
+        Cable: 6
+    - type: Tag
+      tags:
+      - TagCoffeeMakerBoard

@@ -1,0 +1,103 @@
+- type: entity
+  parent: [ BaseMachinePowered, SmallConstructibleMachine, BaseSmallConstructibleMachineDestructible ]
+  id: CoffeeMaker
+  suffix: Empty
+  name: coffee maker
+  description: A table-top espresso machine, for all your coffee needs.
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 5
+  - type: PowerState
+    idlePowerDraw: 5
+    workingPowerDraw: 100
+  - type: Appearance
+  - type: CoffeeMaker
+  - type: ContainerContainer
+    containers:
+      Beaker: !type:ContainerSlot
+      Basket: !type:ContainerSlot
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.17,0,0.20,0.4"
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: ItemSlots
+    slots:
+      Beaker:
+        priority: 1
+        whitelist:
+          tags:
+          - Pitcher
+          - GlassBeaker
+        lockedFailPopup: coffee-maker-message-brewing
+      Basket:
+        whitelist:
+          tags:
+          - CoffeeBasket
+        lockedFailPopup: coffee-maker-message-brewing
+  - type: Machine
+    board: CoffeeMakerCircuitboard
+  - type: Sprite
+    sprite: _TP/Structures/Machines/coffeemaker.rsi
+    offset: 0.0,0.4
+    layers:
+    - state: icon
+    - state: basket
+      map: [ "enum.CoffeeMakerVisuals.Basket" ]
+      visible: false
+    - state: beaker
+      map: [ "enum.CoffeeMakerVisuals.Beaker" ]
+      visible: false
+    - state: pitcher
+      map: [ "enum.CoffeeMakerVisuals.Pitcher" ]
+      visible: false
+    - state: steam
+      map: [ "enum.CoffeeMakerVisuals.Brewing" ]
+      visible: false
+    drawdepth: LargeObjects
+    snapCardinals: true
+  - type: GenericVisualizer
+    visuals:
+      enum.CoffeeMakerVisuals.Basket:
+        enum.CoffeeMakerVisuals.Basket:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Pitcher:
+        enum.CoffeeMakerVisuals.Pitcher:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Beaker:
+        enum.CoffeeMakerVisuals.Beaker:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CoffeeMakerVisuals.Brewing:
+        enum.CoffeeMakerVisuals.Brewing:
+          True: { visible: true }
+          False: { visible: false }
+
+- type: entity
+  parent: CoffeeMaker
+  id: CoffeeMakerFilled
+  suffix: Filled
+  components:
+  - type: ItemSlots
+    slots:
+      Beaker:
+        priority: 1
+        whitelist:
+          tags:
+          - Pitcher
+          - GlassBeaker
+        lockedFailPopup: coffee-maker-message-brewing
+        startingItem: Pitcher
+      Basket:
+        whitelist:
+          tags:
+          - CoffeeBasket
+        lockedFailPopup: coffee-maker-message-brewing
+        startingItem: CoffeeBasket

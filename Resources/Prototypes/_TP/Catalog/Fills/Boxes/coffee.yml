@@ -1,0 +1,29 @@
+- type: entity
+  id: BoxCoffeeBeans
+  parent: BoxCardboard
+  name: box of coffee beans
+  description: A box filled with light roasted coffee beans.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,2,3
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: FoodCoffeeBeansRoastedLight
+        amount: 6
+
+- type: entity
+  id: BoxInstantCoffee
+  parent: BoxCardboard
+  name: box of instant coffee
+  description: A box filled with new instant coffee bags.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,2,3
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: InstantInstantCoffee
+        amount: 6

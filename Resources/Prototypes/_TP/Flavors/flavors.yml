@@ -1,0 +1,5 @@
+# Coffee
+- type: flavor
+  id: FlavorInstantCoffee
+  flavorType: Complex
+  description: flavor-complex-instant-coffee

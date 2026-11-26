@@ -1,0 +1,129 @@
+- type: reagent
+  id: GroundCoffeeLight
+  name: reagent-name-ground-coffee-light
+  desc: reagent-desc-ground-coffee-light
+  physicalDesc: reagent-physical-desc-clumpy
+  flavor: groundcoffeelight
+  color: "#7A5A3C"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.1
+
+- type: reagent
+  id: GroundCoffeeMedium
+  name: reagent-name-ground-coffee-medium
+  desc: reagent-desc-ground-coffee-medium
+  physicalDesc: reagent-physical-desc-clumpy
+  flavor: groundcoffeemedium
+  color: "#4E3629"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.1
+
+- type: reagent
+  id: GroundCoffeeDark
+  name: reagent-name-ground-coffee-dark
+  desc: reagent-desc-ground-coffee-dark
+  physicalDesc: reagent-physical-desc-clumpy
+  flavor: groundcoffeedark
+  color: "#33221A"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.1
+
+- type: reagent
+  id: GroundCoffeeBurnt
+  name: reagent-name-ground-coffee-burnt
+  desc: reagent-desc-ground-coffee-burnt
+  physicalDesc: reagent-physical-desc-clumpy
+  flavor: groundcoffeeburnt
+  color: "#1C1512"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.1
+
+- type: reagent
+  id: SpentCoffeeGrounds
+  name: reagent-name-spent-coffee-grounds
+  desc: reagent-desc-spent-coffee-grounds
+  physicalDesc: reagent-physical-desc-grainy
+  flavor: bitter
+  color: "#2E1F17"
+  recognizable: true
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 1
+
+- type: reagent
+  id: WeakCoffee
+  name: reagent-name-weak-coffee
+  parent: BaseDrink
+  desc: reagent-desc-weak-coffee
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: water
+  color: "#8A6A45"
+  recognizable: true
+  metabolisms:
+    Digestion:
+      metabolites:
+        Theobromine: 0.05
+      effects:
+      - !type:Satiate
+        satiationType: Thirst
+        factor: 2
+
+- type: reagent
+  id: BurntCoffee
+  name: reagent-name-burnt-coffee
+  parent: Coffee
+  desc: reagent-desc-burnt-coffee
+  flavor: burntcoffee
+  color: "#2B1D14"
+
+- type: reagent
+  id: CoffeeAromaLight
+  name: reagent-name-coffee-aroma-light
+  parent: Coffee
+  desc: reagent-desc-coffee-aroma-light
+  flavor: coffeearomalight
+  recognizable: false
+
+- type: reagent
+  id: CoffeeAromaMedium
+  name: reagent-name-coffee-aroma-medium
+  parent: Coffee
+  desc: reagent-desc-coffee-aroma-medium
+  flavor: coffeearomamedium
+  recognizable: false
+
+- type: reagent
+  id: CoffeeAromaDark
+  name: reagent-name-coffee-aroma-dark
+  parent: Coffee
+  desc: reagent-desc-coffee-aroma-dark
+  flavor: coffeearomadark
+  recognizable: false
+
+- type: reagent
+  id: BrewQualityLow
+  name: reagent-name-brew-quality-low
+  parent: Coffee
+  desc: reagent-desc-brew-quality-low
+  flavor: brewqualitylow
+  recognizable: false
+
+- type: reagent
+  id: BrewQualityHigh
+  name: reagent-name-brew-quality-high
+  parent: Coffee
+  desc: reagent-desc-brew-quality-high
+  flavor: brewqualityhigh
+  recognizable: false

@@ -13,6 +13,15 @@
 ## C ##
 
 - type: Tag
+  id: CoffeeBasket
+
+- type: Tag
+  id: CoffeeStirrer
+
+- type: Tag
+  id: CoffeeTamper
+
+- type: Tag
   id: CombatBoots
 
 ## D ##
@@ -62,6 +71,9 @@
   id: Jumpskirt
 
 ## P ##
+
+- type: Tag
+  id: Pitcher
 
 - type: Tag
   id: PrizeTicket

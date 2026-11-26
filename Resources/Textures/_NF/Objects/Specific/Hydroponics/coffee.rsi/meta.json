@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-NC-SA-4.0",
-  "copyright": "Taken from https://github.com/vgstation-coders/vgstation13. produce, produce-beans and variants created by Stagnation (Discord)",
+  "copyright": "Taken from https://github.com/vgstation-coders/vgstation13. produce, produce-beans and variants created by Stagnation (Discord), inhand sprites by whatston3 (GitHub)",
   "size": {
     "x": 32,
     "y": 32
@@ -17,9 +17,6 @@
       "name": "produce"
     },
     {
-      "name": "produce-beans"
-    },
-    {
       "name": "produce-beans-light"
     },
     {
@@ -27,6 +24,9 @@
     },
     {
       "name": "produce-beans-dark"
+    },
+    {
+      "name": "produce-beans-burnt"
     },
     {
       "name": "seed"
@@ -45,6 +45,46 @@
     },
     {
       "name": "stage-5"
+    },
+    {
+      "name": "produce-beans-burnt-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-burnt-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-light-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-light-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-medium-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-medium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-dark-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-beans-dark-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "produce-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "produce-inhand-right",
+      "directions": 4
     }
   ]
 }

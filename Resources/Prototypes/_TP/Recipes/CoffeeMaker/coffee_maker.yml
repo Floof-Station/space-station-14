@@ -1,0 +1,52 @@
+- type: coffeeMakerRecipe
+  id: BaseGroundCoffee
+  abstract: true
+  byproducts:
+    SpentCoffeeGrounds: 1
+  quality:
+    Low:
+      BrewQualityLow: 0.4
+    Medium:
+      Coffee: 0.4
+    High:
+      BrewQualityHigh: 0.4
+
+- type: coffeeMakerRecipe
+  parent: BaseGroundCoffee
+  id: GroundCoffeeLight
+  input: GroundCoffeeLight
+  outputs:
+    Coffee: 3.2
+    CoffeeAromaLight: 0.4
+
+- type: coffeeMakerRecipe
+  parent: BaseGroundCoffee
+  id: GroundCoffeeMedium
+  input: GroundCoffeeMedium
+  outputs:
+    Coffee: 3.2
+    CoffeeAromaMedium: 0.4
+
+- type: coffeeMakerRecipe
+  parent: BaseGroundCoffee
+  id: GroundCoffeeDark
+  input: GroundCoffeeDark
+  outputs:
+    Coffee: 3.2
+    CoffeeAromaDark: 0.4
+
+- type: coffeeMakerRecipe
+  id: GroundCoffeeBurnt
+  input: GroundCoffeeBurnt
+  outputs:
+    BurntCoffee: 4
+  byproducts:
+    SpentCoffeeGrounds: 1
+
+- type: coffeeMakerRecipe
+  id: SpentCoffeeGrounds
+  input: SpentCoffeeGrounds
+  outputs:
+    WeakCoffee: 4
+  byproducts:
+    SpentCoffeeGrounds: 1

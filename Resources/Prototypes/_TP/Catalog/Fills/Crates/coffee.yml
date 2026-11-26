@@ -1,0 +1,19 @@
+- type: entity
+  parent: CratePlastic
+  id: CoffeeSupplyCrate
+  name: coffee supplies crate
+  description: A whole crate full of coffee and coffee-making supplies. An addiction awaits!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: BoxCoffeeBeans
+          amount: 1
+        - id: BoxInstantCoffee
+          amount: 1
+        - id: Pitcher
+        - id: DrinkMugMetal
+          amount: 3
+        - id: CoffeeMixer
+        - id: CoffeePress

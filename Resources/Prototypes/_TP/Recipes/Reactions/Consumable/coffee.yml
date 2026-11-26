@@ -1,0 +1,13 @@
+# Coffee (the drink)
+- type: reaction
+  id: InstantCoffeeToCoffee
+  minTemp: 350
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    ReagentInstantCoffee:
+      amount: 1
+    Water:
+      amount: 2
+  products:
+    Coffee: 3

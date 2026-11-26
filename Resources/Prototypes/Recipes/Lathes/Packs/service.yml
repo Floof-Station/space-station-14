@@ -39,6 +39,7 @@
   - SodaDispenserMachineCircuitboard
   - SmartFridgeCircuitboard
   - TP14LatheRecipeOvenMachineCircuitboard # TRIESTE
+  - CoffeeMakerCircuitboardRecipe # TRIESTE
   - WashingMachineCircuitboard # Forky - clothing stains
 
 - type: latheRecipePack
