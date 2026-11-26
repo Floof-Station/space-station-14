@@ -1,0 +1,58 @@
+<Document>
+# Coffee
+This page covers making coffee with the coffee maker, from the berry to the cup.
+
+## Getting beans
+Coffee berries are grown in botany. Cargo also sells a coffee supplies crate, which has a box of light roast beans, instant coffee, a pitcher, mugs, a stirrer and a tamper.
+
+<Box>
+<GuideEntityEmbed Entity="FoodCoffee"/>
+<GuideEntityEmbed Entity="CoffeeSupplyCrate"/>
+</Box>
+
+## Roasting
+Heat the berries. With time they will roast into light, then medium, then dark roast beans. Don't let them burn.
+
+<Box>
+<GuideEntityEmbed Entity="FoodCoffeeBeansRoastedLight"/>
+<GuideEntityEmbed Entity="FoodCoffeeBeansRoastedMedium"/>
+<GuideEntityEmbed Entity="FoodCoffeeBeansRoastedDark"/>
+<GuideEntityEmbed Entity="FoodCoffeeBeansBurnt"/>
+</Box>
+
+## Grinding
+The coffee basket fits in the grinder, so you can grind the beans directly into it. You can put different roasts in the same basket if you want a blend.
+
+<Box>
+<GuideEntityEmbed Entity="KitchenReagentGrinder"/>
+<GuideEntityEmbed Entity="CoffeeBasket"/>
+</Box>
+
+## Prepping the grounds
+Prepped grounds make better coffee. Use the stirrer on the basket first, then the tamper. Examine the basket to see what you've done so far.
+
+<Box>
+<GuideEntityEmbed Entity="CoffeeMixer"/>
+<GuideEntityEmbed Entity="CoffeePress"/>
+</Box>
+
+## Brewing
+Put the basket and a container into the coffee maker and turn it on. The machine needs power. After a short wait, the coffee is in the container and the used grounds stay in the basket.
+
+The coffee maker board can be printed if you need another machine.
+
+<Box>
+<GuideEntityEmbed Entity="CoffeeMakerFilled"/>
+<GuideEntityEmbed Entity="Pitcher"/>
+</Box>
+
+## Spent grounds
+Botany can use spent grounds as plant fertilizer.
+
+## Instant coffee
+Instant coffee is the quick way to get a cup when there's no coffee maker around. Pour some into a mug and add about twice as much water. The water has to be close to boiling, so heat it up first. Then stir it with a spoon and it turns into coffee.
+
+<Box>
+<GuideEntityEmbed Entity="InstantInstantCoffee"/>
+</Box>
+</Document>
