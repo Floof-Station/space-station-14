@@ -4,7 +4,7 @@
   id: BenchBaseMiddle
   suffix: Middle
   abstract: true
-  parent: SeatBase
+  parent: [ SeatBase, StructureHealthFurniture ] # Floof
   description: Multiple seats spanning a single object. Truly a marvel of science.
   components:
   - type: Physics
@@ -15,11 +15,106 @@
   - type: Sprite
     state: middle
 
+# Floof-start
+- type: entity
+  abstract: true
+  id: BenchWoodBase
+  components:
+  - type: Damageable
+    damageModifierSet: WoodMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+          params:
+            volume: -3
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank1:
+            min: 0
+            max: 1
+
+- type: entity
+  abstract: true
+  id: BenchSteelBase
+  components:
+  - type: Damageable
+    damageModifierSet: SteelMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 0
+            max: 1
+
+- type: entity
+  abstract: true
+  id: BenchSofaBase
+  components:
+  - type: Damageable
+    damageModifierSet: SteelMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 0
+            max: 1
+          MaterialCloth1:
+            min: 0
+            max: 1
+
+- type: entity
+  abstract: true
+  parent: StructureHealthFurniture
+  id: BenchCornerBase
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - TableMask
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Pullable
+  - type: StaticPrice
+    price: 50
+# Floof-end
+
 # Park benches
 - type: entity
   name: park bench
   id: BenchParkMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -59,7 +154,7 @@
 - type: entity
   name: park bench
   id: BenchParkBambooMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -99,7 +194,7 @@
 - type: entity
   name: pew
   id: BenchPewMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -139,7 +234,7 @@
 - type: entity
   name: steel bench
   id: BenchSteelMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchSteelBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -179,7 +274,7 @@
 - type: entity
   name: white steel bench
   id: BenchSteelWhiteMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchSteelBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -219,7 +314,7 @@
 - type: entity
   name: sofa
   id: BenchSofaMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchSofaBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -260,32 +355,13 @@
   id: BenchSofaCorner
   suffix: Corner
 #  parent: BenchSofaMiddle
+  parent: [ BenchCornerBase, BenchSofaBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
-  - type: Transform
-    anchored: true
-  - type: Rotatable
   - type: Sprite
     sprite: _DV/Structures/Furniture/Bench/sofa.rsi
     state: corner
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Pullable
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Metallic
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 50
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
   - type: Construction
     graph: Bench
     node: BenchSofaCorner
@@ -294,7 +370,7 @@
 - type: entity
   name: grey sofa
   id: BenchSofaCorpMiddle
-  parent: BenchBaseMiddle
+  parent: [ BenchBaseMiddle, BenchSofaBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
@@ -335,32 +411,13 @@
   id: BenchSofaCorpCorner
   suffix: Corner
 #  parent: BenchSofaCorpMiddle
+  parent: [ BenchCornerBase, BenchSofaBase ] # Floof
   placement:
     mode: SnapgridCenter
   components:
-  - type: Transform
-    anchored: true
-  - type: Rotatable
   - type: Sprite
     sprite: _DV/Structures/Furniture/Bench/sofa_corp.rsi
     state: corner
-  - type: Clickable
-  - type: InteractionOutline
-  - type: Pullable
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Metallic
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 50
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalThud
   - type: Construction
     graph: Bench
     node: BenchSofaCorpCorner
