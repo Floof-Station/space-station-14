@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "poster_yes_erp edited by Fansana from poster34_legit, taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f01de25493e2bd2706ef9b0303cb0d7b5e3e471b",
+  "copyright": "poster_yes_erp edited by Fansana from poster34_legit, taken from tgstation at commit https://github.com/tgstation/tgstation/commit/f01de25493e2bd2706ef9b0303cb0d7b5e3e471b; poster_polly_shut_up and poster_polly_dorms made by Dzordz (Discord)",
   "size": {
     "x": 32,
     "y": 32
@@ -9,6 +9,12 @@
   "states": [
     {
       "name": "poster_yes_erp"
+    },
+    {
+      "name": "poster_polly_shut_up"
+    },
+    {
+      "name": "poster_polly_dorms"
     }
   ]
 }

@@ -7,3 +7,23 @@
   - type: Sprite
     sprite: _Floof/Structures/Wallmounts/posters.rsi
     state: poster_yes_erp
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandPollyShutUp
+  name: "Shut Up, Polly"
+  description: "A crude poster of Polly squawking something filthy, and a crewmember who has clearly heard it one time too many."
+  components:
+  - type: Sprite
+    sprite: _Floof/Structures/Wallmounts/posters.rsi
+    state: poster_polly_shut_up
+
+- type: entity
+  parent: PosterBase
+  id: PosterLegitPollyDorms
+  name: "Keep Polly Away From Dorms"
+  description: "An official notice, issued after Polly overheard a few enthusiastic dorm residents and started treating the common radio channel to its best impression of their evening. Keep the bird out of the dorms."
+  components:
+  - type: Sprite
+    sprite: _Floof/Structures/Wallmounts/posters.rsi
+    state: poster_polly_dorms
