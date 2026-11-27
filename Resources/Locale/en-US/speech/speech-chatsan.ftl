@@ -133,7 +133,8 @@ chatsan-replacement-47 = see ya
 chatsan-word-48 = rn
 chatsan-replacement-48 = right now
 
-chatsan-word-49 = atm
+# Floof: 'chatsan-word-49 = atm'
+chatsan-word-49 = (?-i:[aA]tm)
 chatsan-replacement-49 = at the moment
 
 chatsan-word-50 = istg
