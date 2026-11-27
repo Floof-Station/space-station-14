@@ -1148,3 +1148,10 @@ Entries:
   id: 137
   time: '2026-11-27T03:49:27.0000000+00:00'
   url: https://github.com/Floof-Station/space-station-14/pull/419
+- author: Pachat-Kas
+  changes:
+    - type: Tweak
+      message: Uppercase "ATM" in chat is no longer turned into "AT THE MOMENT".
+  id: 138
+  time: '2026-11-27T03:59:18.0000000+00:00'
+  url: https://github.com/Floof-Station/space-station-14/pull/420
