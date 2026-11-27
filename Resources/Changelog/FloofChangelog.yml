@@ -1155,3 +1155,12 @@ Entries:
   id: 138
   time: '2026-11-27T03:59:18.0000000+00:00'
   url: https://github.com/Floof-Station/space-station-14/pull/420
+- author: Pachat-Kas
+  changes:
+    - type: Add
+      message: >-
+        Added two Polly posters, one telling it to shut up and one keeping it
+        out of the dorms.
+  id: 139
+  time: '2026-11-27T04:24:34.0000000+00:00'
+  url: https://github.com/Floof-Station/space-station-14/pull/421
