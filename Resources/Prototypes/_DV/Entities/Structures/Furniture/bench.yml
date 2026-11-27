@@ -1,0 +1,422 @@
+## I fixed this file manually, don't let git touch any edits in here without checking them manually.
+# Base benches
+- type: entity
+  abstract: true
+  parent: [ SeatBase, StructureHealthFurniture ] # Floof
+  id: BenchBaseMiddle
+  name: bench
+  suffix: Middle
+  description: Multiple seats spanning a single object. Truly a marvel of science.
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Sprite
+    state: middle
+
+- type: entity
+  abstract: true
+  parent: StructureHealthFurniture
+  id: BenchCornerBase
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - TableMask
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Pullable
+  - type: StaticPrice
+    price: 50
+
+- type: entity
+  abstract: true
+  id: BenchWoodBase
+  components:
+  - type: Damageable
+    damageModifierSet: WoodMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+          params:
+            volume: -3
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank1:
+            min: 0
+            max: 1
+
+- type: entity
+  abstract: true
+  id: BenchSteelBase
+  components:
+  - type: Damageable
+    damageModifierSet: SteelMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 0
+            max: 1
+
+- type: entity
+  abstract: true
+  id: BenchSofaBase
+  components:
+  - type: Damageable
+    damageModifierSet: SteelMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 0
+            max: 1
+          MaterialCloth1:
+            min: 0
+            max: 1
+
+# Park benches
+- type: entity
+  parent: BenchParkMiddle
+  id: BenchParkLeftDV
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchParkLeftDV
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
+  id: BenchParkMiddle
+  name: park bench
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/parkbench_wooden.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchParkMiddle
+
+- type: entity
+  parent: BenchParkMiddle
+  id: BenchParkRightDV
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchParkRightDV
+
+# Bamboo benches
+- type: entity
+  parent: BenchParkBambooMiddle
+  id: BenchParkBambooLeftDV
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchParkBambooLeftDV
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
+  id: BenchParkBambooMiddle
+  name: park bench
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/parkbench_bamboo.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchParkBambooMiddle
+
+- type: entity
+  parent: BenchParkBambooMiddle
+  id: BenchParkBambooRightDV
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchParkBambooRightDV
+
+# Pews
+- type: entity
+  parent: BenchPewMiddle
+  id: BenchPewLeft
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchPewLeft
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchWoodBase ] # Floof
+  id: BenchPewMiddle
+  name: pew
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/pews.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchPewMiddle
+
+- type: entity
+  parent: BenchPewMiddle
+  id: BenchPewRight
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchPewRight
+
+# Steel benches
+- type: entity
+  parent: BenchSteelMiddle
+  id: BenchSteelLeft
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchSteelLeft
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchSteelBase ] # Floof
+  id: BenchSteelMiddle
+  name: steel bench
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/steel_bench.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchSteelMiddle
+
+- type: entity
+  parent: BenchSteelMiddle
+  id: BenchSteelRight
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchSteelRight
+
+# White steel benches
+- type: entity
+  parent: BenchSteelWhiteMiddle
+  id: BenchSteelWhiteLeft
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchSteelWhiteLeft
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchSteelBase ] # Floof
+  id: BenchSteelWhiteMiddle
+  name: white steel bench
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/steel_bench_white.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchSteelWhiteMiddle
+
+- type: entity
+  parent: BenchSteelWhiteMiddle
+  id: BenchSteelWhiteRight
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchSteelWhiteRight
+
+# Standard sofa
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaLeftDV
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchSofaLeftDV
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchSofaBase ] # Floof
+  id: BenchSofaMiddle
+  name: sofa
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/sofa.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchSofaMiddle
+
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaRightDV
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchSofaRightDV
+
+- type: entity
+#  parent: BenchSofaMiddle
+  parent: [ BenchCornerBase, BenchSofaBase ] # Floof
+  id: BenchSofaCorner
+  name: sofa
+  suffix: Corner
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/sofa.rsi
+    state: corner
+  - type: Construction
+    graph: Bench
+    node: BenchSofaCorner
+
+# Corp sofa
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpLeftDV
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: left
+  - type: Construction
+    graph: Bench
+    node: BenchSofaCorpLeftDV
+
+- type: entity
+  parent: [ BenchBaseMiddle, BenchSofaBase ] # Floof
+  id: BenchSofaCorpMiddle
+  name: grey sofa
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/sofa_corp.rsi
+  - type: Construction
+    graph: Bench
+    node: BenchSofaCorpMiddle
+
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpRightDV
+  suffix: Right
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: right
+  - type: Construction
+    graph: Bench
+    node: BenchSofaCorpRightDV
+
+- type: entity
+#  parent: BenchSofaCorpMiddle
+  parent: [ BenchCornerBase, BenchSofaBase ] # Floof
+  id: BenchSofaCorpCorner
+  name: grey sofa
+  suffix: Corner
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _DV/Structures/Furniture/Bench/sofa_corp.rsi
+    state: corner
+  - type: Construction
+    graph: Bench
+    node: BenchSofaCorpCorner
